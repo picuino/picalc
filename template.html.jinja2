@@ -13,16 +13,39 @@
   <style>
     body {
       font: 16px sans-serif;
-      background-color: #F0F0F0;
-      min-width: 360px;
-      margin: 0 20px 0 20px;
+      background-color: #f0f4f4;
+      margin: 0;
+      min-width: {{data.width.min}};
     }
+
+    .content {
+      max-width: {{data.width.max}}; 
+      margin: 0 auto;
+      padding: 16px 16px 32px 16px;
+      background-color: #fff;
+    }
+
+    .row { 
+      padding-bottom: 2px; 
+    }
+
+    .license {
+      max-width: {{data.width.max}}; 
+      margin: 0 auto;   
+      text-align: center;
+      padding: 20px 16px 60px 16px;
+      font-size: 12px;
+      font-weight: bold;
+      background-color: #ddd;
+    }
+
     h1 {
       font-size: 140%;
       font-weight: bold;
       text-transform: uppercase;
       margin: 20px 0 10px 0;
     }
+
     h2 {
       font-size: 120%;
       font-weight: bold;
@@ -35,19 +58,10 @@
     }
 
     input[type=button] {
-      display: inline-block;
-      font-size: 1em;
-      background-color: #fff;
+      font-size: 16px;
+      background-color: #eee;
       border: 1px solid #888;
       border-radius: 4px;
-    }
-
-    .spreadsheet {
-    }
-
-    .license {
-      max-width: 480px;
-      padding: 40px 0 40px 0;
     }
 
     /* Column 1: Variable name */
@@ -103,11 +117,6 @@
     .scoment {
       display: inline-block;
       min-width: {{data.width.comment}};
-    }
-
-    /* Rows */
-    .row {
-      padding-bottom: 2px;
     }
 
   </style>
@@ -254,7 +263,7 @@
 
 <body onload="init()">
 
-  <div class="spreadsheet">
+  <div class="content">
   <h1>{{data.title}}</h1>
 
     {%- for datarow in rows %}
@@ -298,12 +307,11 @@
     {%- endif %}
   {%- endfor %}
 
-  </div>  <!-- End spreadsheet -->
-
+  </div>  <!-- End content -->
 
   <!-- License -->
   <div class="license">
-    This work by <a href="https://github.com/Picuino/Picalc">Picuino</a>
+    This work by <a href="https://github.com/picuino/picalc">Picuino</a>
     is licensed under a
    <a rel="MIT License" href="http://www.gnu.org/licenses/gpl-3.0.txt">
       GPL version 3 license</a>.

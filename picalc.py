@@ -39,8 +39,14 @@ class picalc:
       default = {
          'resolution': 5,
          'template': 'template.html.jinja2',
-         'width': { 'name': '6em', 'value': '6em', 'units': '6em', 'comment': '20em', },
-         'output': 'out.txt',     
+         'width': {
+            'max': '640px',
+            'min': '420px',
+            'name': '6em',
+            'value': '6em',
+            'units': '6em',
+            'comment': '20em', },
+         'output': 'out.txt',  
       }
       for key in default.keys():
          if not key in self.database:

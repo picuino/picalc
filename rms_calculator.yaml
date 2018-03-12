@@ -9,8 +9,10 @@ output: rms_calculator.html
 resolution: 5
 
 width:
+   max: 640px
+   min: 420px
    name: 7em
-   value: 6em
+   value: 5em
    units: 2em
    comment: 20em
 

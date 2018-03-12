@@ -7,22 +7,45 @@
   <meta charset="UTF-8">
   <meta name="Keywords" content="RMS, average, median, value, calculator">
   <meta name="Description" content="JavaScript average and RMS value Calculator">
-  <meta name="Version" content="12/03/2018 - SHA:496F78">
+  <meta name="Version" content="12/03/2018 - SHA:6A8B72">
 
   <!-- Styles -->
   <style>
     body {
       font: 16px sans-serif;
-      background-color: #F0F0F0;
-      min-width: 360px;
-      margin: 0 20px 0 20px;
+      background-color: #f0f4f4;
+      margin: 0;
+      min-width: 420px;
     }
+
+    .content {
+      max-width: 640px; 
+      margin: 0 auto;
+      padding: 16px 16px 32px 16px;
+      background-color: #fff;
+    }
+
+    .row { 
+      padding-bottom: 2px; 
+    }
+
+    .license {
+      max-width: 640px; 
+      margin: 0 auto;   
+      text-align: center;
+      padding: 20px 16px 60px 16px;
+      font-size: 12px;
+      font-weight: bold;
+      background-color: #ddd;
+    }
+
     h1 {
       font-size: 140%;
       font-weight: bold;
       text-transform: uppercase;
       margin: 20px 0 10px 0;
     }
+
     h2 {
       font-size: 120%;
       font-weight: bold;
@@ -35,19 +58,10 @@
     }
 
     input[type=button] {
-      display: inline-block;
-      font-size: 1em;
-      background-color: #fff;
+      font-size: 16px;
+      background-color: #eee;
       border: 1px solid #888;
       border-radius: 4px;
-    }
-
-    .spreadsheet {
-    }
-
-    .license {
-      max-width: 480px;
-      padding: 40px 0 40px 0;
     }
 
     /* Column 1: Variable name */
@@ -68,7 +82,7 @@
     }
     .sval {
       display: inline-block;
-      width: 6em;
+      width: 5em;
     }
     .sval input[type=text] {
       background-color: #FFFFC0;
@@ -76,7 +90,7 @@
 
     .sconst {
       display: inline-block;
-      width: 6em;
+      width: 5em;
     }
     .sconst input[type=text] {
       background-color: #FFFFFF;
@@ -84,7 +98,7 @@
 
     .scalc  {
       display: inline-block;
-      width: 6em;
+      width: 5em;
     }
     .scalc input[type=text] {
       background-color: #C0FFFF;
@@ -103,11 +117,6 @@
     .scoment {
       display: inline-block;
       min-width: 20em;
-    }
-
-    /* Rows */
-    .row {
-      padding-bottom: 2px;
     }
 
   </style>
@@ -354,7 +363,7 @@
 
 <body onload="init()">
 
-  <div class="spreadsheet">
+  <div class="content">
   <h1>Average and RMS value Calculator</h1>
 
     <!--  Image: Wave Types -->
@@ -977,12 +986,11 @@ RU5ErkJggg==
       <div class="scoment">RMS value of all waves</div>
     </div>
 
-  </div>  <!-- End spreadsheet -->
-
+  </div>  <!-- End content -->
 
   <!-- License -->
   <div class="license">
-    This work by <a href="https://github.com/Picuino/Picalc">Picuino</a>
+    This work by <a href="https://github.com/picuino/picalc">Picuino</a>
     is licensed under a
    <a rel="MIT License" href="http://www.gnu.org/licenses/gpl-3.0.txt">
       GPL version 3 license</a>.
