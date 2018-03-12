@@ -7,7 +7,7 @@
   <meta charset="UTF-8">
   <meta name="Keywords" content="Inductance, magnetics, coil, calculator">
   <meta name="Description" content="Javascript Inductance calculator">
-  <meta name="Version" content="12/03/2018 - SHA:F4F064">
+  <meta name="Version" content="12/03/2018 - SHA:0B091F">
 
   <!-- Styles -->
   <style>
@@ -190,34 +190,34 @@
       V_sq = L * I_max * 2 / ( T / 2.0 );
 
       <!-- Print calc: Relative lenght of air gap (g/√Ae) -->
-      document.getElementById("g_factor").value = roundnum(g_factor * 1e+02, 5);
+      document.getElementById("g_factor").value = num_fix(g_factor * 1e+02, 5);
 
       <!-- Print calc: Fringing factor of air gap (+-15% error) -->
-      document.getElementById("Fr_factor").value = roundnum(Fr_factor, 5);
+      document.getElementById("Fr_factor").value = num_fix(Fr_factor, 5);
 
       <!-- Print calc: Inductance factor (permeability) of air gap -->
-      document.getElementById("AL_gap").value = roundnum(AL_gap * 1e+09, 5);
+      document.getElementById("AL_gap").value = num_fix(AL_gap * 1e+09, 5);
 
       <!-- Print calc: Total Inductance factor with gap -->
-      document.getElementById("AL_total").value = roundnum(AL_total * 1e+09, 5);
+      document.getElementById("AL_total").value = num_fix(AL_total * 1e+09, 5);
 
       <!-- Print calc: Coil Inductance -->
-      document.getElementById("L").value = roundnum(L * 1e+06, 5);
+      document.getElementById("L").value = num_fix(L * 1e+06, 5);
 
       <!-- Print calc: Maximum Inductor Current -->
-      document.getElementById("I_max").value = roundnum(I_max, 5);
+      document.getElementById("I_max").value = num_fix(I_max, 5);
 
       <!-- Print calc: Energy stored in Inductance -->
-      document.getElementById("E_max").value = roundnum(E_max * 1e+06, 5);
+      document.getElementById("E_max").value = num_fix(E_max * 1e+06, 5);
 
       <!-- Print calc: Period -->
-      document.getElementById("T").value = roundnum(T * 1e+06, 5);
+      document.getElementById("T").value = num_fix(T * 1e+06, 5);
 
       <!-- Print calc: Maximum sine wave voltage -->
-      document.getElementById("V_sin").value = roundnum(V_sin, 5);
+      document.getElementById("V_sin").value = num_fix(V_sin, 5);
 
       <!-- Print calc: Maximum square wave voltage -->
-      document.getElementById("V_sq").value = roundnum(V_sq, 5);
+      document.getElementById("V_sq").value = num_fix(V_sq, 5);
     }
 
     <!-- Reset variables to default values -->
@@ -279,16 +279,17 @@
       return val * 1.0; <!-- return number -->
     }
 
-    <!-- Round number to digits -->
-    function roundnum(number, digits) {
-      if (isNaN(number) || !isFinite(number)) return '';
+    <!-- Format number with fix digits -->
+    function num_fix(number, digits) {
+      if (!isFinite(number)) return '';
       if (number == 0) return '0';
       if (Math.sign(number) < 0)
-        sign = '-';
+        var sign = '-';
       else
-        sign = '';
-      exp = Math.ceil(Math.log(number)/Math.log(10) + 0.000001);
-      number = Math.round(Math.abs(number) * Math.pow(10, digits - exp)) + '';
+        var sign = '';
+     number = Math.abs(number)
+      exp = Math.ceil(Math.log10(number) + 0.000001);
+      number = Math.round(number * Math.pow(10, digits - exp)) + '';
       if (digits > exp) { <!-- decimals -->
         if (exp <= 0) { <!-- all decimals -->
           return sign + '0.0000000'.substr(0, 2 - exp) + number;
@@ -511,9 +512,9 @@
   <!-- License -->
   <div class="license">
     This work by <a href="https://github.com/Picuino/Picalc">Picuino</a>
-    is licensed under a 
-	<a rel="MIT License" href="http://www.gnu.org/licenses/gpl-3.0.txt">
-	   GPL version 3 license</a>.
+    is licensed under a
+   <a rel="MIT License" href="http://www.gnu.org/licenses/gpl-3.0.txt">
+      GPL version 3 license</a>.
   </div>
 
 </body>

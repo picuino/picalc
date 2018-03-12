@@ -7,7 +7,7 @@
   <meta charset="UTF-8">
   <meta name="Keywords" content="RMS, average, median, value, calculator">
   <meta name="Description" content="JavaScript average and RMS value Calculator">
-  <meta name="Version" content="12/03/2018 - SHA:9DD5CD">
+  <meta name="Version" content="12/03/2018 - SHA:4540A0">
 
   <!-- Styles -->
   <style>
@@ -196,52 +196,52 @@
       V_add_rms = Math.sqrt(V1_rms*V1_rms + V2_rms*V2_rms + V3_rms*V3_rms + V4_rms*V4_rms + V5_rms*V5_rms);
 
       <!-- Print calc: Average value of sine wave (offset) -->
-      document.getElementById("V_offset1").value = roundnum(V_offset1, 5);
+      document.getElementById("V_offset1").value = num_fix(V_offset1, 5);
 
       <!-- Print calc: RMS value of sine wave (without offset) -->
-      document.getElementById("V_sin_ac_rms").value = roundnum(V_sin_ac_rms, 5);
+      document.getElementById("V_sin_ac_rms").value = num_fix(V_sin_ac_rms, 5);
 
       <!-- Print calc: RMS value of sine wave (with offset) -->
-      document.getElementById("V_sin_rms").value = roundnum(V_sin_rms, 5);
+      document.getElementById("V_sin_rms").value = num_fix(V_sin_rms, 5);
 
       <!-- Print calc: Average value of Triangle wave (offset) -->
-      document.getElementById("V_offset2").value = roundnum(V_offset2, 5);
+      document.getElementById("V_offset2").value = num_fix(V_offset2, 5);
 
       <!-- Print calc: RMS value of Triangle wave (without offset) -->
-      document.getElementById("V_tri_ac_rms").value = roundnum(V_tri_ac_rms, 5);
+      document.getElementById("V_tri_ac_rms").value = num_fix(V_tri_ac_rms, 5);
 
       <!-- Print calc: RMS value of Triangle wave (with offset) -->
-      document.getElementById("V_tri_rms").value = roundnum(V_tri_rms, 5);
+      document.getElementById("V_tri_rms").value = num_fix(V_tri_rms, 5);
 
       <!-- Print calc: Average value of Rectified Sine wave (offset) -->
-      document.getElementById("V_offset3").value = roundnum(V_offset3, 5);
+      document.getElementById("V_offset3").value = num_fix(V_offset3, 5);
 
       <!-- Print calc: RMS value of of Rectified Sine wave (without offset) -->
-      document.getElementById("V_rsin_ac_rms").value = roundnum(V_rsin_ac_rms, 5);
+      document.getElementById("V_rsin_ac_rms").value = num_fix(V_rsin_ac_rms, 5);
 
       <!-- Print calc: RMS value of of Rectified Sine wave (with offset) -->
-      document.getElementById("V_rsin_rms").value = roundnum(V_rsin_rms, 5);
+      document.getElementById("V_rsin_rms").value = num_fix(V_rsin_rms, 5);
 
       <!-- Print calc: Average value of Sawtooth wave (offset) -->
-      document.getElementById("V_offset4").value = roundnum(V_offset4, 5);
+      document.getElementById("V_offset4").value = num_fix(V_offset4, 5);
 
       <!-- Print calc: RMS value of Sawtooth wave (without offset) -->
-      document.getElementById("V_saw_ac_rms").value = roundnum(V_saw_ac_rms, 5);
+      document.getElementById("V_saw_ac_rms").value = num_fix(V_saw_ac_rms, 5);
 
       <!-- Print calc: RMS value of Sawtooth wave (with offset) -->
-      document.getElementById("V_saw_rms").value = roundnum(V_saw_rms, 5);
+      document.getElementById("V_saw_rms").value = num_fix(V_saw_rms, 5);
 
       <!-- Print calc: Average value of Square wave (offset) -->
-      document.getElementById("V_offset5").value = roundnum(V_offset5, 5);
+      document.getElementById("V_offset5").value = num_fix(V_offset5, 5);
 
       <!-- Print calc: RMS value of Square wave (without offset) -->
-      document.getElementById("V_sq_ac_rms").value = roundnum(V_sq_ac_rms, 5);
+      document.getElementById("V_sq_ac_rms").value = num_fix(V_sq_ac_rms, 5);
 
       <!-- Print calc: RMS value of Square wave (with offset) -->
-      document.getElementById("V_sq_rms").value = roundnum(V_sq_rms, 5);
+      document.getElementById("V_sq_rms").value = num_fix(V_sq_rms, 5);
 
       <!-- Print calc: RMS value of all waves -->
-      document.getElementById("V_add_rms").value = roundnum(V_add_rms, 5);
+      document.getElementById("V_add_rms").value = num_fix(V_add_rms, 5);
     }
 
     <!-- Reset variables to default values -->
@@ -306,16 +306,17 @@
       return val * 1.0; <!-- return number -->
     }
 
-    <!-- Round number to digits -->
-    function roundnum(number, digits) {
-      if (isNaN(number) || !isFinite(number)) return '';
+    <!-- Format number with fix digits -->
+    function num_fix(number, digits) {
+      if (!isFinite(number)) return '';
       if (number == 0) return '0';
       if (Math.sign(number) < 0)
-        sign = '-';
+        var sign = '-';
       else
-        sign = '';
-      exp = Math.ceil(Math.log(number)/Math.log(10) + 0.000001);
-      number = Math.round(Math.abs(number) * Math.pow(10, digits - exp)) + '';
+        var sign = '';
+     number = Math.abs(number)
+      exp = Math.ceil(Math.log10(number) + 0.000001);
+      number = Math.round(number * Math.pow(10, digits - exp)) + '';
       if (digits > exp) { <!-- decimals -->
         if (exp <= 0) { <!-- all decimals -->
           return sign + '0.0000000'.substr(0, 2 - exp) + number;
@@ -977,9 +978,9 @@ RU5ErkJggg==
   <!-- License -->
   <div class="license">
     This work by <a href="https://github.com/Picuino/Picalc">Picuino</a>
-    is licensed under a 
-	<a rel="MIT License" href="http://www.gnu.org/licenses/gpl-3.0.txt">
-	   GPL version 3 license</a>.
+    is licensed under a
+   <a rel="MIT License" href="http://www.gnu.org/licenses/gpl-3.0.txt">
+      GPL version 3 license</a>.
   </div>
 
 </body>
