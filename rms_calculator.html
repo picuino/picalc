@@ -7,7 +7,7 @@
   <meta charset="UTF-8">
   <meta name="Keywords" content="RMS, average, median, value, calculator">
   <meta name="Description" content="JavaScript average and RMS value Calculator">
-  <meta name="Version" content="12/03/2018 - SHA:31443B">
+  <meta name="Version" content="12/03/2018 - SHA:9DD5CD">
 
   <!-- Styles -->
   <style>
@@ -303,7 +303,7 @@
     function tonum(id) {
       val = document.getElementById(id).value.replace(',', '.');
       if (isNaN(val)) return '';
-      return val;
+      return val * 1.0; <!-- return number -->
     }
 
     <!-- Round number to digits -->

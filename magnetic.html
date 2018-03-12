@@ -7,7 +7,7 @@
   <meta charset="UTF-8">
   <meta name="Keywords" content="Inductance, magnetics, coil, calculator">
   <meta name="Description" content="Javascript Inductance calculator">
-  <meta name="Version" content="12/03/2018 - SHA:72251F">
+  <meta name="Version" content="12/03/2018 - SHA:F4F064">
 
   <!-- Styles -->
   <style>
@@ -276,7 +276,7 @@
     function tonum(id) {
       val = document.getElementById(id).value.replace(',', '.');
       if (isNaN(val)) return '';
-      return val;
+      return val * 1.0; <!-- return number -->
     }
 
     <!-- Round number to digits -->

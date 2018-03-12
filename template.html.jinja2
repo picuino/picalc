@@ -203,7 +203,7 @@
     function tonum(id) {
       val = document.getElementById(id).value.replace(',', '.');
       if (isNaN(val)) return '';
-      return val;
+      return val * 1.0; <!-- return number -->
     }
 
     <!-- Round number to digits -->
