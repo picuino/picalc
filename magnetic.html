@@ -7,7 +7,7 @@
   <meta charset="UTF-8">
   <meta name="Keywords" content="Inductance, magnetics, coil, calculator">
   <meta name="Description" content="Javascript Inductance calculator">
-  <meta name="Version" content="12/03/2018 - SHA:0B091F">
+  <meta name="Version" content="12/03/2018 - SHA:4615BB">
 
   <!-- Styles -->
   <style>
@@ -116,7 +116,10 @@
 
     <!-- Init calculations -->
     function init() {
-       reset_var();
+       if  (getCookie("saved") == 'true')
+          load_var();
+       else
+          reset_var();
        calc();
     }
 
@@ -247,10 +250,12 @@
     <!-- Save variables -->
     function save_var() {
       var expiresdate = new Date(2068, 1, 02, 11, 20);
+      expiresdate = "expires=" + expiresdate.toUTCString();
       var names = ["Ae", "B_max", "AL", "g", "AL_2", "N", "f",  ];
       for(var i=0; i<names.length; i++) {
-        document.cookie = names[i] + " = " + encodeURIComponent(tonum(names[i])) + "; expires=" + expiresdate.toUTCString();
+        document.cookie = names[i] + " = " + encodeURIComponent(tonum(names[i])) + "; " + expiresdate;
       }
+      document.cookie = "saved = true; " + expiresdate
     }
 
     <!-- Load variables -->
