@@ -188,35 +188,35 @@ rows:
 # ** ADD WAVES **
 
 - type: header
-  name: RMS of added values
+  name: Sum of waves RMS value
 
 - type: var
-  comment: V1_rms
+  comment: V_rms of Wave 1
   name: V1_rms
   unit: V
 
 - type: var
-  comment: V2_rms
+  comment: V_rms of Wave 2
   name: V2_rms
   unit: V
 
 - type: var
-  comment: V3_rms
+  comment: V_rms of Wave 3
   name: V3_rms
   unit: V
 
 - type: var
-  comment: V4_rms
+  comment: V_rms of Wave 4
   name: V4_rms
   unit: V
 
 - type: var
-  comment: V5_rms
+  comment: V_rms of Wave 5
   name: V5_rms
   unit: V
 
 - type: calc
-  comment: RMS of added values
+  comment: RMS value of all waves
   name: V_add_rms
   unit: V
   calc: V_add_rms = Math.sqrt(V1_rms*V1_rms + V2_rms*V2_rms + V3_rms*V3_rms + V4_rms*V4_rms + V5_rms*V5_rms)

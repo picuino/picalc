@@ -7,7 +7,7 @@
   <meta charset="UTF-8">
   <meta name="Keywords" content="RMS, average, median, value, calculator">
   <meta name="Description" content="JavaScript average and RMS value Calculator">
-  <meta name="Version" content="12/03/2018 - SHA:E73FB3">
+  <meta name="Version" content="12/03/2018 - SHA:31443B">
 
   <!-- Styles -->
   <style>
@@ -132,19 +132,19 @@
       <!-- Variable: Duty cycle -->
       D = tonum("D") * 1e-02;
 
-      <!-- Variable: V1_rms -->
+      <!-- Variable: V_rms of Wave 1 -->
       V1_rms = tonum("V1_rms");
 
-      <!-- Variable: V2_rms -->
+      <!-- Variable: V_rms of Wave 2 -->
       V2_rms = tonum("V2_rms");
 
-      <!-- Variable: V3_rms -->
+      <!-- Variable: V_rms of Wave 3 -->
       V3_rms = tonum("V3_rms");
 
-      <!-- Variable: V4_rms -->
+      <!-- Variable: V_rms of Wave 4 -->
       V4_rms = tonum("V4_rms");
 
-      <!-- Variable: V5_rms -->
+      <!-- Variable: V_rms of Wave 5 -->
       V5_rms = tonum("V5_rms");
 
       <!-- Calculation: Average value of sine wave (offset) -->
@@ -192,7 +192,7 @@
 
       <!-- Calculation: RMS value of Square wave (with offset) -->
 
-      <!-- Calculation: RMS of added values -->
+      <!-- Calculation: RMS value of all waves -->
       V_add_rms = Math.sqrt(V1_rms*V1_rms + V2_rms*V2_rms + V3_rms*V3_rms + V4_rms*V4_rms + V5_rms*V5_rms);
 
       <!-- Print calc: Average value of sine wave (offset) -->
@@ -240,7 +240,7 @@
       <!-- Print calc: RMS value of Square wave (with offset) -->
       document.getElementById("V_sq_rms").value = roundnum(V_sq_rms, 5);
 
-      <!-- Print calc: RMS of added values -->
+      <!-- Print calc: RMS value of all waves -->
       document.getElementById("V_add_rms").value = roundnum(V_add_rms, 5);
     }
 
@@ -920,15 +920,15 @@ RU5ErkJggg==
       <div class="scoment">RMS value of Square wave (with offset)</div>
     </div>
 
-    <!--  Header: RMS of added values -->
-    <h2 id="RMS_of_added_values">RMS of added values</h2>
+    <!--  Header: Sum of waves RMS value -->
+    <h2 id="Sum_of_waves_RMS_value">Sum of waves RMS value</h2>
 
     <!--  Row  -->
     <div class="row">
       <div class="sname">V1_rms</div>
       <div class="sval"> <form> <input type="text" id="V1_rms"> </form> </div>
       <div class="sunit">V</div>
-      <div class="scoment">V1_rms</div>
+      <div class="scoment">V_rms of Wave 1</div>
     </div>
 
     <!--  Row  -->
@@ -936,7 +936,7 @@ RU5ErkJggg==
       <div class="sname">V2_rms</div>
       <div class="sval"> <form> <input type="text" id="V2_rms"> </form> </div>
       <div class="sunit">V</div>
-      <div class="scoment">V2_rms</div>
+      <div class="scoment">V_rms of Wave 2</div>
     </div>
 
     <!--  Row  -->
@@ -944,7 +944,7 @@ RU5ErkJggg==
       <div class="sname">V3_rms</div>
       <div class="sval"> <form> <input type="text" id="V3_rms"> </form> </div>
       <div class="sunit">V</div>
-      <div class="scoment">V3_rms</div>
+      <div class="scoment">V_rms of Wave 3</div>
     </div>
 
     <!--  Row  -->
@@ -952,7 +952,7 @@ RU5ErkJggg==
       <div class="sname">V4_rms</div>
       <div class="sval"> <form> <input type="text" id="V4_rms"> </form> </div>
       <div class="sunit">V</div>
-      <div class="scoment">V4_rms</div>
+      <div class="scoment">V_rms of Wave 4</div>
     </div>
 
     <!--  Row  -->
@@ -960,7 +960,7 @@ RU5ErkJggg==
       <div class="sname">V5_rms</div>
       <div class="sval"> <form> <input type="text" id="V5_rms"> </form> </div>
       <div class="sunit">V</div>
-      <div class="scoment">V5_rms</div>
+      <div class="scoment">V_rms of Wave 5</div>
     </div>
 
     <!--  Row  -->
@@ -968,7 +968,7 @@ RU5ErkJggg==
       <div class="sname">V_add_rms</div>
       <div class="scalc"> <form> <input type="text" id="V_add_rms"> </form> </div>
       <div class="sunit">V</div>
-      <div class="scoment">RMS of added values</div>
+      <div class="scoment">RMS value of all waves</div>
     </div>
 
   </div>  <!-- End spreadsheet -->
