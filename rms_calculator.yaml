@@ -1,0 +1,222 @@
+﻿
+title: Average and RMS value Calculator
+description: JavaScript average and RMS value Calculator
+keywords: RMS, average, median, value, calculator
+
+template: template.html.jinja2
+output: rms_calculator.html
+
+resolution: 5
+
+width:
+   name: 7em
+   value: 6em
+   units: 2em
+   comment: 20em
+
+
+# *******************************************************************
+
+rows:
+
+- type: img
+  name: Wave Types
+  src: images/waves.png
+
+- type: html
+  name: Buttons for manage values
+  code: |
+    <div class="row">Values:
+    <input type="button" value="Reset" onclick="reset_var()">
+    <input type="button" value="Clear" onclick="clear_var()">
+    <input type="button" value="Save" onclick="save_var()">
+    <input type="button" value="Load" onclick="load_var()">
+    </div>
+
+
+# ** INPUT PARAMETER **
+
+- type: header
+  name: Maximum and Minimum values of wave (peak to peak)
+
+- type: var
+  comment: Maximum value of signal
+  name: V_max
+  value: 5
+  unit: V
+
+- type: var
+  comment: Minimum value of signal
+  name: V_min
+  value: 1
+  unit: V
+
+- type: var
+  comment: Duty cycle
+  name: D
+  value: 50
+  unit: '%'
+  prefix: 0.01
+
+
+# ** SINE WAVE **
+
+- type: header
+  name: Sine wave
+
+- type: calc
+  comment: Average value of sine wave (offset)
+  name: V_offset
+  unit: V
+  id: V_offset1
+  calc: V_offset1 = V_min + 0.5 * (V_max - V_min)
+
+- type: calc
+  comment: RMS value of sine wave (without offset)
+  name: V_sin_ac_rms
+  unit: V
+  calc: V_sin_ac_rms = Math.abs(V_max - V_min) * Math.sqrt(0.125)
+
+- type: calc
+  comment: RMS value of sine wave (with offset)
+  name: V_sin_rms
+  unit: V
+  calc: V_sin_rms = Math.sqrt(V_sin_ac_rms * V_sin_ac_rms + V_offset1 * V_offset1)
+
+
+# ** TRIANGLE WAVE **
+
+- type: header
+  name: Triangle wave
+
+- type: calc
+  comment: Average value of Triangle wave (offset)
+  name: V_offset
+  unit: V
+  id: V_offset2
+  calc: V_offset2 = V_min + 0.5 * (V_max - V_min)
+
+- type: calc
+  comment: RMS value of Triangle wave (without offset)
+  name: V_tri_ac_rms
+  unit: V
+  calc: V_tri_ac_rms = Math.abs(V_max - V_min) * Math.sqrt(1.0/12)
+
+- type: calc
+  comment: RMS value of Triangle wave (with offset)
+  name: V_tri_rms
+  unit: V
+  calc: V_tri_rms = Math.sqrt(V_tri_ac_rms * V_tri_ac_rms + V_offset2 * V_offset2)
+
+
+# ** RECTIFIED SINE WAVE **
+
+- type: header
+  name: Rectified Sine wave
+
+- type: calc
+  comment: Average value of Rectified Sine wave (offset)
+  name: V_offset
+  unit: V
+  id: V_offset3
+  calc: V_offset3 = V_min + (V_max - V_min) * 2 * D / Math.PI
+
+- type: calc
+  comment: RMS value of of Rectified Sine wave (without offset)
+  name: V_rsin_ac_rms
+  unit: V
+  calc: V_rsin_ac_rms = Math.abs(V_max - V_min) * Math.sqrt(D*(0.5 - 4.0 /(Math.PI*Math.PI)))
+
+- type: calc
+  comment: RMS value of of Rectified Sine wave (with offset)
+  name: V_rsin_rms
+  unit: V
+  calc: V_rsin_rms = Math.sqrt(V_rsin_ac_rms * V_rsin_ac_rms + V_offset3 * V_offset3)
+
+
+# ** SAWTOOTH WAVE **
+
+- type: header
+  name: Sawtooth wave
+
+- type: calc
+  comment: Average value of Sawtooth wave (offset)
+  name: V_offset
+  unit: V
+  id: V_offset4
+  calc: V_offset4 = V_min + D * 0.5 * (V_max - V_min)
+
+- type: calc
+  comment: RMS value of Sawtooth wave (without offset)
+  name: V_saw_ac_rms
+  unit: V
+  calc: V_saw_ac_rms = Math.abs(V_max - V_min) * Math.sqrt(D * 0.0833333)
+
+- type: calc
+  comment: RMS value of Sawtooth wave (with offset)
+  name: V_saw_rms
+  unit: V
+  calc: V_saw_rms = Math.sqrt(V_saw_ac_rms * V_saw_ac_rms + V_offset4 * V_offset4)
+
+
+# ** SQUARE WAVE **
+
+- type: header
+  name: Square wave
+
+- type: calc
+  comment: Average value of Square wave (offset)
+  name: V_offset
+  unit: V
+  id: V_offset5
+  calc: V_offset5 = V_min +  D * (V_max - V_min)
+
+- type: calc
+  comment: RMS value of Square wave (without offset)
+  name: V_sq_ac_rms
+  unit: V
+  calc:
+  - V_sq_rms = Math.sqrt(V_max*V_max*D + V_min*V_min*(1-D))
+  - V_sq_ac_rms = Math.sqrt(V_sq_rms*V_sq_rms - V_offset5 * V_offset5)
+
+- type: calc
+  comment: RMS value of Square wave (with offset)
+  name: V_sq_rms
+  unit: V
+
+
+# ** ADD WAVES **
+
+- type: header
+  name: RMS of added values
+
+- type: var
+  comment: V1_rms
+  name: V1_rms
+  unit: V
+
+- type: var
+  comment: V2_rms
+  name: V2_rms
+  unit: V
+
+- type: var
+  comment: V3_rms
+  name: V3_rms
+  unit: V
+
+- type: var
+  comment: V4_rms
+  name: V4_rms
+  unit: V
+
+- type: var
+  comment: V5_rms
+  name: V5_rms
+  unit: V
+
+- type: calc
+  comment: RMS of added values
+  name: V_add_rms
+  unit: V
+  calc: V_add_rms = Math.sqrt(V1_rms*V1_rms + V2_rms*V2_rms + V3_rms*V3_rms + V4_rms*V4_rms + V5_rms*V5_rms)

@@ -1,0 +1,521 @@
+﻿<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+
+  <title>Inductance Calculator</title>
+  <meta charset="UTF-8">
+  <meta name="Keywords" content="Inductance, magnetics, coil, calculator">
+  <meta name="Description" content="Javascript Inductance calculator">
+  <meta name="Version" content="12/03/2018 - SHA:72251F">
+
+  <!-- Styles -->
+  <style>
+    body {
+      font: 16px sans-serif;
+      background-color: #F0F0F0;
+      min-width: 360px;
+      margin: 0 20px 0 20px;
+    }
+    h1 {
+      font-size: 140%;
+      font-weight: bold;
+      text-transform: uppercase;
+      margin: 20px 0 10px 0;
+    }
+    h2 {
+      font-size: 120%;
+      font-weight: bold;
+      margin: 20px 0 6px 0;
+    }
+
+    img {
+      padding: 2px 0 2px 0;
+      max-width: 100%;
+    }
+
+    input[type=button] {
+      display: inline-block;
+      font-size: 1em;
+      background-color: #fff;
+      border: 1px solid #888;
+      border-radius: 4px;
+    }
+
+    .spreadsheet {
+    }
+
+    .license {
+      max-width: 480px;
+      padding: 40px 0 40px 0;
+    }
+
+    /* Column 1: Variable name */
+    .sname {
+      display: inline-block;
+      min-width: 5em;
+    }
+
+    /* Column 2: Variable Value (input form) */
+    input[type=text], select, textarea {
+      width: 100%;
+      padding: 0 4px 0 4px;
+      font: inherit;
+      text-align: right;
+      box-sizing: border-box;
+      border: 1px solid #888;
+      border-radius: 4px;
+    }
+    .sval {
+      display: inline-block;
+      width: 6em;
+    }
+    .sval input[type=text] {
+      background-color: #FFFFC0;
+    }
+
+    .sconst {
+      display: inline-block;
+      width: 6em;
+    }
+    .sconst input[type=text] {
+      background-color: #FFFFFF;
+    }
+
+    .scalc  {
+      display: inline-block;
+      width: 6em;
+    }
+    .scalc input[type=text] {
+      background-color: #C0FFFF;
+    }
+
+    /* Column 3: Variable Units */
+    .sunit {
+      display: inline-block;
+      min-width: 5em;
+      text-align: center;
+      border: 1px solid #888;
+      border-radius: 4px;
+    }
+
+    /* Column 4: Variable comment */
+    .scoment {
+      display: inline-block;
+      min-width: 20em;
+    }
+
+    /* Rows */
+    .row {
+      padding-bottom: 2px;
+    }
+
+  </style>
+
+  <script>
+
+    <!-- Init calculations -->
+    function init() {
+       reset_var();
+       calc();
+    }
+
+    <!-- Compute calculations -->
+    function calc() {
+
+      <!-- Variable: Effective magnetic cross section -->
+      Ae = tonum("Ae") * 1e-06;
+
+      <!-- Variable: Max value of magnetic flux density -->
+      B_max = tonum("B_max") * 1e-03;
+
+      <!-- Variable: Inductance factor (permeability) -->
+      AL = tonum("AL") * 1e-09;
+
+      <!-- Variable: Air gap lenght -->
+      g = tonum("g") * 1e-03;
+
+      <!-- Variable: Inductance factor (permeability) -->
+      AL_2 = tonum("AL_2") * 1e-09;
+
+      <!-- Variable: Number of winding turns -->
+      N = tonum("N");
+
+      <!-- Variable: Frequency -->
+      f = tonum("f") * 1e+03;
+
+      <!-- Constant: Permeability of air -->
+      uo = 1.2566e-06;
+      document.getElementById("uo").value = "1.2566e-06";
+
+      <!-- Constant: Resistivity of copper at 20ºC -->
+      ro_cu = 1.724e-08;
+      document.getElementById("ro_cu").value = "1.7240e-08";
+
+      <!-- Constant: Coefficient of resistivity of copper with temperature -->
+      Cro_cu = 0.00393;
+      document.getElementById("Cro_cu").value = "3.9300e-03";
+
+      <!-- Calculation: Relative lenght of air gap (g/√Ae) -->
+      g_factor = g / Math.sqrt(Ae);
+
+      <!-- Calculation: Fringing factor of air gap (+-15% error) -->
+      Fr_K1 = 2.15;
+      Fr_K2 = 0.74;
+      Fr_factor = 1 + Fr_K1 * Math.pow(g_factor, Fr_K2);
+
+      <!-- Calculation: Inductance factor (permeability) of air gap -->
+      AL_gap = uo * Ae * Fr_factor / g;
+
+      <!-- Calculation: Total Inductance factor with gap -->
+      AL_total = 1.0 / ( (1.0 / AL_gap) + (1.0 / AL) );
+
+      <!-- Calculation: Coil Inductance -->
+      L = AL_2 * Math.pow(N, 2);
+
+      <!-- Calculation: Maximum Inductor Current -->
+      I_max = (Ae * B_max) / (AL * N);
+
+      <!-- Calculation: Energy stored in Inductance -->
+      E_max = 0.5 * Math.pow(I_max, 2) * L;
+
+      <!-- Calculation: Period -->
+      T = 1.0 / f;
+
+      <!-- Calculation: Maximum sine wave voltage -->
+      V_sin = I_max * (2 * Math.PI * f) * L / Math.sqrt(2);
+
+      <!-- Calculation: Maximum square wave voltage -->
+      T = 1.0 / f;
+      V_sq = L * I_max * 2 / ( T / 2.0 );
+
+      <!-- Print calc: Relative lenght of air gap (g/√Ae) -->
+      document.getElementById("g_factor").value = roundnum(g_factor * 1e+02, 5);
+
+      <!-- Print calc: Fringing factor of air gap (+-15% error) -->
+      document.getElementById("Fr_factor").value = roundnum(Fr_factor, 5);
+
+      <!-- Print calc: Inductance factor (permeability) of air gap -->
+      document.getElementById("AL_gap").value = roundnum(AL_gap * 1e+09, 5);
+
+      <!-- Print calc: Total Inductance factor with gap -->
+      document.getElementById("AL_total").value = roundnum(AL_total * 1e+09, 5);
+
+      <!-- Print calc: Coil Inductance -->
+      document.getElementById("L").value = roundnum(L * 1e+06, 5);
+
+      <!-- Print calc: Maximum Inductor Current -->
+      document.getElementById("I_max").value = roundnum(I_max, 5);
+
+      <!-- Print calc: Energy stored in Inductance -->
+      document.getElementById("E_max").value = roundnum(E_max * 1e+06, 5);
+
+      <!-- Print calc: Period -->
+      document.getElementById("T").value = roundnum(T * 1e+06, 5);
+
+      <!-- Print calc: Maximum sine wave voltage -->
+      document.getElementById("V_sin").value = roundnum(V_sin, 5);
+
+      <!-- Print calc: Maximum square wave voltage -->
+      document.getElementById("V_sq").value = roundnum(V_sq, 5);
+    }
+
+    <!-- Reset variables to default values -->
+    function reset_var() {
+      document.getElementById("Ae").value = 683;
+      document.getElementById("B_max").value = 300;
+      document.getElementById("AL").value = 8100;
+      document.getElementById("g").value = 0;
+      document.getElementById("AL_2").value = tonum("AL");
+      document.getElementById("N").value = 10;
+      document.getElementById("f").value = 20;
+      calc();
+    }
+
+    <!-- Clear variables -->
+    function clear_var() {
+      document.getElementById("Ae").value = '';
+      document.getElementById("B_max").value = '';
+      document.getElementById("AL").value = '';
+      document.getElementById("g").value = '';
+      document.getElementById("AL_2").value = '';
+      document.getElementById("N").value = '';
+      document.getElementById("f").value = '';
+      calc();
+    }
+
+    <!-- Save variables -->
+    function save_var() {
+      var expiresdate = new Date(2068, 1, 02, 11, 20);
+      var names = ["Ae", "B_max", "AL", "g", "AL_2", "N", "f",  ];
+      for(var i=0; i<names.length; i++) {
+        document.cookie = names[i] + " = " + encodeURIComponent(tonum(names[i])) + "; expires=" + expiresdate.toUTCString();
+      }
+    }
+
+    <!-- Load variables -->
+    function load_var() {
+      document.getElementById("Ae").value = getCookie("Ae");
+      document.getElementById("B_max").value = getCookie("B_max");
+      document.getElementById("AL").value = getCookie("AL");
+      document.getElementById("g").value = getCookie("g");
+      document.getElementById("AL_2").value = getCookie("AL_2");
+      document.getElementById("N").value = getCookie("N");
+      document.getElementById("f").value = getCookie("f");
+      calc();
+    }
+
+    <!-- Read cookies -->
+    function getCookie(name) {
+      var re = new RegExp(name + "=([^;]+)");
+      var value = re.exec(document.cookie);
+      return (value != null) ? unescape(value[1]) : null;
+    }
+
+    <!-- Evalue inputs with '.' or ',' as comma -->
+    function tonum(id) {
+      val = document.getElementById(id).value.replace(',', '.');
+      if (isNaN(val)) return '';
+      return val;
+    }
+
+    <!-- Round number to digits -->
+    function roundnum(number, digits) {
+      if (isNaN(number) || !isFinite(number)) return '';
+      if (number == 0) return '0';
+      if (Math.sign(number) < 0)
+        sign = '-';
+      else
+        sign = '';
+      exp = Math.ceil(Math.log(number)/Math.log(10) + 0.000001);
+      number = Math.round(Math.abs(number) * Math.pow(10, digits - exp)) + '';
+      if (digits > exp) { <!-- decimals -->
+        if (exp <= 0) { <!-- all decimals -->
+          return sign + '0.0000000'.substr(0, 2 - exp) + number;
+        }
+        else { <!-- integer and decimals -->
+          return sign + number.substr(0, exp) + '.' + number.substr(exp, digits - exp);
+        }
+      }
+      else { <!-- no decimals -->
+        number = number  + '0000000000'
+        return sign + number.substr(0, exp);
+      }
+    }
+
+    <!-- Manage keys [Enter] and [tab] -->
+    function OnKeyPress(evt) {
+      var evt = (evt) ? evt : ((event) ? event : null);
+      var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null);
+      if (node.type=="text") {
+        if (evt.keyCode == 9) { calc(); return; }
+        if (evt.keyCode == 13) { calc(); return false; }
+      }
+    }
+    document.onkeypress = OnKeyPress;
+
+  </script>
+
+</head>
+
+
+<body onload="init()">
+
+  <div class="spreadsheet">
+  <h1>Inductance Calculator</h1>
+
+    <!--  Section: Buttons for manage values -->
+    <div class="row">Values:
+<input type="button" value="Reset" onclick="reset_var()">
+<input type="button" value="Clear" onclick="clear_var()">
+<input type="button" value="Save" onclick="save_var()">
+<input type="button" value="Load" onclick="load_var()">
+</div>
+
+
+    <!--  Header: Core and phisical constants -->
+    <h2 id="Core_and_phisical_constants">Core and phisical constants</h2>
+
+    <!--  Row  -->
+    <div class="row">
+      <div class="sname">Ae</div>
+      <div class="sval"> <form> <input type="text" id="Ae"> </form> </div>
+      <div class="sunit">mm<sup>2</sup></div>
+      <div class="scoment">Effective magnetic cross section</div>
+    </div>
+
+    <!--  Row  -->
+    <div class="row">
+      <div class="sname">B_max</div>
+      <div class="sval"> <form> <input type="text" id="B_max"> </form> </div>
+      <div class="sunit">mT</div>
+      <div class="scoment">Max value of magnetic flux density</div>
+    </div>
+
+    <!--  Row  -->
+    <div class="row">
+      <div class="sname">AL</div>
+      <div class="sval"> <form> <input type="text" id="AL"> </form> </div>
+      <div class="sunit">nH/turn<sup>2</sup></div>
+      <div class="scoment">Inductance factor (permeability)</div>
+    </div>
+
+    <!--  Row  -->
+    <div class="row">
+      <div class="sname">uo</div>
+      <div class="sconst"> <form> <input type="text" id="uo"> </form> </div>
+      <div class="sunit">V·s/A·m</div>
+      <div class="scoment">Permeability of air</div>
+    </div>
+
+    <!--  Row  -->
+    <div class="row">
+      <div class="sname">ro_cu</div>
+      <div class="sconst"> <form> <input type="text" id="ro_cu"> </form> </div>
+      <div class="sunit">Ohm/m</div>
+      <div class="scoment">Resistivity of copper at 20ºC</div>
+    </div>
+
+    <!--  Row  -->
+    <div class="row">
+      <div class="sname">Cro_cu</div>
+      <div class="sconst"> <form> <input type="text" id="Cro_cu"> </form> </div>
+      <div class="sunit">1/ºC</div>
+      <div class="scoment">Coefficient of resistivity of copper with temperature</div>
+    </div>
+
+    <!--  Header: Inductance Factor with Air Gap -->
+    <h2 id="Inductance_Factor_with_Air_Gap">Inductance Factor with Air Gap</h2>
+
+    <!--  Row  -->
+    <div class="row">
+      <div class="sname">g</div>
+      <div class="sval"> <form> <input type="text" id="g"> </form> </div>
+      <div class="sunit">mm</div>
+      <div class="scoment">Air gap lenght</div>
+    </div>
+
+    <!--  Row  -->
+    <div class="row">
+      <div class="sname">g_factor</div>
+      <div class="scalc"> <form> <input type="text" id="g_factor"> </form> </div>
+      <div class="sunit">%</div>
+      <div class="scoment">Relative lenght of air gap (g/√Ae)</div>
+    </div>
+
+    <!--  Row  -->
+    <div class="row">
+      <div class="sname">Fr_factor</div>
+      <div class="scalc"> <form> <input type="text" id="Fr_factor"> </form> </div>
+      <div class="sunit">&nbsp;</div>
+      <div class="scoment">Fringing factor of air gap (+-15% error)</div>
+    </div>
+
+    <!--  Row  -->
+    <div class="row">
+      <div class="sname">AL_gap</div>
+      <div class="scalc"> <form> <input type="text" id="AL_gap"> </form> </div>
+      <div class="sunit">nH/turn<sup>2</sup></div>
+      <div class="scoment">Inductance factor (permeability) of air gap</div>
+    </div>
+
+    <!--  Row  -->
+    <div class="row">
+      <div class="sname">AL_total</div>
+      <div class="scalc"> <form> <input type="text" id="AL_total"> </form> </div>
+      <div class="sunit">nH/turn<sup>2</sup></div>
+      <div class="scoment">Total Inductance factor with gap</div>
+    </div>
+
+    <!--  Header: Inductance of coil -->
+    <h2 id="Inductance_of_coil">Inductance of coil</h2>
+
+    <!--  Row  -->
+    <div class="row">
+      <div class="sname">AL</div>
+      <div class="sval"> <form> <input type="text" id="AL_2"> </form> </div>
+      <div class="sunit">nH/turn<sup>2</sup></div>
+      <div class="scoment">Inductance factor (permeability)</div>
+    </div>
+
+    <!--  Row  -->
+    <div class="row">
+      <div class="sname">N</div>
+      <div class="sval"> <form> <input type="text" id="N"> </form> </div>
+      <div class="sunit">turns</div>
+      <div class="scoment">Number of winding turns</div>
+    </div>
+
+    <!--  Row  -->
+    <div class="row">
+      <div class="sname">L</div>
+      <div class="scalc"> <form> <input type="text" id="L"> </form> </div>
+      <div class="sunit">uH</div>
+      <div class="scoment">Coil Inductance</div>
+    </div>
+
+    <!--  Row  -->
+    <div class="row">
+      <div class="sname">I_max</div>
+      <div class="scalc"> <form> <input type="text" id="I_max"> </form> </div>
+      <div class="sunit">A</div>
+      <div class="scoment">Maximum Inductor Current</div>
+    </div>
+
+    <!--  Row  -->
+    <div class="row">
+      <div class="sname">E_max</div>
+      <div class="scalc"> <form> <input type="text" id="E_max"> </form> </div>
+      <div class="sunit">uJ</div>
+      <div class="scoment">Energy stored in Inductance</div>
+    </div>
+
+    <!--  Header: Maximum Voltage -->
+    <h2 id="Maximum_Voltage">Maximum Voltage</h2>
+
+    <!--  Row  -->
+    <div class="row">
+      <div class="sname">f</div>
+      <div class="sval"> <form> <input type="text" id="f"> </form> </div>
+      <div class="sunit">kHz</div>
+      <div class="scoment">Frequency</div>
+    </div>
+
+    <!--  Row  -->
+    <div class="row">
+      <div class="sname">T</div>
+      <div class="scalc"> <form> <input type="text" id="T"> </form> </div>
+      <div class="sunit">us</div>
+      <div class="scoment">Period</div>
+    </div>
+
+    <!--  Row  -->
+    <div class="row">
+      <div class="sname">V_sin</div>
+      <div class="scalc"> <form> <input type="text" id="V_sin"> </form> </div>
+      <div class="sunit">V</div>
+      <div class="scoment">Maximum sine wave voltage</div>
+    </div>
+
+    <!--  Row  -->
+    <div class="row">
+      <div class="sname">V_sq</div>
+      <div class="scalc"> <form> <input type="text" id="V_sq"> </form> </div>
+      <div class="sunit">V</div>
+      <div class="scoment">Maximum square wave voltage</div>
+    </div>
+
+  </div>  <!-- End spreadsheet -->
+
+
+  <!-- License -->
+  <div class="license">
+    This work by <a href="https://github.com/Picuino/Picalc">Picuino</a>
+    is licensed under a 
+	<a rel="MIT License" href="http://www.gnu.org/licenses/gpl-3.0.txt">
+	   GPL version 3 license</a>.
+  </div>
+
+</body>
+
+</html>

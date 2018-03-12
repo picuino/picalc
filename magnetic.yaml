@@ -1,0 +1,202 @@
+﻿
+title: Inductance Calculator
+description: Javascript Inductance calculator
+keywords: Inductance, magnetics, coil, calculator
+
+template: template.html.jinja2
+output: magnetic.html
+
+resolution: 5
+
+width:
+   name: 5em
+   value: 6em
+   units: 5em
+   comment: 20em
+
+
+# *******************************************************************
+
+rows:
+
+- type: html
+  name: Buttons for manage values
+  code: |
+    <div class="row">Values:
+    <input type="button" value="Reset" onclick="reset_var()">
+    <input type="button" value="Clear" onclick="clear_var()">
+    <input type="button" value="Save" onclick="save_var()">
+    <input type="button" value="Load" onclick="load_var()">
+    </div>
+
+
+# ** INPUT PARAMETER **
+
+- type: header
+  name: Core and phisical constants
+
+- type: var
+  comment: Effective magnetic cross section
+  name: Ae
+  value: 683
+  unit: mm<sup>2</sup>
+  prefix: 1.0e-06
+
+- type: var
+  comment: Max value of magnetic flux density
+  name: B_max
+  value: 300
+  unit: mT
+
+- type: var
+  comment: Inductance factor (permeability)
+  name: AL
+  value: 8100
+  unit: nH/turn<sup>2</sup>
+
+- type: const
+  comment: Permeability of air
+  name: uo
+  unit: "V·s/A·m"
+  value: 1.2566e-6
+
+- type: const
+  comment: "Resistivity of copper at 20\xBAC"
+  name: ro_cu
+  unit: Ohm/m
+  value: 17.24e-9
+
+- type: const
+  comment: Coefficient of resistivity of copper with temperature
+  name: Cro_cu
+  unit: "1/\xBAC"
+  value: 3.93e-3
+
+
+# ** Inductance Factor with Air Gap **
+
+- type: header
+  name: Inductance Factor with Air Gap
+
+- type: var
+  comment: Air gap lenght
+  name: g
+  value: 0
+  unit: mm
+
+- type: calc
+  comment: Relative lenght of air gap (g/√Ae)
+  name: g_factor
+  unit: '%'
+  prefix: 1e-2
+  calc: g_factor = g / Math.sqrt(Ae)
+
+- type: calc
+  name: Fr_factor
+  unit:
+#
+# Carter factor.
+# Bad aproximation to real ferrite EE cores.
+#
+#  comment: Fringing factor of air gap (Carter Factor)
+#  calc:
+#  - Lambda = 1.5 * Math.sqrt(Ae)
+#  - Beta = Math.sqrt(Ae) / (4.0 * g)
+#  - Alpha = (Beta * Math.atan(Beta) - 0.5 * Math.log(1 + Math.pow(Beta, 2))) * 4.0 / Math.PI
+#  - Fr_factor = Lambda / (Lambda - Alpha * g)
+#
+
+# Simple regression factor
+# Calculated with best fit with several E cores.
+# Error: +-15%
+  comment: Fringing factor of air gap (+-15% error)
+  calc:
+  - Fr_K1 = 2.15
+  - Fr_K2 = 0.74
+  - Fr_factor = 1 + Fr_K1 * Math.pow(g_factor, Fr_K2)
+
+
+- type: calc
+  comment: Inductance factor (permeability) of air gap
+  name: AL_gap
+  unit: nH/turn<sup>2</sup>
+  calc: AL_gap = uo * Ae * Fr_factor / g
+
+- type: calc
+  comment: Total Inductance factor with gap
+  name: AL_total
+  unit: nH/turn<sup>2</sup>
+  calc: AL_total = 1.0 / ( (1.0 / AL_gap) + (1.0 / AL) )
+
+
+# ** Inductance of coil **
+
+- type: header
+  name: Inductance of coil
+
+- type: var
+  comment: Inductance factor (permeability)
+  name: AL
+  id: AL_2
+  value:  'tonum("AL")'
+  unit: nH/turn<sup>2</sup>
+
+- type: var
+  comment: Number of winding turns
+  name: N
+  value: 10
+  unit: turns
+
+- type: calc
+  comment: Coil Inductance
+  name: L
+  unit: uH
+  calc: L = AL_2 * Math.pow(N, 2)
+
+- type: calc
+  comment: Maximum Inductor Current
+  name: I_max
+  unit: A
+  calc: I_max = (Ae * B_max) / (AL * N)
+
+- type: calc
+  comment: Energy stored in Inductance
+  name: E_max
+  unit: uJ
+  calc: E_max = 0.5 * Math.pow(I_max, 2) * L
+
+
+# ** Maximum Voltage **
+
+- type: header
+  name: Maximum Voltage
+
+- type: var
+  comment: Frequency
+  name: f
+  value: 20
+  unit: kHz
+
+- type: calc
+  comment: Period
+  name: T
+  unit: us
+  calc: T = 1.0 / f
+
+- type: calc
+  comment: Maximum sine wave voltage
+  name: V_sin
+  unit: V
+#  Ip = Vp / (2*pi*f*L)
+#  V = Vp / sqrt(2)
+  calc: V_sin = I_max * (2 * Math.PI * f) * L / Math.sqrt(2)
+
+- type: calc
+  comment: Maximum square wave voltage
+  name: V_sq
+  unit: V
+#  I * L = V * T
+  calc:
+  - T = 1.0 / f
+  - V_sq = L * I_max * 2 / ( T / 2.0 )
+
