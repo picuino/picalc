@@ -9,7 +9,7 @@ resolution: 5
 
 width:
    max: 640px
-   min: 420px
+   min: 320px
    name: 7em
    value: 5em
    units: 2em

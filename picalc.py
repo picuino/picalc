@@ -39,14 +39,19 @@ class picalc:
       default = {
          'resolution': 5,
          'template': 'template.html.jinja2',
+         'font': {
+            'normal_size': '16px',
+            'license_size': '12px',
+         },
          'width': {
             'max': '640px',
             'min': '420px',
             'name': '6em',
             'value': '6em',
             'units': '6em',
-            'comment': '20em', },
-            'output': os.path.splitext(self.database_name)[0] + '.html',
+            'comment': '20em',
+         },
+         'output': os.path.splitext(self.database_name)[0] + '.html',
       }
 
       for key in default.keys():

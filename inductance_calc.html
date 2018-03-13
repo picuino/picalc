@@ -7,7 +7,8 @@
   <meta charset="UTF-8">
   <meta name="Keywords" content="Inductance, magnetics, coil, calculator">
   <meta name="Description" content="Javascript Inductance calculator">
-  <meta name="Version" content="13/03/2018 - SHA:7D1F6D">
+  <meta name="Version" content="14/03/2018 - SHA:2440D4">
+	<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
 
   <!-- Styles -->
   <style>
@@ -16,6 +17,10 @@
       background-color: #f0f4f4;
       margin: 0;
       min-width: 420px;
+    }
+    /* Responsive design for Small screen */
+    @media screen and (max-width: 640px) {
+      body { min-width: 420px !important; }
     }
 
     .content {
@@ -58,7 +63,8 @@
     }
 
     input[type=button] {
-      font-size: 16px;
+      font: inherit;
+      text-align: center;
       background-color: #eee;
       border: 1px solid #888;
       border-radius: 4px;
@@ -351,6 +357,13 @@
 
     <!--  Header: Core and phisical constants -->
     <h2 id="Core_and_phisical_constants">Core and phisical constants</h2>
+
+    <!--  Row  -->
+    <div class="row">
+      <div class="sname">core</div>
+      <div class="sunit">&nbsp;</div>
+      <div class="scoment">Select core and parameter values</div>
+    </div>
 
     <!--  Row  -->
     <div class="row">

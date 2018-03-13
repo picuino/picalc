@@ -8,14 +8,19 @@
   <meta name="Keywords" content="{{data.keywords}}">
   <meta name="Description" content="{{data.description}}">
   <meta name="Version" content="{{version}}">
+	<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
 
   <!-- Styles -->
   <style>
     body {
-      font: 16px sans-serif;
+      font: {{data.font.normal_size}} sans-serif;
       background-color: #f0f4f4;
       margin: 0;
       min-width: {{data.width.min}};
+    }
+    /* Responsive design for Small screen */
+    @media screen and (max-width: {{data.width.max}}) {
+      body { min-width: {{data.width.min}} !important; }
     }
 
     .content {
@@ -34,7 +39,7 @@
       margin: 0 auto;   
       text-align: center;
       padding: 20px 16px 60px 16px;
-      font-size: 12px;
+      font-size: {{data.font.license_size}};
       font-weight: bold;
       background-color: #ddd;
     }
@@ -58,7 +63,8 @@
     }
 
     input[type=button] {
-      font-size: 16px;
+      font: inherit;
+      text-align: center;
       background-color: #eee;
       border: 1px solid #888;
       border-radius: 4px;
