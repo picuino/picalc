@@ -4,11 +4,12 @@ description: Javascript Inductance calculator
 keywords: Inductance, magnetics, coil, calculator
 
 template: template.html.jinja2
-output: magnetic.html
 
 resolution: 5
 
 width:
+   max: 640px
+   min: 420px
    name: 5em
    value: 6em
    units: 5em

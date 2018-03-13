@@ -4,7 +4,6 @@ description: JavaScript average and RMS value Calculator
 keywords: RMS, average, median, value, calculator
 
 template: template.html.jinja2
-output: rms_calculator.html
 
 resolution: 5
 
@@ -15,6 +14,10 @@ width:
    value: 5em
    units: 2em
    comment: 20em
+
+include:
+   - type: script 
+     name: zeros.js
 
 
 # *******************************************************************

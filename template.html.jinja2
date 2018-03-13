@@ -125,7 +125,14 @@
 {%- macro to_numexp_5(num) -%} {{"%5.4e"|format(num|float)}} {%- endmacro %}
 
   <script>
+    {% for include in data.include %} {% if include.type == 'script' %}
 
+    <!-- Include script ({{include.code.count('\n')+1}} lines ): {{include.name}} -->
+    {{include.code|string}}
+
+    <!-- End {{include.name}} -->
+    {%- endif %} {%- endfor %} 
+    
     <!-- Init calculations -->
     function init() {
        if  (getCookie("saved") == 'true')

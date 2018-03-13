@@ -46,8 +46,9 @@ class picalc:
             'value': '6em',
             'units': '6em',
             'comment': '20em', },
-         'output': 'out.txt',  
+            'output': os.path.splitext(self.database_name)[0] + '.html',
       }
+
       for key in default.keys():
          if not key in self.database:
             self.database[key] = default[key]
@@ -100,15 +101,25 @@ class picalc:
       """Read database from file
          Fill empty values of database with default options
          Load template"""
+      self.database_name = re.sub('^.[\\/]', '', filename)
       self.database = yaml.load(self.read(filename))
       self.default_options()
+      self.load_include()
+
+
+   def load_include(self):
+      """Read code of all included files"""
+      if not 'include' in self.database:
+         return
+      for inc in self.database['include']:
+         inc['code'] = self.read(os.path.join('include', inc['name']))
 
 
    def load_template(self):
       """Read template from file"""
       self.template_code = self.read(self.database['template'])
       self.template = Template(self.template_code)
-       
+      
 
    def render(self, binobjects):
       """Render template"""
