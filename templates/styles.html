@@ -1,32 +1,31 @@
-﻿{% extends "base.html" %}
-    body {
-      font: 16px sans-serif;
+﻿    body {
+      font: {{data.font.normal_size}} sans-serif;
       background-color: #f0f4f4;
       margin: 0;
-      min-width: 420px;
+      min-width: {{data.width.min}};
     }
     /* Responsive design for Small screen */
-    @media screen and (max-width: 640px) {
-      body { min-width: 420px !important; }
+    @media screen and (max-width: {{data.width.max}}) {
+      body { min-width: {{data.width.min}} !important; }
     }
 
     .content {
-      max-width: 640px; 
+      max-width: {{data.width.max}};
       margin: 0 auto;
       padding: 16px 16px 32px 16px;
       background-color: #fff;
     }
 
-    .row { 
-      padding-bottom: 2px; 
+    .row {
+      padding-bottom: 2px;
     }
 
-    .license {
-      max-width: 640px; 
-      margin: 0 auto;   
+    .footer {
+      max-width: {{data.width.max}};
+      margin: 0 auto;
       text-align: center;
       padding: 20px 16px 60px 16px;
-      font-size: 12px;
+      font-size: {{data.font.license_size}};
       font-weight: bold;
       background-color: #ddd;
     }
@@ -60,7 +59,7 @@
     /* Column 1: Variable name */
     .sname {
       display: inline-block;
-      min-width: 7em;
+      min-width: {{data.width.name}};
     }
 
     /* Column 2: Variable Value (input form) */
@@ -73,11 +72,9 @@
       border: 1px solid #888;
       border-radius: 4px;
     }
-    input[type=text]:disabled { color: black; }
-    
     .sval {
       display: inline-block;
-      width: 5em;
+      width: {{data.width.value}};
     }
     .sval input[type=text] {
       background-color: #FFFFC0;
@@ -85,7 +82,7 @@
 
     .sconst {
       display: inline-block;
-      width: 5em;
+      width: {{data.width.value}};
     }
     .sconst input[type=text] {
       background-color: #FFFFFF;
@@ -93,7 +90,7 @@
 
     .scalc  {
       display: inline-block;
-      width: 5em;
+      width: {{data.width.value}};
     }
     .scalc input[type=text] {
       background-color: #C0FFFF;
@@ -102,7 +99,7 @@
     /* Column 3: Variable Units */
     .sunit {
       display: inline-block;
-      min-width: 2em;
+      min-width: {{data.width.units}};
       text-align: center;
       border: 1px solid #888;
       border-radius: 4px;
@@ -111,5 +108,5 @@
     /* Column 4: Variable comment */
     .scoment {
       display: inline-block;
-      min-width: 20em;
+      min-width: {{data.width.comment}};
     }

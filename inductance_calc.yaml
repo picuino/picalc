@@ -3,8 +3,6 @@ title: Inductance Calculator
 description: Javascript Inductance calculator
 keywords: Inductance, magnetics, coil, calculator
 
-template: template.html.jinja2
-
 resolution: 5
 
 width:

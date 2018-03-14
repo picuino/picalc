@@ -3,8 +3,6 @@ title: Average and RMS value Calculator
 description: JavaScript average and RMS value Calculator
 keywords: RMS, average, median, value, calculator
 
-template: template.html.jinja2
-
 resolution: 5
 
 width:
@@ -31,12 +29,12 @@ rows:
 - type: html
   name: Buttons for manage values
   code: |
-    <div class="row">Values:
-    <input type="button" value="Reset" onclick="reset_var()">
-    <input type="button" value="Clear" onclick="clear_var()">
-    <input type="button" value="Save" onclick="save_var()">
-    <input type="button" value="Load" onclick="load_var()">
-    </div>
+      <div class="row">Values:
+      <input type="button" value="Reset" onclick="reset_var()">
+      <input type="button" value="Clear" onclick="clear_var()">
+      <input type="button" value="Save" onclick="save_var()">
+      <input type="button" value="Load" onclick="load_var()">
+      </div>
 
 
 # ** INPUT PARAMETER **
