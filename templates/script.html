@@ -3,8 +3,8 @@
 
     {% for include in data.include %} {% if include.type == 'script' %}
 
-    <!-- Include script: {{include.name}} -->
-    {% include 'include/{{include.name}}' %}
+    <!-- Include script ({{include.code.count('\n')+1}} lines ): {{include.name}} -->
+    {{include.code|string}}
 
     <!-- End {{include.name}} -->
     {%- endif %}{%- endfor %} 

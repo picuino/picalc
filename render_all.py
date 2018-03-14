@@ -13,7 +13,7 @@ import base64
 import os
 import re
 import codecs
-from jinja2 import Environment, PackageLoader, select_autoescape, Template
+from jinja2 import Environment, FileSystemLoader, select_autoescape, Template
 import yaml
 import time
 import hashlib
@@ -24,10 +24,10 @@ import hashlib
 class Picalc(object):
    
    def __init__(self, database_name):
+      self.templates_path = 'templates'
+      self.include_path = 'include'
+      self.options_name = 'options.yaml'
       self.load_database(database_name)
-      self.templates_path = self.database['templates_path']
-      self.template_name = self.database['template']
-      self.output_name = self.database['output']
       self.load_template()
 
    
@@ -36,17 +36,15 @@ class Picalc(object):
          Fill empty values of database with default options"""
       self.database_name = re.sub('^.[\\/]', '', filename)
       self.database = yaml.load(self.read(self.database_name))
-      self.default_options()
+      self.format_database()
 
 
    def load_template(self):
       """Read template from file"""
-      print os.path.join(self.templates_path, self.template_name)
       self.env = Environment(
-                    loader=PackageLoader('', 'templates'),
+                    loader=FileSystemLoader(self.templates_path),
                     autoescape=select_autoescape(['html', 'xml']))
-      self.template = self.env.get_template( \
-         os.path.join(self.templates_path, self.template_name))
+      self.template = self.env.get_template(self.template_name)
       
 
    def render(self, binobjects):
@@ -60,32 +58,51 @@ class Picalc(object):
       self.page = Template(self.page).render(time_sha_version=self.version)
 
 
-   def default_options(self):
-      """Fill empty values of database with default options"""
-      # Default general options
-      default = {
-         'resolution': 5,
-         'template': 'base.html',
-         'font': {
-            'normal_size': '16px',
-            'license_size': '12px',
-         },
-         'width': {
-            'max': '640px',
-            'min': '420px',
-            'name': '6em',
-            'value': '6em',
-            'units': '6em',
-            'comment': '20em',
-         },
-         'templates_path': 'templates',
-         'output': os.path.splitext(self.database_name)[0] + '.html',
-      }
+   def format_database(self):
+      self.database_default_options()
+      self.load_includes()
+      self.database_fill()
 
+      
+   def load_includes(self):
+      """Read all include files present in database"""
+      if not 'include' in self.database:
+         return
+      for include in self.database['include']:
+         if not 'name' in include:
+            continue
+         print '   Load:', os.path.join(self.include_path, include['name'])
+         include['code'] = self.read(os.path.join(self.include_path, include['name']))
+
+
+   def option(self, name):
+      """Return option from database or local variables
+         Return none if key does not exists"""
+      if name in self.database:
+         return self.database[name]
+      if name in self.__dict__:
+         return self.__dict__[name]
+      return None
+
+         
+   def database_default_options(self):
+      """Fill empty values of database with default options"""
+      default = yaml.load(self.read(\
+                os.path.join(self.templates_path, self.options_name)))
+      default['output'] = os.path.splitext(self.database_name)[0] + '.html'
       for key in default.keys():
          if not key in self.database:
             self.database[key] = default[key]
+      self.templates_path = self.option('templates_path')
+      self.template_name = self.option('template')
+      self.include_path = self.option('include_path')
+      self.output_name = self.option('output')
 
+
+   def database_fill(self):
+      """Fill database empty fields.
+         fill id with names
+         fill prefix with number according unit prefix"""
       for row in self.database['rows']:
          # Generate id string based on name
          if not 'id' in row:
@@ -151,13 +168,13 @@ def process(database, images):
    print('\nDatabase: ' + database)
 
    pc = Picalc(database)
-   print('   Template: ' + pc.template_name())
+   print('   Template: ' + pc.template_name)
 
    pc.render(images)
-   print('   Output:   ' + pc.output_name())
+   print('   Output:   ' + pc.output_name)
    print('   Version:  ' + pc.version)
 
-   pc.write(pc.output_name(), pc.page)
+   pc.write(pc.output_name, pc.page)
 
 
 def main():

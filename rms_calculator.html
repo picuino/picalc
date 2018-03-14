@@ -3,16 +3,17 @@
 
 <head>
 
+  <!-- Head -->
   <title>Average and RMS value Calculator</title>
   <meta charset="UTF-8">
   <meta name="Keywords" content="RMS, average, median, value, calculator">
   <meta name="Description" content="JavaScript average and RMS value Calculator">
-  <meta name="Version" content="14/03/2018 - SHA:2B276E">
+  <meta name="Version" content=" 14/03/2018 - SHA:E87AC5 ">
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
 
   <!-- Styles -->
   <style>
-    body {
+     ﻿    body {
       font: 16px sans-serif;
       background-color: #f0f4f4;
       margin: 0;
@@ -28,19 +29,19 @@
     }
 
     .content {
-      max-width: 640px; 
+      max-width: 640px;
       margin: 0 auto;
       padding: 16px 16px 32px 16px;
       background-color: #fff;
     }
 
-    .row { 
-      padding-bottom: 2px; 
+    .row {
+      padding-bottom: 2px;
     }
 
-    .license {
-      max-width: 640px; 
-      margin: 0 auto;   
+    .footer {
+      max-width: 640px;
+      margin: 0 auto;
       text-align: center;
       padding: 20px 16px 60px 16px;
       font-size: 12px;
@@ -90,8 +91,6 @@
       border: 1px solid #888;
       border-radius: 4px;
     }
-    input[type=text]:disabled { color: black; }
-    
     .sval {
       display: inline-block;
       width: 5em;
@@ -130,26 +129,28 @@
       display: inline-block;
       min-width: 20em;
     }
-
   </style>
 
+  <!-- Script -->
   <script>
+     ﻿
+
      
 
     <!-- Include script (48 lines ): zeros.js -->
     ﻿
-    <!-- Zero finding with secant method. https://en.wikipedia.org/wiki/Secant_method -->
+    &lt;!-- Zero finding with secant method. https://en.wikipedia.org/wiki/Secant_method --&gt;
     function zero_secant(x, fn) {
       var iter, x0, x1, x2, y0, y1;
       x1 = x * 1.0;
       y1 = fn(x1);
       x2 = x1 * 1.001 + 1e-8;
-      for(iter=0; iter<40; iter++) {
+      for(iter=0; iter&lt;40; iter++) {
         x0 = x1;
         y0 = y1;
         x1 = x2
         y1 = fn(x1);
-        if ((Math.abs(y1) < 1e-50) || Math.abs((x1-x0)/x1) < 1e-12)     
+        if ((Math.abs(y1) &lt; 1e-50) || Math.abs((x1-x0)/x1) &lt; 1e-12)     
           break;
         if (y0 == y1)
            x2 = x1 * 1.001 + 1e-8;
@@ -160,7 +161,7 @@
     }
 
     
-    <!-- Zero finding between two points -->
+    &lt;!-- Zero finding between two points --&gt;
     function zero_bisect(x0, x1, fn) {
       var iter, x2, y0, y1, y2;
       x0 = x0 * 1.0;
@@ -168,11 +169,11 @@
       y0 = fn(x0);
       y1 = func_1(x1);
       if (Math.sign(y0 * y1) != -1) 
-        return '';
-      for(iter=0; iter<80; iter++) {
+        return &#39;&#39;;
+      for(iter=0; iter&lt;80; iter++) {
         x2 = 0.5 * (x0 + x1);
         y2 = func_1(x2);
-        if ((Math.abs(y2) < 1e-50) || Math.abs((x1-x0)/x1) < 1e-12)
+        if ((Math.abs(y2) &lt; 1e-50) || Math.abs((x1-x0)/x1) &lt; 1e-12)
           break;
         if (Math.sign(y2) == Math.sign(y1)) {
           y1 = y2;
@@ -420,7 +421,6 @@
       }
     }
     document.onkeypress = OnKeyPress;
-
   </script>
 
 </head>
@@ -428,7 +428,9 @@
 
 <body onload="init()">
 
-  <div class="content">
+  <!-- Content -->
+    ﻿<div class="content">
+
   <h1>Average and RMS value Calculator</h1>
 
     <!--  Image: Wave Types -->
@@ -830,12 +832,12 @@ RU5ErkJggg==
 ">
 
     <!--  Section: Buttons for manage values -->
-    <div class="row">Values:
-<input type="button" value="Reset" onclick="reset_var()">
-<input type="button" value="Clear" onclick="clear_var()">
-<input type="button" value="Save" onclick="save_var()">
-<input type="button" value="Load" onclick="load_var()">
-</div>
+    &lt;div class=&#34;row&#34;&gt;Values:
+&lt;input type=&#34;button&#34; value=&#34;Reset&#34; onclick=&#34;reset_var()&#34;&gt;
+&lt;input type=&#34;button&#34; value=&#34;Clear&#34; onclick=&#34;clear_var()&#34;&gt;
+&lt;input type=&#34;button&#34; value=&#34;Save&#34; onclick=&#34;save_var()&#34;&gt;
+&lt;input type=&#34;button&#34; value=&#34;Load&#34; onclick=&#34;load_var()&#34;&gt;
+&lt;/div&gt;
 
 
     <!--  Header: Maximum and Minimum values of wave (peak to peak) -->
@@ -1051,15 +1053,16 @@ RU5ErkJggg==
       <div class="scoment">RMS value of all waves</div>
     </div>
 
-  </div>  <!-- End content -->
+</div>  <!-- End content -->
 
+  <!-- Footer -->
+    ﻿<div class="footer">
   <!-- License -->
-  <div class="license">
-    This work by <a href="https://github.com/picuino/picalc">Picuino</a>
-    is licensed under a
-   <a rel="MIT License" href="http://www.gnu.org/licenses/gpl-3.0.txt">
-      GPL version 3 license</a>.
-  </div>
+  This work by <a href="https://github.com/picuino/picalc">Picuino</a>
+  is licensed under a
+  <a rel="MIT License" href="http://www.gnu.org/licenses/gpl-3.0.txt">
+  GPL version 3 license</a>.
+</div>
 
 </body>
 
