@@ -7,7 +7,7 @@
   <meta charset="UTF-8">
   <meta name="Keywords" content="Inductance, magnetics, coil, calculator">
   <meta name="Description" content="Javascript Inductance calculator">
-  <meta name="Version" content="14/03/2018 - SHA:9BA60E">
+  <meta name="Version" content="14/03/2018 - SHA:3033AE">
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
 
   <!-- Styles -->
@@ -86,6 +86,8 @@
       border: 1px solid #888;
       border-radius: 4px;
     }
+    input[type=text]:disabled { color: black; }
+    
     .sval {
       display: inline-block;
       width: 6em;
@@ -360,13 +362,6 @@
 
     <!--  Row  -->
     <div class="row">
-      <div class="sname">core</div>
-      <div class="sunit">&nbsp;</div>
-      <div class="scoment">Select core and parameter values</div>
-    </div>
-
-    <!--  Row  -->
-    <div class="row">
       <div class="sname">Ae</div>
       <div class="sval"> <form> <input type="text" id="Ae"> </form> </div>
       <div class="sunit">mm<sup>2</sup></div>
@@ -392,7 +387,7 @@
     <!--  Row  -->
     <div class="row">
       <div class="sname">uo</div>
-      <div class="sconst"> <form> <input type="text" id="uo"> </form> </div>
+      <div class="sconst"> <form> <input disabled="disabled" type="text" id="uo"> </form> </div>
       <div class="sunit">V·s/A·m</div>
       <div class="scoment">Permeability of air</div>
     </div>
@@ -400,7 +395,7 @@
     <!--  Row  -->
     <div class="row">
       <div class="sname">ro_cu</div>
-      <div class="sconst"> <form> <input type="text" id="ro_cu"> </form> </div>
+      <div class="sconst"> <form> <input disabled="disabled" type="text" id="ro_cu"> </form> </div>
       <div class="sunit">Ohm/m</div>
       <div class="scoment">Resistivity of copper at 20ºC</div>
     </div>
@@ -408,7 +403,7 @@
     <!--  Row  -->
     <div class="row">
       <div class="sname">Cro_cu</div>
-      <div class="sconst"> <form> <input type="text" id="Cro_cu"> </form> </div>
+      <div class="sconst"> <form> <input disabled="disabled" type="text" id="Cro_cu"> </form> </div>
       <div class="sunit">1/ºC</div>
       <div class="scoment">Coefficient of resistivity of copper with temperature</div>
     </div>
@@ -427,7 +422,7 @@
     <!--  Row  -->
     <div class="row">
       <div class="sname">g_factor</div>
-      <div class="scalc"> <form> <input type="text" id="g_factor"> </form> </div>
+      <div class="scalc"> <form> <input disabled="disabled" type="text" id="g_factor"> </form> </div>
       <div class="sunit">%</div>
       <div class="scoment">Relative lenght of air gap (g/√Ae)</div>
     </div>
@@ -435,7 +430,7 @@
     <!--  Row  -->
     <div class="row">
       <div class="sname">Fr_factor</div>
-      <div class="scalc"> <form> <input type="text" id="Fr_factor"> </form> </div>
+      <div class="scalc"> <form> <input disabled="disabled" type="text" id="Fr_factor"> </form> </div>
       <div class="sunit">&nbsp;</div>
       <div class="scoment">Fringing factor of air gap (+-15% error)</div>
     </div>
@@ -443,7 +438,7 @@
     <!--  Row  -->
     <div class="row">
       <div class="sname">AL_gap</div>
-      <div class="scalc"> <form> <input type="text" id="AL_gap"> </form> </div>
+      <div class="scalc"> <form> <input disabled="disabled" type="text" id="AL_gap"> </form> </div>
       <div class="sunit">nH/turn<sup>2</sup></div>
       <div class="scoment">Inductance factor (permeability) of air gap</div>
     </div>
@@ -451,7 +446,7 @@
     <!--  Row  -->
     <div class="row">
       <div class="sname">AL_total</div>
-      <div class="scalc"> <form> <input type="text" id="AL_total"> </form> </div>
+      <div class="scalc"> <form> <input disabled="disabled" type="text" id="AL_total"> </form> </div>
       <div class="sunit">nH/turn<sup>2</sup></div>
       <div class="scoment">Total Inductance factor with gap</div>
     </div>
@@ -478,7 +473,7 @@
     <!--  Row  -->
     <div class="row">
       <div class="sname">L</div>
-      <div class="scalc"> <form> <input type="text" id="L"> </form> </div>
+      <div class="scalc"> <form> <input disabled="disabled" type="text" id="L"> </form> </div>
       <div class="sunit">uH</div>
       <div class="scoment">Coil Inductance</div>
     </div>
@@ -486,7 +481,7 @@
     <!--  Row  -->
     <div class="row">
       <div class="sname">I_max</div>
-      <div class="scalc"> <form> <input type="text" id="I_max"> </form> </div>
+      <div class="scalc"> <form> <input disabled="disabled" type="text" id="I_max"> </form> </div>
       <div class="sunit">A</div>
       <div class="scoment">Maximum Inductor Current</div>
     </div>
@@ -494,7 +489,7 @@
     <!--  Row  -->
     <div class="row">
       <div class="sname">E_max</div>
-      <div class="scalc"> <form> <input type="text" id="E_max"> </form> </div>
+      <div class="scalc"> <form> <input disabled="disabled" type="text" id="E_max"> </form> </div>
       <div class="sunit">uJ</div>
       <div class="scoment">Energy stored in Inductance</div>
     </div>
@@ -513,7 +508,7 @@
     <!--  Row  -->
     <div class="row">
       <div class="sname">T</div>
-      <div class="scalc"> <form> <input type="text" id="T"> </form> </div>
+      <div class="scalc"> <form> <input disabled="disabled" type="text" id="T"> </form> </div>
       <div class="sunit">us</div>
       <div class="scoment">Period</div>
     </div>
@@ -521,7 +516,7 @@
     <!--  Row  -->
     <div class="row">
       <div class="sname">V_sin</div>
-      <div class="scalc"> <form> <input type="text" id="V_sin"> </form> </div>
+      <div class="scalc"> <form> <input disabled="disabled" type="text" id="V_sin"> </form> </div>
       <div class="sunit">V</div>
       <div class="scoment">Maximum sine wave voltage</div>
     </div>
@@ -529,7 +524,7 @@
     <!--  Row  -->
     <div class="row">
       <div class="sname">V_sq</div>
-      <div class="scalc"> <form> <input type="text" id="V_sq"> </form> </div>
+      <div class="scalc"> <form> <input disabled="disabled" type="text" id="V_sq"> </form> </div>
       <div class="sunit">V</div>
       <div class="scoment">Maximum square wave voltage</div>
     </div>
