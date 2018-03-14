@@ -1,0 +1,46 @@
+﻿<div class="content">
+
+  <h1>{{data.title}}</h1>
+
+  {%- for datarow in rows %}
+
+    {%- if datarow.type == 'header' %}
+
+    <!--  Header: {{datarow.name}} -->
+    <h2 {%- if 'id' in datarow %} id="{{datarow.id}}"{% endif %}>{{datarow.name}}</h2>
+
+    {%- elif datarow.type == 'html' %}
+
+    <!--  Section: {{datarow.name}} -->
+    {{datarow.code}}
+
+    {%- elif datarow.type == 'img' %}
+
+    <!--  Image: {{datarow.name}} -->
+    <img alt="{{datarow.name}}" {% if 'width' in datarow %}width="{{datarow.width}}" {% endif %}src="{{binobjects[datarow.src]}}">
+
+    {%- elif datarow.type in ['var', 'const', 'calc'] %}
+
+    <!--  Row  -->
+    <div class="row">
+      <div class="sname">{{datarow.name}}</div>
+
+    {%- if datarow.type == 'const' %}
+      <div class="sconst"> <form> <input disabled="disabled" type="text" id="{{datarow.id}}"> </form> </div>
+    {%- endif %}
+
+    {%- if datarow.type == 'var' %}
+      <div class="sval"> <form> <input type="text" id="{{datarow.id}}"> </form> </div>
+    {%- endif %}
+
+    {%- if datarow.type == 'calc' %}
+      <div class="scalc"> <form> <input disabled="disabled" type="text" id="{{datarow.id}}"> </form> </div>
+    {%- endif %}
+      <div class="sunit">{% if datarow.unit %}{{datarow.unit}}{% else %}&nbsp;{% endif %}</div>
+      <div class="scoment">{{datarow.comment}}</div>
+    </div>
+
+    {%- endif %}
+  {%- endfor %}
+
+</div>  <!-- End content -->

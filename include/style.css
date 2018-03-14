@@ -1,0 +1,115 @@
+﻿{% extends "base.html" %}
+    body {
+      font: 16px sans-serif;
+      background-color: #f0f4f4;
+      margin: 0;
+      min-width: 420px;
+    }
+    /* Responsive design for Small screen */
+    @media screen and (max-width: 640px) {
+      body { min-width: 420px !important; }
+    }
+
+    .content {
+      max-width: 640px; 
+      margin: 0 auto;
+      padding: 16px 16px 32px 16px;
+      background-color: #fff;
+    }
+
+    .row { 
+      padding-bottom: 2px; 
+    }
+
+    .license {
+      max-width: 640px; 
+      margin: 0 auto;   
+      text-align: center;
+      padding: 20px 16px 60px 16px;
+      font-size: 12px;
+      font-weight: bold;
+      background-color: #ddd;
+    }
+
+    h1 {
+      font-size: 140%;
+      font-weight: bold;
+      text-transform: uppercase;
+      margin: 20px 0 10px 0;
+    }
+
+    h2 {
+      font-size: 120%;
+      font-weight: bold;
+      margin: 20px 0 6px 0;
+    }
+
+    img {
+      padding: 2px 0 2px 0;
+      max-width: 100%;
+    }
+
+    input[type=button] {
+      font: inherit;
+      text-align: center;
+      background-color: #eee;
+      border: 1px solid #888;
+      border-radius: 4px;
+    }
+
+    /* Column 1: Variable name */
+    .sname {
+      display: inline-block;
+      min-width: 7em;
+    }
+
+    /* Column 2: Variable Value (input form) */
+    input[type=text], select, textarea {
+      width: 100%;
+      padding: 0 4px 0 4px;
+      font: inherit;
+      text-align: right;
+      box-sizing: border-box;
+      border: 1px solid #888;
+      border-radius: 4px;
+    }
+    input[type=text]:disabled { color: black; }
+    
+    .sval {
+      display: inline-block;
+      width: 5em;
+    }
+    .sval input[type=text] {
+      background-color: #FFFFC0;
+    }
+
+    .sconst {
+      display: inline-block;
+      width: 5em;
+    }
+    .sconst input[type=text] {
+      background-color: #FFFFFF;
+    }
+
+    .scalc  {
+      display: inline-block;
+      width: 5em;
+    }
+    .scalc input[type=text] {
+      background-color: #C0FFFF;
+    }
+
+    /* Column 3: Variable Units */
+    .sunit {
+      display: inline-block;
+      min-width: 2em;
+      text-align: center;
+      border: 1px solid #888;
+      border-radius: 4px;
+    }
+
+    /* Column 4: Variable comment */
+    .scoment {
+      display: inline-block;
+      min-width: 20em;
+    }
