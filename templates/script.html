@@ -1,12 +1,12 @@
 ﻿{%- macro to_numexp_1(num) -%} {{"%1.0e"|format(num|float)}} {%- endmacro %}
 {%- macro to_numexp_5(num) -%} {{"%5.4e"|format(num|float)}} {%- endmacro %}
 
-    {% for include in data.include %} {% if include.type == 'script' %}
+    {% for inc in include %} {% if inc.type == 'script' %}
 
-    <!-- Include script ({{include.code.count('\n')+1}} lines ): {{include.name}} -->
-    {{include.code|string}}
+    <!-- Include script ({{inc.code.count('\n')+1}} lines ): {{inc.name}} -->
+    {{inc.code|string}}
 
-    <!-- End {{include.name}} -->
+    <!-- End {{inc.name}} -->
     {%- endif %}{%- endfor %} 
     
     <!-- Init calculations -->
@@ -50,7 +50,7 @@
 
       <!-- Print calc: {{datarow.comment}} -->
       document.getElementById("{{datarow.id}}").value = num_fix({{datarow.id}}
-        {%- if datarow.prefix != 1 %} * {{ to_numexp_1(1.0/datarow.prefix|float) }}{% endif %}, {{data.resolution}});
+        {%- if datarow.prefix != 1 %} * {{ to_numexp_1(1.0/datarow.prefix|float) }}{% endif %}, {{config.resolution}});
     {%- endif %} {%- endfor %}
     }
 

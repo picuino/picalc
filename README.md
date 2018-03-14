@@ -1,2 +1,2 @@
 # Picalc
-Framework for make online calculators
+Template system for make online calculators
