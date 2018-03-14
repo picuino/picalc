@@ -1,0 +1,140 @@
+﻿{%- macro to_numexp_1(num) -%} {{"%1.0e"|format(num|float)}} {%- endmacro %}
+{%- macro to_numexp_5(num) -%} {{"%5.4e"|format(num|float)}} {%- endmacro %}
+
+    {% for include in data.include %} {% if include.type == 'script' %}
+
+    <!-- Include script ({{include.code.count('\n')+1}} lines ): {{include.name}} -->
+    {{include.code|string}}
+
+    <!-- End {{include.name}} -->
+    {%- endif %} {%- endfor %} 
+    
+    <!-- Init calculations -->
+    function init() {
+       if  (getCookie("saved") == 'true')
+          load_var();
+       else
+          reset_var();
+       calc();
+    }
+
+    <!-- Compute calculations -->
+    function calc() {
+    {%- for datarow in rows %} {%- if datarow.type == 'var' %}
+
+      <!-- Variable: {{datarow.comment}} -->
+      {{datarow.id}} = tonum("{{datarow.id}}")
+        {%- if datarow.prefix != 1 %} * {{ to_numexp_1(datarow.prefix|float) }}{% endif %};
+    {%- endif %} {%- endfor %}
+
+    {%- for datarow in rows -%} {%- if datarow.type == 'const' %}
+
+      <!-- Constant: {{datarow.comment}} -->
+      {{datarow.id}} = {{datarow.value}};
+      document.getElementById("{{datarow.id}}").value = "{{to_numexp_5(datarow.value)}}";
+    {%- endif %} {%- endfor %}
+
+    {%- for datarow in rows -%} {%- if datarow.type == 'calc' %}
+
+      <!-- Calculation: {{datarow.comment}} -->
+      {%- if datarow.calc is iterable and datarow.calc is not string %}
+        {%- for calc in datarow.calc %}
+      {{calc}};
+        {%- endfor %}
+      {%- else %}
+      {{datarow.calc}};
+      {%- endif %}
+    {%- endif %} {%- endfor %}
+
+    {%- for datarow in rows -%} {%- if datarow.type == 'calc' %}
+
+      <!-- Print calc: {{datarow.comment}} -->
+      document.getElementById("{{datarow.id}}").value = num_fix({{datarow.id}}
+        {%- if datarow.prefix != 1 %} * {{ to_numexp_1(1.0/datarow.prefix|float) }}{% endif %}, {{data.resolution}});
+    {%- endif %} {%- endfor %}
+    }
+
+    <!-- Reset variables to default values -->
+    function reset_var() {
+      {%- for datarow in rows %} {%- if datarow.type == 'var' %}
+      document.getElementById("{{datarow.id}}").value = {% if datarow.value or datarow.value == 0 %}{{datarow.value}}{% else %}''{% endif %};
+      {%- endif %} {%- endfor %}
+      calc();
+    }
+
+    <!-- Clear variables -->
+    function clear_var() {
+      {%- for datarow in rows %} {%- if datarow.type == 'var' %}
+      document.getElementById("{{datarow.id}}").value = '';
+      {%- endif %} {%- endfor %}
+      calc();
+    }
+
+    <!-- Save variables -->
+    function save_var() {
+      var expiresdate = new Date(2068, 1, 02, 11, 20);
+      expiresdate = "expires=" + expiresdate.toUTCString();
+      var names = [{%- for datarow in rows %} {%- if datarow.type == 'var' %}"{{datarow.id}}", {% endif %} {%- endfor %} ];
+      for(var i=0; i<names.length; i++) {
+        document.cookie = names[i] + " = " + encodeURIComponent(tonum(names[i])) + "; " + expiresdate;
+      }
+      document.cookie = "saved = true; " + expiresdate
+    }
+
+    <!-- Load variables -->
+    function load_var() {
+      {%- for datarow in rows %} {%- if datarow.type == 'var' %}
+      document.getElementById("{{datarow.id}}").value = getCookie("{{datarow.id}}");
+      {%- endif %} {%- endfor %}
+      calc();
+    }
+
+    <!-- Read cookies -->
+    function getCookie(name) {
+      var re = new RegExp(name + "=([^;]+)");
+      var value = re.exec(document.cookie);
+      return (value != null) ? unescape(value[1]) : null;
+    }
+
+    <!-- Evalue inputs with '.' or ',' as comma -->
+    function tonum(id) {
+      val = document.getElementById(id).value.replace(',', '.');
+      if (isNaN(val)) return '';
+      return val * 1.0; <!-- return number -->
+    }
+
+    <!-- Format number with fix digits -->
+    function num_fix(number, digits) {
+      if (!isFinite(number)) return '';
+      if (number == 0) return '0';
+      if (Math.sign(number) < 0)
+        var sign = '-';
+      else
+        var sign = '';
+     number = Math.abs(number)
+      exp = Math.ceil(Math.log10(number) + 0.000001);
+      number = Math.round(number * Math.pow(10, digits - exp)) + '';
+      if (digits > exp) { <!-- decimals -->
+        if (exp <= 0) { <!-- all decimals -->
+          return sign + '0.0000000'.substr(0, 2 - exp) + number;
+        }
+        else { <!-- integer and decimals -->
+          return sign + number.substr(0, exp) + '.' + number.substr(exp, digits - exp);
+        }
+      }
+      else { <!-- no decimals -->
+        number = number  + '0000000000'
+        return sign + number.substr(0, exp);
+      }
+    }
+
+    <!-- Manage keys [Enter] and [tab] -->
+    function OnKeyPress(evt) {
+      var evt = (evt) ? evt : ((event) ? event : null);
+      var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null);
+      if (node.type=="text") {
+        if (evt.keyCode == 9) { calc(); return; }
+        if (evt.keyCode == 13) { calc(); return false; }
+      }
+    }
+    document.onkeypress = OnKeyPress;

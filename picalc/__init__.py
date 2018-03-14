@@ -1,29 +1,33 @@
 # -*- coding: utf-8 -*-
 """
-  Read yaml databases in local directory
-  and process all to make html pages
+  Read yaml database and process data
+  with jinja templates to make html pages
   for online calculations
 """
 
 import os
 import codecs
 import re
-from jinja2 import Template
+from jinja2 import Environment, PackageLoader, select_autoescape
 import yaml
 import time
 import hashlib
-import base64
+
 
 # ********************************************************************
 
 class picalc:
    
-   def __init__(self):
+   def __init__(self, path='templates'):
       self.database = {}
       self.template = None
       self.template_code = None
       self.page = None
-
+      self.path = path
+      self.env = Environment(
+         loader=PackageLoader('', 'templates'),
+         autoescape=select_autoescape(['html', 'xml'])
+      )
 
    def template_name(self):
       return self.database['template']
@@ -95,35 +99,28 @@ class picalc:
       """Return version string based on hash of
          database and template"""
       date = time.strftime("%d/%m/%Y")
+      print self.env.TemplateModule
+
+      
+      asdfasdf
       sha  = hashlib.sha256(\
              unicode(self.database).encode('utf8') +
-             unicode(self.template_code).encode('utf8') \
+             unicode(self.TemplateModule).encode('utf8') \
              ).hexdigest()
       return date + ' - SHA:' + sha.upper()[:6]
 
 
-   def load(self, filename):
+   def load_database(self, filename):
       """Read database from file
-         Fill empty values of database with default options
-         Load template"""
+         Fill empty values of database with default options"""
       self.database_name = re.sub('^.[\\/]', '', filename)
       self.database = yaml.load(self.read(filename))
       self.default_options()
-      self.load_include()
-
-
-   def load_include(self):
-      """Read code of all included files"""
-      if not 'include' in self.database:
-         return
-      for inc in self.database['include']:
-         inc['code'] = self.read(os.path.join('include', inc['name']))
 
 
    def load_template(self):
       """Read template from file"""
-      self.template_code = self.read(self.database['template'])
-      self.template = Template(self.template_code)
+      self.template = env.get_template(self.template_name)
       
 
    def render(self, binobjects):
@@ -134,55 +131,3 @@ class picalc:
                      version=self.version(),
                      binobjects=binobjects)
 
-
-# ********************************************************************
-
-
-def read_base64(filename):
-   fi = open(filename, 'rb')
-   data = fi.read()
-   fi.close()
-   return data.encode('base64')
-
-
-def findfiles(extensions, path='.'):
-   """Return all files of path with matching extensions"""
-   for filename in os.listdir(path):
-      ext = os.path.splitext(filename)[1].lower()
-      if isinstance(extensions, list) and ext in extensions:
-         yield os.path.join(path, filename).replace('\\', '/')
-      if isinstance(extensions, str) and ext == extensions:
-         yield os.path.join(path, filename).replace('\\', '/')
-
-
-def process(database, images):
-   """Process and render database"""
-   print('\nDatabase: ' + database)
-   
-   pc = picalc()
-   pc.load(database)
-   pc.load_template()
-   pc.render(images)
-   pc.write(pc.output_name(), pc.page)
-   
-   print('   Template: ' + pc.template_name())
-   print('   Output:   ' + pc.output_name())
-   print('   Version:  ' + pc.version())
-
-
-def main():
-   # Read all images of directory in base64 format
-   images = {}
-   print('Images:')
-   for filename in findfiles(['.png', '.gif', '.jpg'], path='images'):
-      ext = os.path.splitext(filename)[1].lower()
-      images[filename] = 'data:image/%s;base64,\n' % (ext[1:]) + read_base64(filename)
-      print('   ' + filename)
-
-   # Process all yaml databases
-   for filename in findfiles(['.yaml']):
-       process(filename, images)
-
-
-if __name__ == "__main__":
-    main()

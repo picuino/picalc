@@ -1,0 +1,37 @@
+﻿<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+
+  <!-- Head -->
+  <title>{{data.title}}</title>
+  <meta charset="UTF-8">
+  <meta name="Keywords" content="{{data.keywords}}">
+  <meta name="Description" content="{{data.description}}">
+  <meta name="Version" content="{{version}}">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
+
+  <!-- Styles -->
+  <style>
+     {% include "styles.html"  %}
+  </style>
+
+  <!-- Script -->
+  <script>
+     {% include "script.html"  %}
+  </script>
+
+</head>
+
+
+<body onload="init()">
+
+  <!-- Content -->
+    {% include "content.html"  %}
+
+  <!-- Footer -->
+    {% include "footer.html"  %}
+
+</body>
+
+</html>

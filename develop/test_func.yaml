@@ -1,0 +1,89 @@
+﻿
+title: New functions test
+description: Test new JavaScript Functions
+keywords: function
+
+template: template.html.jinja2
+
+resolution: 5
+
+width:
+   max: 640px
+   min: 420px
+   name: 5em
+   value: 6em
+   units: 2em
+   comment: 20em
+
+
+# *******************************************************************
+
+rows:
+
+- type: html
+  name: Buttons for manage values
+  code: |
+    <div class="row">Values:
+    <input type="button" value="Reset" onclick="reset_var()">
+    <input type="button" value="Clear" onclick="clear_var()">
+    <input type="button" value="func_1" onclick="func_1()">
+    <input type="button" value="func_2" onclick="func_2()">
+    <input type="button" value="func_3" onclick="func_3()">
+    <input type="button" value="func_4" onclick="func_4()">
+    </div>
+
+
+# ** INPUT PARAMETER **
+
+- type: header
+  name: Core and phisical constants
+
+- type: var
+  comment: Param 1
+  name: P1
+  unit: ''
+
+- type: var
+  comment: Param 2
+  name: P2
+  unit: ''
+
+- type: var
+  comment: Param 3
+  name: P3
+  unit: ''
+
+- type: var
+  comment: Param 4
+  name: P4
+  unit: ''
+
+- type: var
+  comment: Param 5
+  name: P5
+  unit: ''
+
+- type: calc
+  comment: func_1
+  name: F1
+  calc: F1 = func_1()
+
+- type: calc
+  comment: func_2
+  name: F2
+  calc: F2 = func_2()
+
+- type: calc
+  comment: func_3
+  name: F3
+  calc: F3 = func_3()
+
+- type: calc
+  comment: func_4
+  name: F4
+  calc: F4 = func_4()
+
+- type: calc
+  comment: func_5
+  name: F5
+  calc: F5 = func_5()

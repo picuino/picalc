@@ -1,0 +1,14 @@
+add query parameters
+
+
+Form select values
+------------------
+
+<form action="function()" method="post">
+   Core: 
+   <select name="core">    
+    <option value="E30" selected="selected">E30</option>
+    <option value="E45">E45</option>
+    <option value="E80">E80</option>
+   </select>
+</form>

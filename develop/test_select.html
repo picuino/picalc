@@ -3,28 +3,23 @@
 
 <head>
 
-  <title>{{data.title}}</title>
+  <title>New functions test</title>
   <meta charset="UTF-8">
-  <meta name="Keywords" content="{{data.keywords}}">
-  <meta name="Description" content="{{data.description}}">
-  <meta name="Version" content="{{version}}">
-  <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
+  <meta name="Keywords" content="function">
+  <meta name="Description" content="Test new JavaScript Functions">
+  <meta name="Version" content="13/03/2018 - SHA:808BB2">
 
   <!-- Styles -->
   <style>
     body {
-      font: {{data.font.normal_size}} sans-serif;
+      font: 16px sans-serif;
       background-color: #f0f4f4;
       margin: 0;
-      min-width: {{data.width.min}};
-    }
-    /* Responsive design for Small screen */
-    @media screen and (max-width: {{data.width.max}}) {
-      body { min-width: {{data.width.min}} !important; }
+      min-width: 420px;
     }
 
     .content {
-      max-width: {{data.width.max}}; 
+      max-width: 640px; 
       margin: 0 auto;
       padding: 16px 16px 32px 16px;
       background-color: #fff;
@@ -35,11 +30,11 @@
     }
 
     .license {
-      max-width: {{data.width.max}}; 
+      max-width: 640px; 
       margin: 0 auto;   
       text-align: center;
       padding: 20px 16px 60px 16px;
-      font-size: {{data.font.license_size}};
+      font-size: 12px;
       font-weight: bold;
       background-color: #ddd;
     }
@@ -63,8 +58,7 @@
     }
 
     input[type=button] {
-      font: inherit;
-      text-align: center;
+      font-size: 16px;
       background-color: #eee;
       border: 1px solid #888;
       border-radius: 4px;
@@ -73,7 +67,7 @@
     /* Column 1: Variable name */
     .sname {
       display: inline-block;
-      min-width: {{data.width.name}};
+      min-width: 5em;
     }
 
     /* Column 2: Variable Value (input form) */
@@ -86,11 +80,9 @@
       border: 1px solid #888;
       border-radius: 4px;
     }
-    input[type=text]:disabled { color: black; }
-    
     .sval {
       display: inline-block;
-      width: {{data.width.value}};
+      width: 6em;
     }
     .sval input[type=text] {
       background-color: #FFFFC0;
@@ -98,7 +90,7 @@
 
     .sconst {
       display: inline-block;
-      width: {{data.width.value}};
+      width: 6em;
     }
     .sconst input[type=text] {
       background-color: #FFFFFF;
@@ -106,7 +98,7 @@
 
     .scalc  {
       display: inline-block;
-      width: {{data.width.value}};
+      width: 6em;
     }
     .scalc input[type=text] {
       background-color: #C0FFFF;
@@ -115,7 +107,7 @@
     /* Column 3: Variable Units */
     .sunit {
       display: inline-block;
-      min-width: {{data.width.units}};
+      min-width: 2em;
       text-align: center;
       border: 1px solid #888;
       border-radius: 4px;
@@ -124,23 +116,29 @@
     /* Column 4: Variable comment */
     .scoment {
       display: inline-block;
-      min-width: {{data.width.comment}};
+      min-width: 20em;
     }
 
   </style>
 
-{%- macro to_numexp_1(num) -%} {{"%1.0e"|format(num|float)}} {%- endmacro %}
-{%- macro to_numexp_5(num) -%} {{"%5.4e"|format(num|float)}} {%- endmacro %}
-
   <script>
-    {% for include in data.include %} {% if include.type == 'script' %}
 
-    <!-- Include script ({{include.code.count('\n')+1}} lines ): {{include.name}} -->
-    {{include.code|string}}
-
-    <!-- End {{include.name}} -->
-    {%- endif %} {%- endfor %} 
+    function func_1() {
+      var database = {
+         'E30': [130, 230],
+         'E45': [145, 245],
+         'E80': [180, 280],
+      }         
+      core = document.getElementById("core").value
+      document.getElementById("P1").value = database[core][0];
+      document.getElementById("P2").value = database[core][1];
+    }
     
+    function func_2() {
+    }
+  
+
+
     <!-- Init calculations -->
     function init() {
        if  (getCookie("saved") == 'true')
@@ -152,53 +150,24 @@
 
     <!-- Compute calculations -->
     function calc() {
-    {%- for datarow in rows %} {%- if datarow.type == 'var' %}
 
-      <!-- Variable: {{datarow.comment}} -->
-      {{datarow.id}} = tonum("{{datarow.id}}")
-        {%- if datarow.prefix != 1 %} * {{ to_numexp_1(datarow.prefix|float) }}{% endif %};
-    {%- endif %} {%- endfor %}
+      <!-- Variable: Param 1 -->
+      P1 = tonum("P1");
+      P2 = tonum("P2");
 
-    {%- for datarow in rows -%} {%- if datarow.type == 'const' %}
-
-      <!-- Constant: {{datarow.comment}} -->
-      {{datarow.id}} = {{datarow.value}};
-      document.getElementById("{{datarow.id}}").value = "{{to_numexp_5(datarow.value)}}";
-    {%- endif %} {%- endfor %}
-
-    {%- for datarow in rows -%} {%- if datarow.type == 'calc' %}
-
-      <!-- Calculation: {{datarow.comment}} -->
-      {%- if datarow.calc is iterable and datarow.calc is not string %}
-        {%- for calc in datarow.calc %}
-      {{calc}};
-        {%- endfor %}
-      {%- else %}
-      {{datarow.calc}};
-      {%- endif %}
-    {%- endif %} {%- endfor %}
-
-    {%- for datarow in rows -%} {%- if datarow.type == 'calc' %}
-
-      <!-- Print calc: {{datarow.comment}} -->
-      document.getElementById("{{datarow.id}}").value = num_fix({{datarow.id}}
-        {%- if datarow.prefix != 1 %} * {{ to_numexp_1(1.0/datarow.prefix|float) }}{% endif %}, {{data.resolution}});
-    {%- endif %} {%- endfor %}
     }
 
     <!-- Reset variables to default values -->
     function reset_var() {
-      {%- for datarow in rows %} {%- if datarow.type == 'var' %}
-      document.getElementById("{{datarow.id}}").value = {% if datarow.value or datarow.value == 0 %}{{datarow.value}}{% else %}''{% endif %};
-      {%- endif %} {%- endfor %}
+      document.getElementById("P1").value = '1';
+      document.getElementById("P2").value = '100';
       calc();
     }
 
     <!-- Clear variables -->
     function clear_var() {
-      {%- for datarow in rows %} {%- if datarow.type == 'var' %}
-      document.getElementById("{{datarow.id}}").value = '';
-      {%- endif %} {%- endfor %}
+      document.getElementById("P1").value = '';
+      document.getElementById("P2").value = '';
       calc();
     }
 
@@ -206,7 +175,7 @@
     function save_var() {
       var expiresdate = new Date(2068, 1, 02, 11, 20);
       expiresdate = "expires=" + expiresdate.toUTCString();
-      var names = [{%- for datarow in rows %} {%- if datarow.type == 'var' %}"{{datarow.id}}", {% endif %} {%- endfor %} ];
+      var names = ["P1", "P2", "P3", "P4", "P5",  ];
       for(var i=0; i<names.length; i++) {
         document.cookie = names[i] + " = " + encodeURIComponent(tonum(names[i])) + "; " + expiresdate;
       }
@@ -215,9 +184,8 @@
 
     <!-- Load variables -->
     function load_var() {
-      {%- for datarow in rows %} {%- if datarow.type == 'var' %}
-      document.getElementById("{{datarow.id}}").value = getCookie("{{datarow.id}}");
-      {%- endif %} {%- endfor %}
+      document.getElementById("P1").value = getCookie("P1");
+      document.getElementById("P2").value = getCookie("P2");
       calc();
     }
 
@@ -279,48 +247,61 @@
 <body onload="init()">
 
   <div class="content">
-  <h1>{{data.title}}</h1>
+  <h1>New functions test</h1>
 
-    {%- for datarow in rows %}
+    <!--  Section: Buttons for manage values -->
+    <div class="row">Values:
+<input type="button" value="Reset" onclick="reset_var()">
+<input type="button" value="Clear" onclick="clear_var()">
+<input type="button" value="func_1" onclick="func_1()">
+<input type="button" value="func_2" onclick="func_2()">
+</div>
 
-    {%- if datarow.type == 'header' %}
 
-    <!--  Header: {{datarow.name}} -->
-    <h2 {%- if 'id' in datarow %} id="{{datarow.id}}"{% endif %}>{{datarow.name}}</h2>
+    <!--  Header: Core and phisical constants -->
+    <h2 id="Core_and_phisical_constants">Core and phisical constants</h2>
+    
+<form method="post">
+   Core: 
+   <select  onchange="func_1()" id="core" name="core">    
+    <option value="E30" selected="selected">E30</option>
+    <option value="E45">E45</option>
+    <option value="E80">E80</option>
+   </select>
+</form>
 
-    {%- elif datarow.type == 'html' %}
-
-    <!--  Section: {{datarow.name}} -->
-    {{datarow.code}}
-
-    {%- elif datarow.type == 'img' %}
-
-    <!--  Image: {{datarow.name}} -->
-    <img alt="{{datarow.name}}" {% if 'width' in datarow %}width="{{datarow.width}}" {% endif %}src="{{binobjects[datarow.src]}}">
-
-    {%- elif datarow.type in ['var', 'const', 'calc'] %}
 
     <!--  Row  -->
     <div class="row">
-      <div class="sname">{{datarow.name}}</div>
-
-    {%- if datarow.type == 'const' %}
-      <div class="sconst"> <form> <input disabled="disabled" type="text" id="{{datarow.id}}"> </form> </div>
-    {%- endif %}
-
-    {%- if datarow.type == 'var' %}
-      <div class="sval"> <form> <input type="text" id="{{datarow.id}}"> </form> </div>
-    {%- endif %}
-
-    {%- if datarow.type == 'calc' %}
-      <div class="scalc"> <form> <input disabled="disabled" type="text" id="{{datarow.id}}"> </form> </div>
-    {%- endif %}
-      <div class="sunit">{% if datarow.unit %}{{datarow.unit}}{% else %}&nbsp;{% endif %}</div>
-      <div class="scoment">{{datarow.comment}}</div>
+      <div class="sname">P1</div>
+      <div class="sval"> <form> <input type="text" id="P1"> </form> </div>
+      <div class="sunit">&nbsp;</div>
+      <div class="scoment">Param 1</div>
     </div>
 
-    {%- endif %}
-  {%- endfor %}
+    <!--  Row  -->
+    <div class="row">
+      <div class="sname">P2</div>
+      <div class="sval"> <form> <input type="text" id="P2"> </form> </div>
+      <div class="sunit">&nbsp;</div>
+      <div class="scoment">Param 2</div>
+    </div>
+
+    <!--  Row  -->
+    <div class="row">
+      <div class="sname">F1</div>
+      <div class="scalc"> <form> <input type="text" id="F1"> </form> </div>
+      <div class="sunit">&nbsp;</div>
+      <div class="scoment">func_1</div>
+    </div>
+
+    <!--  Row  -->
+    <div class="row">
+      <div class="sname">F2</div>
+      <div class="scalc"> <form> <input type="text" id="F2"> </form> </div>
+      <div class="sunit">&nbsp;</div>
+      <div class="scoment">func_2</div>
+    </div>
 
   </div>  <!-- End content -->
 

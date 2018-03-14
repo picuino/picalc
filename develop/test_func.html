@@ -1,0 +1,437 @@
+﻿<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+
+  <title>New functions test</title>
+  <meta charset="UTF-8">
+  <meta name="Keywords" content="function">
+  <meta name="Description" content="Test new JavaScript Functions">
+  <meta name="Version" content="13/03/2018 - SHA:808BB2">
+
+  <!-- Styles -->
+  <style>
+    
+    body {
+      font: 16px sans-serif;
+      background-color: #f0f4f4;
+      margin: 0;
+      min-width: 320px;
+    }
+
+    /* Responsive design for Small screen */
+    @media screen and (max-width: 640px) {
+      body { min-width: 320px !important; }
+    } 
+
+    .content {
+      max-width: 640px; 
+      margin: 0 auto;
+      padding: 16px 16px 32px 16px;
+      background-color: #fff;
+    }
+
+    .row { 
+      padding-bottom: 2px; 
+    }
+
+    .license {
+      max-width: 640px; 
+      margin: 0 auto;   
+      text-align: center;
+      padding: 20px 16px 60px 16px;
+      font-size: 12px;
+      font-weight: bold;
+      background-color: #ddd;
+    }    
+    
+    h1 {
+      font-size: 140%;
+      font-weight: bold;
+      text-transform: uppercase;
+      margin: 20px 0 10px 0;
+    }
+
+    h2 {
+      font-size: 120%;
+      font-weight: bold;
+      margin: 20px 0 6px 0;
+    }
+
+    img {
+      padding: 2px 0 2px 0;
+      max-width: 100%;
+    }
+
+    input[type=button] {
+      font-size: 16px;
+      background-color: #eee;
+      border: 1px solid #888;
+      border-radius: 4px;
+    }
+
+    /* Column 1: Variable name */
+    .sname {
+      display: inline-block;
+      min-width: 5em;
+    }
+
+    /* Column 2: Variable Value (input form) */
+    input[type=text], select, textarea {
+      width: 100%;
+      padding: 0 4px 0 4px;
+      font: inherit;
+      text-align: right;
+      box-sizing: border-box;
+      border: 1px solid #888;
+      border-radius: 4px;
+    }
+    .sval {
+      display: inline-block;
+      width: 6em;
+    }
+    .sval input[type=text] {
+      background-color: #FFFFC0;
+    }
+
+    .sconst {
+      display: inline-block;
+      width: 6em;
+    }
+    .sconst input[type=text] {
+      background-color: #FFFFFF;
+    }
+
+    .scalc  {
+      display: inline-block;
+      width: 6em;
+    }
+    .scalc input[type=text] {
+      background-color: #C0FFFF;
+    }
+
+    /* Column 3: Variable Units */
+    .sunit {
+      display: inline-block;
+      min-width: 2em;
+      text-align: center;
+      border: 1px solid #888;
+      border-radius: 4px;
+    }
+
+    /* Column 4: Variable comment */
+    .scoment {
+      display: inline-block;
+      min-width: 20em;
+    }
+
+  </style>
+
+  <script>
+
+    function func_1(x) { 
+      return Math.sin(x) - 0.5*x;
+    }
+    
+    <!-- Zero finding with secant method. https://en.wikipedia.org/wiki/Secant_method -->
+    function zero_secant(x, fn) {
+      var iter, x0, x1, x2, y0, y1;
+      x1 = x * 1.0;
+      y1 = fn(x1);
+      x2 = x1 * 1.001 + 1e-8;
+      for(iter=0; iter<40; iter++) {
+        x0 = x1;
+        y0 = y1;
+        x1 = x2
+        y1 = fn(x1);
+        if ((Math.abs(y1) < 1e-50) || Math.abs((x1-x0)/x1) < 1e-12)     
+          break;
+        if (y0 == y1)
+           x2 = x1 * 1.001 + 1e-8;
+        else 
+           x2 = x1 - y1*(x1-x0)/(y1-y0);
+      }
+      return x1;
+    }
+    
+    function func_2() {
+      document.getElementById("F2").value = zero_secant(P1, func_1);
+    }
+
+    function func_3() {
+      document.getElementById("F3").value = zero_bisect(P1, P2, func_1);
+    }
+    
+    
+    <!-- Zero finding between two points -->
+    function zero_bisect(x0, x1, fn) {
+      var iter, x2, y0, y1, y2;
+      x0 = x0 * 1.0;
+      x1 = x1 * 1.0;
+      y0 = fn(x0);
+      y1 = func_1(x1);
+      if (Math.sign(y0 * y1) != -1) 
+        return '';
+      for(iter=0; iter<80; iter++) {
+        x2 = 0.5 * (x0 + x1);
+        y2 = func_1(x2);
+        if ((Math.abs(y2) < 1e-50) || Math.abs((x1-x0)/x1) < 1e-12)
+          break;
+        if (Math.sign(y2) == Math.sign(y1)) {
+          y1 = y2;
+          x1 = x2;
+        }
+        else {
+          y0 = y2;
+          x0 = x2;
+        }
+      }
+      return x2;
+    }
+    
+    
+    function func_4() { 
+    }
+    
+    function func_5() {
+       return P1 + P2 + P3 + P4 + P5;
+    }
+
+    <!-- Init calculations -->
+    function init() {
+       if  (getCookie("saved") == 'true')
+          load_var();
+       else
+          reset_var();
+       calc();
+    }
+
+    <!-- Compute calculations -->
+    function calc() {
+
+      <!-- Variable: Param 1 -->
+      P1 = tonum("P1");
+      P2 = tonum("P2");
+      P3 = tonum("P3");
+      P4 = tonum("P4");
+      P5 = tonum("P5");
+
+      <!-- Calculation: func_1 -->
+      F1 = func_1(P1);
+      F5 = P1 + P2 + P3 + P4 + P5;
+
+
+      <!-- Print calc: func_1 -->
+      document.getElementById("F1").value = num_fix(F1, 5);
+      document.getElementById("F5").value = num_fix(F5, 5);
+    }
+
+    <!-- Reset variables to default values -->
+    function reset_var() {
+      document.getElementById("P1").value = '1';
+      document.getElementById("P2").value = '100';
+      document.getElementById("P3").value = '';
+      document.getElementById("P4").value = '';
+      document.getElementById("P5").value = '';
+      calc();
+    }
+
+    <!-- Clear variables -->
+    function clear_var() {
+      document.getElementById("P1").value = '';
+      document.getElementById("P2").value = '';
+      document.getElementById("P3").value = '';
+      document.getElementById("P4").value = '';
+      document.getElementById("P5").value = '';
+      calc();
+    }
+
+    <!-- Save variables -->
+    function save_var() {
+      var expiresdate = new Date(2068, 1, 02, 11, 20);
+      expiresdate = "expires=" + expiresdate.toUTCString();
+      var names = ["P1", "P2", "P3", "P4", "P5",  ];
+      for(var i=0; i<names.length; i++) {
+        document.cookie = names[i] + " = " + encodeURIComponent(tonum(names[i])) + "; " + expiresdate;
+      }
+      document.cookie = "saved = true; " + expiresdate
+    }
+
+    <!-- Load variables -->
+    function load_var() {
+      document.getElementById("P1").value = getCookie("P1");
+      document.getElementById("P2").value = getCookie("P2");
+      document.getElementById("P3").value = getCookie("P3");
+      document.getElementById("P4").value = getCookie("P4");
+      document.getElementById("P5").value = getCookie("P5");
+      calc();
+    }
+
+    <!-- Read cookies -->
+    function getCookie(name) {
+      var re = new RegExp(name + "=([^;]+)");
+      var value = re.exec(document.cookie);
+      return (value != null) ? unescape(value[1]) : null;
+    }
+
+    <!-- Evalue inputs with '.' or ',' as comma -->
+    function tonum(id) {
+      val = document.getElementById(id).value.replace(',', '.');
+      if (isNaN(val)) return '';
+      return val * 1.0; <!-- return number -->
+    }
+
+    <!-- Format number with fix digits -->
+    function num_fix(number, digits) {
+      if (!isFinite(number)) return '';
+      if (number == 0) return '0';
+      if (Math.sign(number) < 0)
+        var sign = '-';
+      else
+        var sign = '';
+     number = Math.abs(number)
+      exp = Math.ceil(Math.log10(number) + 0.000001);
+      number = Math.round(number * Math.pow(10, digits - exp)) + '';
+      if (digits > exp) { <!-- decimals -->
+        if (exp <= 0) { <!-- all decimals -->
+          return sign + '0.0000000'.substr(0, 2 - exp) + number;
+        }
+        else { <!-- integer and decimals -->
+          return sign + number.substr(0, exp) + '.' + number.substr(exp, digits - exp);
+        }
+      }
+      else { <!-- no decimals -->
+        number = number  + '0000000000'
+        return sign + number.substr(0, exp);
+      }
+    }
+
+    <!-- Manage keys [Enter] and [tab] -->
+    function OnKeyPress(evt) {
+      var evt = (evt) ? evt : ((event) ? event : null);
+      var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null);
+      if (node.type=="text") {
+        if (evt.keyCode == 9) { calc(); return; }
+        if (evt.keyCode == 13) { calc(); return false; }
+      }
+    }
+    document.onkeypress = OnKeyPress;
+
+  </script>
+
+</head>
+
+
+<body onload="init()">
+
+  <div class="content">
+  <h1>New functions test</h1>
+
+    <!--  Section: Buttons for manage values -->
+    <div class="row">Values:
+<input type="button" value="Reset" onclick="reset_var()">
+<input type="button" value="Clear" onclick="clear_var()">
+<input type="button" value="func_1" onclick="func_1()">
+<input type="button" value="func_2" onclick="func_2()">
+<input type="button" value="func_3" onclick="func_3()">
+<input type="button" value="func_4" onclick="func_4()">
+<input type="button" value="func_5" onclick="func_5()">
+</div>
+
+
+    <!--  Header: Core and phisical constants -->
+    <h2 id="Core_and_phisical_constants">Core and phisical constants</h2>
+
+    <!--  Row  -->
+    <div class="row">
+      <div class="sname">P1</div>
+      <div class="sval"> <form> <input type="text" id="P1"> </form> </div>
+      <div class="sunit">&nbsp;</div>
+      <div class="scoment">Param 1</div>
+    </div>
+
+    <!--  Row  -->
+    <div class="row">
+      <div class="sname">P2</div>
+      <div class="sval"> <form> <input type="text" id="P2"> </form> </div>
+      <div class="sunit">&nbsp;</div>
+      <div class="scoment">Param 2</div>
+    </div>
+
+    <!--  Row  -->
+    <div class="row">
+      <div class="sname">P3</div>
+      <div class="sval"> <form> <input type="text" id="P3"> </form> </div>
+      <div class="sunit">&nbsp;</div>
+      <div class="scoment">Param 3</div>
+    </div>
+
+    <!--  Row  -->
+    <div class="row">
+      <div class="sname">P4</div>
+      <div class="sval"> <form> <input type="text" id="P4"> </form> </div>
+      <div class="sunit">&nbsp;</div>
+      <div class="scoment">Param 4</div>
+    </div>
+
+    <!--  Row  -->
+    <div class="row">
+      <div class="sname">P5</div>
+      <div class="sval"> <form> <input type="text" id="P5"> </form> </div>
+      <div class="sunit">&nbsp;</div>
+      <div class="scoment">Param 5</div>
+    </div>
+
+    <!--  Row  -->
+    <div class="row">
+      <div class="sname">F1</div>
+      <div class="scalc"> <form> <input type="text" id="F1"> </form> </div>
+      <div class="sunit">&nbsp;</div>
+      <div class="scoment">func_1</div>
+    </div>
+
+    <!--  Row  -->
+    <div class="row">
+      <div class="sname">F2</div>
+      <div class="scalc"> <form> <input type="text" id="F2"> </form> </div>
+      <div class="sunit">&nbsp;</div>
+      <div class="scoment">func_2</div>
+    </div>
+
+    <!--  Row  -->
+    <div class="row">
+      <div class="sname">F3</div>
+      <div class="scalc"> <form> <input type="text" id="F3"> </form> </div>
+      <div class="sunit">&nbsp;</div>
+      <div class="scoment">func_3</div>
+    </div>
+
+    <!--  Row  -->
+    <div class="row">
+      <div class="sname">F4</div>
+      <div class="scalc"> <form> <input type="text" id="F4"> </form> </div>
+      <div class="sunit">&nbsp;</div>
+      <div class="scoment">func_4</div>
+    </div>
+
+    <!--  Row  -->
+    <div class="row">
+      <div class="sname">F5</div>
+      <div class="scalc"> <form> <input type="text" id="F5"> </form> </div>
+      <div class="sunit">&nbsp;</div>
+      <div class="scoment">func_5</div>
+    </div>
+
+  </div>  <!-- End content -->
+
+  <!-- License -->
+  <div class="license">
+    This work by <a href="https://github.com/picuino/picalc">Picuino</a>
+    is licensed under a
+   <a rel="MIT License" href="http://www.gnu.org/licenses/gpl-3.0.txt">
+      GPL version 3 license</a>.
+  </div>
+
+</body>
+
+</html>
