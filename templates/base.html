@@ -4,21 +4,22 @@
 <head>
 
   <!-- Head -->
-  <title>{{config.title}}</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta charset="UTF-8">
   <meta name="Keywords" content="{{config.keywords}}">
   <meta name="Description" content="{{config.description}}">
   <meta name="Version" content="{{version}}">
-  <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
+  <title>{{config.title}}</title>
 
   <!-- Styles -->
   <style>
-     {% include "styles.html"  %}
+  {% include "styles.html"  %}
   </style>
 
   <!-- Script -->
   <script>
-     {% include "script.html"  %}
+  {% include "script.html"  %}
   </script>
 
 </head>
@@ -27,10 +28,10 @@
 <body onload="init()">
 
   <!-- Content -->
-    {% include "content.html"  %}
+  {% include "content.html"  %}
 
   <!-- Footer -->
-    {% include "footer.html"  %}
+  {% include "footer.html"  %}
 
 </body>
 

@@ -23,15 +23,17 @@ import hashlib
 
 
 class Container(dict):
-   """Object for contain dict"""
+   """Object for contain dicts"""
    def __init__(self, data):
-      self.add(data)
+      self.update(data)
       
-   def add(self, data):
+   def update(self, data):
       self.__dict__.update(data)
 
-      
+   def __str__(self):
+      return str(self.__dict__)
 
+   
 class Picalc(object):
    
    def __init__(self, database_name):
@@ -70,9 +72,9 @@ class Picalc(object):
    def load_template(self):
       """Read template from file"""
       self.env = Environment(
-         loader=FileSystemLoader(self.config.template_path),
-         autoescape=select_autoescape(['html', 'xml'])
-      )
+         loader=FileSystemLoader(
+            self.config.template_path, encoding='utf-8-sig'),
+         autoescape=False)
       self.template = self.env.get_template(self.config.template_name)
       
 
@@ -111,7 +113,7 @@ class Picalc(object):
                      config=self.config,
                      include=self.include,
                      rows=self.rows,
-                     version=' {{time_sha_version}} ')
+                     version='{{time_sha_version}}')
       self.version = self.compute_version(self.page)
       self.output = Template(self.page).render(time_sha_version=self.version)
       return self.output

@@ -1,19 +1,20 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en-US">
 
 <head>
 
   <!-- Head -->
-  <title>Inductance Calculator</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta charset="UTF-8">
   <meta name="Keywords" content="Inductance, magnetics, coil, calculator">
   <meta name="Description" content="Javascript Inductance calculator">
-  <meta name="Version" content=" 15/03/2018 - SHA:4831FD ">
-  <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
+  <meta name="Version" content="15/03/2018 - SHA:D2C672">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
+  <title>Inductance Calculator</title>
 
   <!-- Styles -->
   <style>
-     ﻿    body {
+      body {
       font: 16px sans-serif;
       background-color: #f0f4f4;
       margin: 0;
@@ -74,7 +75,7 @@
     /* Column 1: Variable name */
     .sname {
       display: inline-block;
-      min-width: 6em;
+      min-width: 5em;
     }
 
     /* Column 2: Variable Value (input form) */
@@ -114,7 +115,7 @@
     /* Column 3: Variable Units */
     .sunit {
       display: inline-block;
-      min-width: 6em;
+      min-width: 5em;
       text-align: center;
       border: 1px solid #888;
       border-radius: 4px;
@@ -129,10 +130,10 @@
 
   <!-- Script -->
   <script>
-     ﻿
+  
 
-     
     
+
     <!-- Init calculations -->
     function init() {
        if  (getCookie("saved") == 'true')
@@ -248,7 +249,7 @@
       document.getElementById("B_max").value = 300;
       document.getElementById("AL").value = 8100;
       document.getElementById("g").value = 0;
-      document.getElementById("AL_2").value = tonum(&#34;AL&#34;);
+      document.getElementById("AL_2").value = tonum("AL");
       document.getElementById("N").value = 10;
       document.getElementById("f").value = 20;
       calc();
@@ -346,17 +347,18 @@
 <body onload="init()">
 
   <!-- Content -->
-    ﻿<div class="content">
+  
+<div class="content">
 
   <h1>Inductance Calculator</h1>
 
     <!--  Section: Buttons for manage values -->
-    &lt;div class=&#34;row&#34;&gt;Values:
-&lt;input type=&#34;button&#34; value=&#34;Reset&#34; onclick=&#34;reset_var()&#34;&gt;
-&lt;input type=&#34;button&#34; value=&#34;Clear&#34; onclick=&#34;clear_var()&#34;&gt;
-&lt;input type=&#34;button&#34; value=&#34;Save&#34; onclick=&#34;save_var()&#34;&gt;
-&lt;input type=&#34;button&#34; value=&#34;Load&#34; onclick=&#34;load_var()&#34;&gt;
-&lt;/div&gt;
+    <div class="row">Values:
+<input type="button" value="Reset" onclick="reset_var()">
+<input type="button" value="Clear" onclick="clear_var()">
+<input type="button" value="Save" onclick="save_var()">
+<input type="button" value="Load" onclick="load_var()">
+</div>
 
 
     <!--  Header: Core and phisical constants -->
@@ -366,7 +368,7 @@
     <div class="row">
       <div class="sname">Ae</div>
       <div class="sval"> <form> <input type="text" id="Ae"> </form> </div>
-      <div class="sunit">mm&lt;sup&gt;2&lt;/sup&gt;</div>
+      <div class="sunit">mm<sup>2</sup></div>
       <div class="scoment">Effective magnetic cross section</div>
     </div>
 
@@ -382,7 +384,7 @@
     <div class="row">
       <div class="sname">AL</div>
       <div class="sval"> <form> <input type="text" id="AL"> </form> </div>
-      <div class="sunit">nH/turn&lt;sup&gt;2&lt;/sup&gt;</div>
+      <div class="sunit">nH/turn<sup>2</sup></div>
       <div class="scoment">Inductance factor (permeability)</div>
     </div>
 
@@ -441,7 +443,7 @@
     <div class="row">
       <div class="sname">AL_gap</div>
       <div class="scalc"> <form> <input disabled="disabled" type="text" id="AL_gap"> </form> </div>
-      <div class="sunit">nH/turn&lt;sup&gt;2&lt;/sup&gt;</div>
+      <div class="sunit">nH/turn<sup>2</sup></div>
       <div class="scoment">Inductance factor (permeability) of air gap</div>
     </div>
 
@@ -449,7 +451,7 @@
     <div class="row">
       <div class="sname">AL_total</div>
       <div class="scalc"> <form> <input disabled="disabled" type="text" id="AL_total"> </form> </div>
-      <div class="sunit">nH/turn&lt;sup&gt;2&lt;/sup&gt;</div>
+      <div class="sunit">nH/turn<sup>2</sup></div>
       <div class="scoment">Total Inductance factor with gap</div>
     </div>
 
@@ -460,7 +462,7 @@
     <div class="row">
       <div class="sname">AL</div>
       <div class="sval"> <form> <input type="text" id="AL_2"> </form> </div>
-      <div class="sunit">nH/turn&lt;sup&gt;2&lt;/sup&gt;</div>
+      <div class="sunit">nH/turn<sup>2</sup></div>
       <div class="scoment">Inductance factor (permeability)</div>
     </div>
 
@@ -534,13 +536,14 @@
 </div>  <!-- End content -->
 
   <!-- Footer -->
-    ﻿<div class="footer">
-  <!-- License -->
-  This work by <a href="https://github.com/picuino/picalc">Picuino</a>
-  is licensed under a
-  <a rel="MIT License" href="http://www.gnu.org/licenses/gpl-3.0.txt">
-  GPL version 3 license</a>.
-</div>
+  
+  <div class="footer">
+    <!-- License -->
+    This work by <a href="https://github.com/picuino/picalc">Picuino</a>
+    is licensed under a
+    <a rel="MIT License" href="http://www.gnu.org/licenses/gpl-3.0.txt">
+    GPL version 3 license</a>.
+  </div>
 
 </body>
 

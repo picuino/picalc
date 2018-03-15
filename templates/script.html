@@ -3,12 +3,12 @@
 
     {% for inc in include %} {% if inc.type == 'script' %}
 
-    <!-- Include script ({{inc.code.count('\n')+1}} lines ): {{inc.name}} -->
+    <!-- Include script ({{inc.code.count('\n')+1}} lines): {{inc.name}} -->
     {{inc.code|string}}
 
     <!-- End {{inc.name}} -->
-    {%- endif %}{%- endfor %} 
-    
+    {%- endif %}{%- endfor %}
+
     <!-- Init calculations -->
     function init() {
        if  (getCookie("saved") == 'true')

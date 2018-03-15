@@ -1,7 +1,7 @@
-config:
+﻿config:
   template_path: templates
   template_name: base.html
-  
+
   include_path: include
   images_path: images
 
