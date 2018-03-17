@@ -73,7 +73,7 @@ class Picalc(object):
       self.rows = database['rows']
 
       # Format database    
-      self.load_includes()
+      self.load_images()
       self.database_complete()
 
 
@@ -86,19 +86,8 @@ class Picalc(object):
       self.template = self.env.get_template(self.config.template_name)
       
 
-   def load_includes(self):
+   def load_images(self):
       """Read all include files present in database"""
-      return
-
-      # Load include files
-      for include in self.include:
-         if not 'name' in include:
-            continue
-         print '   Load:', os.path.join(self.config.include_path, include['name'])
-         include['code'] = self.read(os.path.join(\
-            self.config.include_path, include['name'])
-         )
-
       # Load image files
       self.images = {}
       for row in self.rows:
