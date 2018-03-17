@@ -8,13 +8,13 @@
   <meta charset="UTF-8">
   <meta name="Keywords" content="Inductance, magnetics, coil, calculator">
   <meta name="Description" content="Javascript Inductance calculator">
-  <meta name="Version" content="17/03/2018 - SHA:7164FD">
+  <meta name="Version" content="17/03/2018 - SHA:D1A2C1">
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
   <title>Inductance Calculator</title>
 
   <!-- Styles -->
   <style>
-      body {
+    body {
       font: 16px sans-serif;
       background-color: #f0f4f4;
       margin: 0;
@@ -91,9 +91,7 @@
     input[type=text]:disabled {
        color: inherit;
     }
-    
-    
-    
+
     .sval {
       display: inline-block;
       width: 6em;
@@ -136,11 +134,11 @@
 
   <!-- Script -->
   <script>
-  
+ 
 
+    // Include script: include/cookies.js
     
-
-    <!-- Init calculations -->
+    // Init calculations
     function init() {
        if  (getCookie("saved") == 'true')
           load_var();
@@ -149,200 +147,205 @@
        calc();
     }
 
-    <!-- Compute calculations -->
+    // Save variables to cookie
+    function save_var() {
+       var expiresdate = new Date(2068, 1, 02, 11, 20);
+       expiresdate = "expires=" + expiresdate.toUTCString();
+       var names = ["Ae", "B_max", "AL", "g", "AL_2", "N", "f",  ];
+       for(var i=0; i<names.length; i++) {
+          document.cookie = names[i] + " = " + encodeURIComponent(tonum(names[i])) + "; " + expiresdate;
+       }
+       document.cookie = "saved = true; " + expiresdate
+    }
+
+    // Load variables from cookie
+    function load_var() {
+       document.getElementById("Ae").value = getCookie("Ae");
+       document.getElementById("B_max").value = getCookie("B_max");
+       document.getElementById("AL").value = getCookie("AL");
+       document.getElementById("g").value = getCookie("g");
+       document.getElementById("AL_2").value = getCookie("AL_2");
+       document.getElementById("N").value = getCookie("N");
+       document.getElementById("f").value = getCookie("f");
+       calc();
+    }
+
+    // Read cookies
+    function getCookie(name) {
+       var re = new RegExp(name + "=([^;]+)");
+       var value = re.exec(document.cookie);
+       return (value != null) ? unescape(value[1]) : null;
+    }
+    
+    // End include/cookies.js
+    // Compute calculations
     function calc() {
 
-      <!-- Variable: Effective magnetic cross section -->
-      Ae = tonum("Ae") * 1e-06;
+       // Variable: Effective magnetic cross section
+       Ae = tonum("Ae") * 1e-06;
 
-      <!-- Variable: Max value of magnetic flux density -->
-      B_max = tonum("B_max") * 1e-03;
+       // Variable: Max value of magnetic flux density
+       B_max = tonum("B_max") * 1e-03;
 
-      <!-- Variable: Inductance factor (permeability) -->
-      AL = tonum("AL") * 1e-09;
+       // Variable: Inductance factor (permeability)
+       AL = tonum("AL") * 1e-09;
 
-      <!-- Variable: Air gap lenght -->
-      g = tonum("g") * 1e-03;
+       // Variable: Air gap lenght
+       g = tonum("g") * 1e-03;
 
-      <!-- Variable: Inductance factor (permeability) -->
-      AL_2 = tonum("AL_2") * 1e-09;
+       // Variable: Inductance factor (permeability)
+       AL_2 = tonum("AL_2") * 1e-09;
 
-      <!-- Variable: Number of winding turns -->
-      N = tonum("N");
+       // Variable: Number of winding turns
+       N = tonum("N");
 
-      <!-- Variable: Frequency -->
-      f = tonum("f") * 1e+03;
+       // Variable: Frequency
+       f = tonum("f") * 1e+03;
 
-      <!-- Constant: Permeability of air -->
-      uo = 1.2566e-06;
-      document.getElementById("uo").value = "1.2566e-06";
+       // Constant: Permeability of air
+       uo = 1.2566e-06;
+       document.getElementById("uo").value = "1.2566e-06";
 
-      <!-- Constant: Resistivity of copper at 20ºC -->
-      ro_cu = 1.724e-08;
-      document.getElementById("ro_cu").value = "1.7240e-08";
+       // Constant: Resistivity of copper at 20ºC
+       ro_cu = 1.724e-08;
+       document.getElementById("ro_cu").value = "1.7240e-08";
 
-      <!-- Constant: Coefficient of resistivity of copper with temperature -->
-      Cro_cu = 0.00393;
-      document.getElementById("Cro_cu").value = "3.9300e-03";
+       // Constant: Coefficient of resistivity of copper with temperature
+       Cro_cu = 0.00393;
+       document.getElementById("Cro_cu").value = "3.9300e-03";
 
-      <!-- Calculation: Relative lenght of air gap (g/√Ae) -->
-      g_factor = g / Math.sqrt(Ae);
+       // Calculation: Relative lenght of air gap (g/√Ae)
+       g_factor = g / Math.sqrt(Ae);
 
-      <!-- Calculation: Fringing factor of air gap (+-15% error) -->
-      Fr_K1 = 2.15;
-      Fr_K2 = 0.74;
-      Fr_factor = 1 + Fr_K1 * Math.pow(g_factor, Fr_K2);
+       // Calculation: Fringing factor of air gap (+-15% error)
+       Fr_K1 = 2.15;
+       Fr_K2 = 0.74;
+       Fr_factor = 1 + Fr_K1 * Math.pow(g_factor, Fr_K2);
 
-      <!-- Calculation: Inductance factor (permeability) of air gap -->
-      AL_gap = uo * Ae * Fr_factor / g;
+       // Calculation: Inductance factor (permeability) of air gap
+       AL_gap = uo * Ae * Fr_factor / g;
 
-      <!-- Calculation: Total Inductance factor with gap -->
-      AL_total = 1.0 / ( (1.0 / AL_gap) + (1.0 / AL) );
+       // Calculation: Total Inductance factor with gap
+       AL_total = 1.0 / ( (1.0 / AL_gap) + (1.0 / AL) );
 
-      <!-- Calculation: Coil Inductance -->
-      L = AL_2 * Math.pow(N, 2);
+       // Calculation: Coil Inductance
+       L = AL_2 * Math.pow(N, 2);
 
-      <!-- Calculation: Maximum Inductor Current -->
-      I_max = (Ae * B_max) / (AL * N);
+       // Calculation: Maximum Inductor Current
+       I_max = (Ae * B_max) / (AL * N);
 
-      <!-- Calculation: Energy stored in Inductance -->
-      E_max = 0.5 * Math.pow(I_max, 2) * L;
+       // Calculation: Energy stored in Inductance
+       E_max = 0.5 * Math.pow(I_max, 2) * L;
 
-      <!-- Calculation: Period -->
-      T = 1.0 / f;
+       // Calculation: Period
+       T = 1.0 / f;
 
-      <!-- Calculation: Maximum sine wave voltage -->
-      V_sin = I_max * (2 * Math.PI * f) * L / Math.sqrt(2);
+       // Calculation: Maximum sine wave voltage
+       V_sin = I_max * (2 * Math.PI * f) * L / Math.sqrt(2);
 
-      <!-- Calculation: Maximum square wave voltage -->
-      T = 1.0 / f;
-      V_sq = L * I_max * 2 / ( T / 2.0 );
+       // Calculation: Maximum square wave voltage
+       T = 1.0 / f;
+       V_sq = L * I_max * 2 / ( T / 2.0 );
 
-      <!-- Print calc: Relative lenght of air gap (g/√Ae) -->
-      document.getElementById("g_factor").value = num_fix(g_factor * 1e+02, 5);
+       // Print calc: Relative lenght of air gap (g/√Ae)
+       document.getElementById("g_factor").value = num_fix(g_factor * 1e+02, 5);
 
-      <!-- Print calc: Fringing factor of air gap (+-15% error) -->
-      document.getElementById("Fr_factor").value = num_fix(Fr_factor, 5);
+       // Print calc: Fringing factor of air gap (+-15% error)
+       document.getElementById("Fr_factor").value = num_fix(Fr_factor, 5);
 
-      <!-- Print calc: Inductance factor (permeability) of air gap -->
-      document.getElementById("AL_gap").value = num_fix(AL_gap * 1e+09, 5);
+       // Print calc: Inductance factor (permeability) of air gap
+       document.getElementById("AL_gap").value = num_fix(AL_gap * 1e+09, 5);
 
-      <!-- Print calc: Total Inductance factor with gap -->
-      document.getElementById("AL_total").value = num_fix(AL_total * 1e+09, 5);
+       // Print calc: Total Inductance factor with gap
+       document.getElementById("AL_total").value = num_fix(AL_total * 1e+09, 5);
 
-      <!-- Print calc: Coil Inductance -->
-      document.getElementById("L").value = num_fix(L * 1e+06, 5);
+       // Print calc: Coil Inductance
+       document.getElementById("L").value = num_fix(L * 1e+06, 5);
 
-      <!-- Print calc: Maximum Inductor Current -->
-      document.getElementById("I_max").value = num_fix(I_max, 5);
+       // Print calc: Maximum Inductor Current
+       document.getElementById("I_max").value = num_fix(I_max, 5);
 
-      <!-- Print calc: Energy stored in Inductance -->
-      document.getElementById("E_max").value = num_fix(E_max * 1e+06, 5);
+       // Print calc: Energy stored in Inductance
+       document.getElementById("E_max").value = num_fix(E_max * 1e+06, 5);
 
-      <!-- Print calc: Period -->
-      document.getElementById("T").value = num_fix(T * 1e+06, 5);
+       // Print calc: Period
+       document.getElementById("T").value = num_fix(T * 1e+06, 5);
 
-      <!-- Print calc: Maximum sine wave voltage -->
-      document.getElementById("V_sin").value = num_fix(V_sin, 5);
+       // Print calc: Maximum sine wave voltage
+       document.getElementById("V_sin").value = num_fix(V_sin, 5);
 
-      <!-- Print calc: Maximum square wave voltage -->
-      document.getElementById("V_sq").value = num_fix(V_sq, 5);
+       // Print calc: Maximum square wave voltage
+       document.getElementById("V_sq").value = num_fix(V_sq, 5);
     }
 
-    <!-- Reset variables to default values -->
+    // Reset variables to default values
     function reset_var() {
-      document.getElementById("Ae").value = 683;
-      document.getElementById("B_max").value = 300;
-      document.getElementById("AL").value = 8100;
-      document.getElementById("g").value = 0;
-      document.getElementById("AL_2").value = tonum("AL");
-      document.getElementById("N").value = 10;
-      document.getElementById("f").value = 20;
-      calc();
+       document.getElementById("Ae").value = 683;
+       document.getElementById("B_max").value = 300;
+       document.getElementById("AL").value = 8100;
+       document.getElementById("g").value = 0;
+       document.getElementById("AL_2").value = tonum("AL");
+       document.getElementById("N").value = 10;
+       document.getElementById("f").value = 20;
+       calc();
     }
 
-    <!-- Clear variables -->
+    // Clear variables
     function clear_var() {
-      document.getElementById("Ae").value = '';
-      document.getElementById("B_max").value = '';
-      document.getElementById("AL").value = '';
-      document.getElementById("g").value = '';
-      document.getElementById("AL_2").value = '';
-      document.getElementById("N").value = '';
-      document.getElementById("f").value = '';
-      calc();
+       document.getElementById("Ae").value = '';
+       document.getElementById("B_max").value = '';
+       document.getElementById("AL").value = '';
+       document.getElementById("g").value = '';
+       document.getElementById("AL_2").value = '';
+       document.getElementById("N").value = '';
+       document.getElementById("f").value = '';
+       calc();
     }
 
-    <!-- Save variables -->
-    function save_var() {
-      var expiresdate = new Date(2068, 1, 02, 11, 20);
-      expiresdate = "expires=" + expiresdate.toUTCString();
-      var names = ["Ae", "B_max", "AL", "g", "AL_2", "N", "f",  ];
-      for(var i=0; i<names.length; i++) {
-        document.cookie = names[i] + " = " + encodeURIComponent(tonum(names[i])) + "; " + expiresdate;
-      }
-      document.cookie = "saved = true; " + expiresdate
-    }
-
-    <!-- Load variables -->
-    function load_var() {
-      document.getElementById("Ae").value = getCookie("Ae");
-      document.getElementById("B_max").value = getCookie("B_max");
-      document.getElementById("AL").value = getCookie("AL");
-      document.getElementById("g").value = getCookie("g");
-      document.getElementById("AL_2").value = getCookie("AL_2");
-      document.getElementById("N").value = getCookie("N");
-      document.getElementById("f").value = getCookie("f");
-      calc();
-    }
-
-    <!-- Read cookies -->
-    function getCookie(name) {
-      var re = new RegExp(name + "=([^;]+)");
-      var value = re.exec(document.cookie);
-      return (value != null) ? unescape(value[1]) : null;
-    }
-
-    <!-- Evalue inputs with '.' or ',' as comma -->
+    // Evalue inputs with '.' or ',' as comma
     function tonum(id) {
-      val = document.getElementById(id).value.replace(',', '.');
-      if (isNaN(val)) return '';
-      return val * 1.0; <!-- return number -->
+       val = document.getElementById(id).value.replace(',', '.');
+       if (isNaN(val)) return '';
+       return val * 1.0; // return number
     }
 
-    <!-- Format number with fix digits -->
+    // Format number with fix digits
     function num_fix(number, digits) {
-      if (!isFinite(number)) return '';
-      if (number == 0) return '0';
-      if (Math.sign(number) < 0)
-        var sign = '-';
-      else
-        var sign = '';
-     number = Math.abs(number)
-      exp = Math.ceil(Math.log10(number) + 0.000001);
-      number = Math.round(number * Math.pow(10, digits - exp)) + '';
-      if (digits > exp) { <!-- decimals -->
-        if (exp <= 0) { <!-- all decimals -->
-          return sign + '0.0000000'.substr(0, 2 - exp) + number;
-        }
-        else { <!-- integer and decimals -->
-          return sign + number.substr(0, exp) + '.' + number.substr(exp, digits - exp);
-        }
-      }
-      else { <!-- no decimals -->
-        number = number  + '0000000000'
-        return sign + number.substr(0, exp);
-      }
+       if (!isFinite(number)) return '';
+       if (number == 0) return '0';
+       if (Math.sign(number) < 0)
+          var sign = '-';
+       else
+          var sign = '';
+       number = Math.abs(number)
+       exp = Math.ceil(Math.log10(number) + 0.000001);
+       number = Math.round(number * Math.pow(10, digits - exp)) + '';
+       // Number have fractional part
+       if (digits > exp) {
+         // number have only fractional part
+         if (exp <= 0) {
+            return sign + '0.0000000'.substr(0, 2 - exp) + number;
+         }
+         // Number have integer and fractional part
+         else {
+            return sign + number.substr(0, exp) + '.' + number.substr(exp, digits - exp);
+         }
+       }
+       // Number with only integer part
+       else {
+          number = number  + '0000000000'
+          return sign + number.substr(0, exp);
+       }
     }
 
-    <!-- Manage keys [Enter] and [tab] -->
+    // Manage keys [Enter] and [tab]
     function OnKeyPress(evt) {
-      var evt = (evt) ? evt : ((event) ? event : null);
-      var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null);
-      if (node.type=="text") {
-        if (evt.keyCode == 9) { calc(); return; }
-        if (evt.keyCode == 13) { calc(); return false; }
-      }
+       var evt = (evt) ? evt : ((event) ? event : null);
+       var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null);
+       if (node.type=="text") {
+          if (evt.keyCode == 9) { calc(); return; }
+         if (evt.keyCode == 13) { calc(); return false; }
+       }
     }
     document.onkeypress = OnKeyPress;
   </script>
@@ -353,19 +356,10 @@
 <body onload="init()">
 
   <!-- Content -->
-  
+
 <div class="content">
 
   <h1>Inductance Calculator</h1>
-
-    <!--  Section: Buttons for manage values -->
-    <div class="row">Values:
-<input type="button" value="Reset" onclick="reset_var()">
-<input type="button" value="Clear" onclick="clear_var()">
-<input type="button" value="Save" onclick="save_var()">
-<input type="button" value="Load" onclick="load_var()">
-</div>
-
 
     <!--  Header: Core and phisical constants -->
     <h2 id="Core_and_phisical_constants">Core and phisical constants</h2>
@@ -542,7 +536,7 @@
 </div>  <!-- End content -->
 
   <!-- Footer -->
-  
+
   <div class="footer">
     <!-- License -->
     This work by <a href="https://github.com/picuino/picalc">Picuino</a>

@@ -88,6 +88,7 @@ class Picalc(object):
 
    def load_includes(self):
       """Read all include files present in database"""
+      return
 
       # Load include files
       for include in self.include:
@@ -133,7 +134,7 @@ class Picalc(object):
          fill empty prefix with number according with unit prefix"""
       for row in self.rows:
          # Generate id string based on name
-         if not 'id' in row:
+         if not 'id' in row and not row['type'] in ['buttons']:
             row['id'] = re.sub(' ', '_', row['name'])
 
          # Translate units to exponential number prefix, if not exist.

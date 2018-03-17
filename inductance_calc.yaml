@@ -10,25 +10,30 @@
     value: 6em
     units: 5em
     comment: 20em
+
   resolution: 5
+  
+  onload: init()
+
+
+include:
+  - type: script
+    name: include/cookies.js
 
 
 # *******************************************************************
 
 rows:
 
-- type: html
-  name: Buttons for manage values
-  code: |
-    <div class="row">Values:
-    <input type="button" value="Reset" onclick="reset_var()">
-    <input type="button" value="Clear" onclick="clear_var()">
-    <input type="button" value="Save" onclick="save_var()">
-    <input type="button" value="Load" onclick="load_var()">
-    </div>
+- type: buttons
+  buttons:
+  - { name: Reset,  onclick: reset_var() }
+  - { name: Clear,  onclick: clear_var() }
+  - { name: Save,   onclick: save_var() }
+  - { name: Load,   onclick: load_var() }
 
-
-# ** INPUT PARAMETER **
+  
+  # ** INPUT PARAMETER **
 
 - type: header
   name: Core and phisical constants

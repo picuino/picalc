@@ -75,9 +75,7 @@
     input[type=text]:disabled {
        color: inherit;
     }
-    
-    
-    
+
     .sval {
       display: inline-block;
       width: {{config.width.value}};
