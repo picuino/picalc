@@ -48,7 +48,7 @@
 
     {%- for datarow in rows -%} {%- if datarow.type == 'calc' %}
 
-      <!-- Print calc: {{datarow.comment}} -->
+    <!-- Print calc: {{datarow.comment}} -->
       document.getElementById("{{datarow.id}}").value = num_fix({{datarow.id}}
         {%- if datarow.prefix != 1 %} * {{ to_numexp_1(1.0/datarow.prefix|float) }}{% endif %}, {{config.resolution}});
     {%- endif %} {%- endfor %}
@@ -68,32 +68,6 @@
       document.getElementById("{{datarow.id}}").value = '';
       {%- endif %} {%- endfor %}
       calc();
-    }
-
-    <!-- Save variables -->
-    function save_var() {
-      var expiresdate = new Date(2068, 1, 02, 11, 20);
-      expiresdate = "expires=" + expiresdate.toUTCString();
-      var names = [{%- for datarow in rows %} {%- if datarow.type == 'var' %}"{{datarow.id}}", {% endif %} {%- endfor %} ];
-      for(var i=0; i<names.length; i++) {
-        document.cookie = names[i] + " = " + encodeURIComponent(tonum(names[i])) + "; " + expiresdate;
-      }
-      document.cookie = "saved = true; " + expiresdate
-    }
-
-    <!-- Load variables -->
-    function load_var() {
-      {%- for datarow in rows %} {%- if datarow.type == 'var' %}
-      document.getElementById("{{datarow.id}}").value = getCookie("{{datarow.id}}");
-      {%- endif %} {%- endfor %}
-      calc();
-    }
-
-    <!-- Read cookies -->
-    function getCookie(name) {
-      var re = new RegExp(name + "=([^;]+)");
-      var value = re.exec(document.cookie);
-      return (value != null) ? unescape(value[1]) : null;
     }
 
     <!-- Evalue inputs with '.' or ',' as comma -->

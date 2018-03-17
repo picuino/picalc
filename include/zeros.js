@@ -1,5 +1,5 @@
 ﻿
-    <!-- Zero finding with secant method. https://en.wikipedia.org/wiki/Secant_method -->
+    // Zero finding with secant method. https://en.wikipedia.org/wiki/Secant_method
     function zero_secant(x, fn) {
       var iter, x0, x1, x2, y0, y1;
       x1 = x * 1.0;
@@ -21,7 +21,7 @@
     }
 
     
-    <!-- Zero finding between two points -->
+    // Zero finding between two points
     function zero_bisect(x0, x1, fn) {
       var iter, x2, y0, y1, y2;
       x0 = x0 * 1.0;
