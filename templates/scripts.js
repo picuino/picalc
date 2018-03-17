@@ -12,39 +12,48 @@
 
 
 {#- Read variables, calculate formulaes and print results #}
+
+    var values = {};
+    
+    // Setup variables onload 
+    function setup() {
+      reset_var();
+      calc();
+    }
+
     // Compute calculations
     function calc() {
-    {%- for datarow in rows %} {%- if datarow.type == 'var' %}
+    {%- for rowdata in rows %} {%- if rowdata.type == 'var' %}
 
-       // Variable: {{datarow.comment}}
-       {{datarow.id}} = tonum("{{datarow.id}}")
-          {%- if datarow.prefix != 1 %} * {{ to_numexp_1(datarow.prefix|float) }}{% endif %};
+       // Variable: {{rowdata.comment}}
+       {{rowdata.id}} = idtonum("{{rowdata.id}}")
+          {%- if rowdata.prefix != 1 %} * {{ to_numexp_1(rowdata.prefix|float) }}{% endif %};
     {%- endif %} {%- endfor %}
 
-    {%- for datarow in rows -%} {%- if datarow.type == 'const' %}
+    {%- for rowdata in rows -%} {%- if rowdata.type == 'const' %}
 
-       // Constant: {{datarow.comment}}
-       {{datarow.id}} = {{datarow.value}};
-       document.getElementById("{{datarow.id}}").value = "{{to_numexp_5(datarow.value)}}";
+       // Constant: {{rowdata.comment}}
+       {{rowdata.id}} = {{rowdata.value}};
+       document.getElementById("{{rowdata.id}}").value = "{{to_numexp_5(rowdata.value)}}";
     {%- endif %} {%- endfor %}
 
-    {%- for datarow in rows -%} {%- if datarow.type == 'calc' %}
+    {%- for rowdata in rows -%} {%- if rowdata.type == 'calc' %}
 
-       // Calculation: {{datarow.comment}}
-       {%- if datarow.calc is iterable and datarow.calc is not string %}
-       {%- for calc in datarow.calc %}
+       // Calculation: {{rowdata.comment}}
+       {%- if rowdata.calc is iterable and rowdata.calc is not string %}
+       {%- for calc in rowdata.calc %}
        {{calc}};
        {%- endfor %}
        {%- else %}
-       {{datarow.calc}};
+       {{rowdata.calc}};
        {%- endif %}
     {%- endif %} {%- endfor %}
 
-    {%- for datarow in rows -%} {%- if datarow.type == 'calc' %}
+    {%- for rowdata in rows -%} {%- if rowdata.type == 'calc' %}
 
-       // Print calc: {{datarow.comment}}
-       document.getElementById("{{datarow.id}}").value = num_fix({{datarow.id}}
-          {%- if datarow.prefix != 1 %} * {{ to_numexp_1(1.0/datarow.prefix|float) }}{% endif %}, {{config.resolution}});
+       // Print calc: {{rowdata.comment}}
+       document.getElementById("{{rowdata.id}}").value = num_fix({{rowdata.id}}
+          {%- if rowdata.prefix != 1 %} * {{ to_numexp_1(1.0/rowdata.prefix|float) }}{% endif %}, {{config.resolution}});
     {%- endif %} {%- endfor %}
     }
 
@@ -53,26 +62,27 @@
 
     // Reset variables to default values
     function reset_var() {
-       {%- for datarow in rows %} {%- if datarow.type == 'var' %}
-       document.getElementById("{{datarow.id}}").value = {% if datarow.value or datarow.value == 0 %}{{datarow.value}}{% else %}''{% endif %};
+       {%- for rowdata in rows %} {%- if rowdata.type == 'var' %}
+       document.getElementById("{{rowdata.id}}").value = {% if rowdata.value or rowdata.value == 0 %}{{rowdata.value}}{% else %}''{% endif %};
        {%- endif %} {%- endfor %}
        calc();
     }
 
     // Clear variables
     function clear_var() {
-       {%- for datarow in rows %} {%- if datarow.type == 'var' %}
-       document.getElementById("{{datarow.id}}").value = '';
+       {%- for rowdata in rows %} {%- if rowdata.type == 'var' %}
+       document.getElementById("{{rowdata.id}}").value = '';
        {%- endif %} {%- endfor %}
        calc();
     }
 
 
-{#- Format float numbers #}
+{#- Manage numbers #}
 
     // Evalue inputs with '.' or ',' as comma
-    function tonum(id) {
+    function idtonum(id) {
        val = document.getElementById(id).value.replace(',', '.');
+       if (val != values[val]) {
        if (isNaN(val)) return '';
        return val * 1.0; // return number
     }

@@ -8,7 +8,7 @@
   <meta charset="UTF-8">
   <meta name="Keywords" content="Inductance, magnetics, coil, calculator">
   <meta name="Description" content="Javascript Inductance calculator">
-  <meta name="Version" content="17/03/2018 - SHA:D1A2C1">
+  <meta name="Version" content="17/03/2018 - SHA:CDA318">
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
   <title>Inductance Calculator</title>
 
@@ -153,7 +153,7 @@
        expiresdate = "expires=" + expiresdate.toUTCString();
        var names = ["Ae", "B_max", "AL", "g", "AL_2", "N", "f",  ];
        for(var i=0; i<names.length; i++) {
-          document.cookie = names[i] + " = " + encodeURIComponent(tonum(names[i])) + "; " + expiresdate;
+          document.cookie = names[i] + " = " + encodeURIComponent(idtonum(names[i])) + "; " + expiresdate;
        }
        document.cookie = "saved = true; " + expiresdate
     }
@@ -178,29 +178,38 @@
     }
     
     // End include/cookies.js
+
+    var values = {};
+    
+    // Setup variables onload 
+    function setup() {
+      reset_var();
+      calc();
+    }
+
     // Compute calculations
     function calc() {
 
        // Variable: Effective magnetic cross section
-       Ae = tonum("Ae") * 1e-06;
+       Ae = idtonum("Ae") * 1e-06;
 
        // Variable: Max value of magnetic flux density
-       B_max = tonum("B_max") * 1e-03;
+       B_max = idtonum("B_max") * 1e-03;
 
        // Variable: Inductance factor (permeability)
-       AL = tonum("AL") * 1e-09;
+       AL = idtonum("AL") * 1e-09;
 
        // Variable: Air gap lenght
-       g = tonum("g") * 1e-03;
+       g = idtonum("g") * 1e-03;
 
        // Variable: Inductance factor (permeability)
-       AL_2 = tonum("AL_2") * 1e-09;
+       AL_2 = idtonum("AL_2") * 1e-09;
 
        // Variable: Number of winding turns
-       N = tonum("N");
+       N = idtonum("N");
 
        // Variable: Frequency
-       f = tonum("f") * 1e+03;
+       f = idtonum("f") * 1e+03;
 
        // Constant: Permeability of air
        uo = 1.2566e-06;
@@ -303,8 +312,9 @@
     }
 
     // Evalue inputs with '.' or ',' as comma
-    function tonum(id) {
+    function idtonum(id) {
        val = document.getElementById(id).value.replace(',', '.');
+       if (val != values[val]) {
        if (isNaN(val)) return '';
        return val * 1.0; // return number
     }
@@ -360,6 +370,15 @@
 <div class="content">
 
   <h1>Inductance Calculator</h1>
+
+    <!--  Buttons Values -->
+    <div class="row">
+      Values
+      <input type="button" value="Reset" onclick="reset_var()">
+      <input type="button" value="Clear" onclick="clear_var()">
+      <input type="button" value="Save" onclick="save_var()">
+      <input type="button" value="Load" onclick="load_var()">
+    </div>
 
     <!--  Header: Core and phisical constants -->
     <h2 id="Core_and_phisical_constants">Core and phisical constants</h2>

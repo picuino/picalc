@@ -16,6 +16,6 @@
     units: 6em
     comment: 20em
   
-  onload: calc()
+  onload: setup()
   
   resolution: 5

@@ -31,17 +31,19 @@ rows:
   comment: Wave Types
 
 - type: html
-  name: Buttons for manage values
+  name: Horizontal line
   code: |
       {% raw %}
-      <div class="row">Values:
-      <input type="button" value="Reset" onclick="reset_var()">
-      <input type="button" value="Clear" onclick="clear_var()">
-      <input type="button" value="Save" onclick="save_var()">
-      <input type="button" value="Load" onclick="load_var()">
-      </div>
+      <hr /> <br />
       {% endraw %}
-
+      
+- type: buttons
+  name: Values
+  buttons:
+  - { value: Reset,  onclick: reset_var() }
+  - { value: Clear,  onclick: clear_var() }
+  - { value: Save,   onclick: save_var() }
+  - { value: Load,   onclick: load_var() }
 
 # ** INPUT PARAMETER **
 

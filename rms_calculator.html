@@ -8,7 +8,7 @@
   <meta charset="UTF-8">
   <meta name="Keywords" content="RMS, average, median, value, calculator">
   <meta name="Description" content="JavaScript average and RMS value Calculator">
-  <meta name="Version" content="17/03/2018 - SHA:B6551A">
+  <meta name="Version" content="17/03/2018 - SHA:25EED2">
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
   <title>Average and RMS value Calculator</title>
 
@@ -153,7 +153,7 @@
        expiresdate = "expires=" + expiresdate.toUTCString();
        var names = ["V_max", "V_min", "D", "V1_rms", "V2_rms", "V3_rms", "V4_rms", "V5_rms",  ];
        for(var i=0; i<names.length; i++) {
-          document.cookie = names[i] + " = " + encodeURIComponent(tonum(names[i])) + "; " + expiresdate;
+          document.cookie = names[i] + " = " + encodeURIComponent(idtonum(names[i])) + "; " + expiresdate;
        }
        document.cookie = "saved = true; " + expiresdate
     }
@@ -179,32 +179,41 @@
     }
     
     // End include/cookies.js
+
+    var values = {};
+    
+    // Setup variables onload 
+    function setup() {
+      reset_var();
+      calc();
+    }
+
     // Compute calculations
     function calc() {
 
        // Variable: Maximum value of signal
-       V_max = tonum("V_max");
+       V_max = idtonum("V_max");
 
        // Variable: Minimum value of signal
-       V_min = tonum("V_min");
+       V_min = idtonum("V_min");
 
        // Variable: Duty cycle
-       D = tonum("D") * 1e-02;
+       D = idtonum("D") * 1e-02;
 
        // Variable: V_rms of Wave 1
-       V1_rms = tonum("V1_rms");
+       V1_rms = idtonum("V1_rms");
 
        // Variable: V_rms of Wave 2
-       V2_rms = tonum("V2_rms");
+       V2_rms = idtonum("V2_rms");
 
        // Variable: V_rms of Wave 3
-       V3_rms = tonum("V3_rms");
+       V3_rms = idtonum("V3_rms");
 
        // Variable: V_rms of Wave 4
-       V4_rms = tonum("V4_rms");
+       V4_rms = idtonum("V4_rms");
 
        // Variable: V_rms of Wave 5
-       V5_rms = tonum("V5_rms");
+       V5_rms = idtonum("V5_rms");
 
        // Calculation: Average value of sine wave (offset)
        V_offset1 = V_min + 0.5 * (V_max - V_min);
@@ -330,8 +339,9 @@
     }
 
     // Evalue inputs with '.' or ',' as comma
-    function tonum(id) {
+    function idtonum(id) {
        val = document.getElementById(id).value.replace(',', '.');
+       if (val != values[val]) {
        if (isNaN(val)) return '';
        return val * 1.0; // return number
     }
@@ -786,16 +796,20 @@ XgAAAAAAIF4AAAAAACBeAAAAAADxAgAAAAAA8QIAAAAAAPECAAAAAAPy/wFOsZ2LOGgqVwAAAABJ
 RU5ErkJggg==
 ">
 
-    <!--  Section: Buttons for manage values -->
+    <!--  Section: Horizontal line -->
     
-<div class="row">Values:
-<input type="button" value="Reset" onclick="reset_var()">
-<input type="button" value="Clear" onclick="clear_var()">
-<input type="button" value="Save" onclick="save_var()">
-<input type="button" value="Load" onclick="load_var()">
-</div>
+<hr /> <br />
 
 
+
+    <!--  Buttons Values -->
+    <div class="row">
+      Values
+      <input type="button" value="Reset" onclick="reset_var()">
+      <input type="button" value="Clear" onclick="clear_var()">
+      <input type="button" value="Save" onclick="save_var()">
+      <input type="button" value="Load" onclick="load_var()">
+    </div>
 
     <!--  Header: Maximum and Minimum values of wave (peak to peak) -->
     <h2 id="Maximum_and_Minimum_values_of_wave_(peak_to_peak)">Maximum and Minimum values of wave (peak to peak)</h2>

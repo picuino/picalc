@@ -15,7 +15,6 @@
   
   onload: init()
 
-
 include:
   - type: script
     name: include/cookies.js
@@ -26,11 +25,12 @@ include:
 rows:
 
 - type: buttons
+  name: Values
   buttons:
-  - { name: Reset,  onclick: reset_var() }
-  - { name: Clear,  onclick: clear_var() }
-  - { name: Save,   onclick: save_var() }
-  - { name: Load,   onclick: load_var() }
+  - { value: Reset,  onclick: reset_var() }
+  - { value: Clear,  onclick: clear_var() }
+  - { value: Save,   onclick: save_var() }
+  - { value: Load,   onclick: load_var() }
 
   
   # ** INPUT PARAMETER **

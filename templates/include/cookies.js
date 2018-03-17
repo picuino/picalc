@@ -14,7 +14,7 @@
        expiresdate = "expires=" + expiresdate.toUTCString();
        var names = [{%- for datarow in rows %} {%- if datarow.type == 'var' %}"{{datarow.id}}", {% endif %} {%- endfor %} ];
        for(var i=0; i<names.length; i++) {
-          document.cookie = names[i] + " = " + encodeURIComponent(tonum(names[i])) + "; " + expiresdate;
+          document.cookie = names[i] + " = " + encodeURIComponent(idtonum(names[i])) + "; " + expiresdate;
        }
        document.cookie = "saved = true; " + expiresdate
     }

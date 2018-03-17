@@ -3,42 +3,52 @@
 
   <h1>{{config.title}}</h1>
 
-{%- for datarow in rows %}
+{%- for rowdata in rows %}
 
-{%- if datarow.type == 'header' %}
+{%- if rowdata.type == 'header' %}
 
-    <!--  Header: {{datarow.name}} -->
-    <h2 {%- if 'id' in datarow %} id="{{datarow.id}}"{% endif %}>{{datarow.name}}</h2>
+    <!--  Header: {{rowdata.name}} -->
+    <h2 {%- if 'id' in rowdata %} id="{{rowdata.id}}"{% endif %}>{{rowdata.name}}</h2>
 
-{%- elif datarow.type == 'html' %}
+{%- elif rowdata.type == 'html' %}
 
-    <!--  Section: {{datarow.name}} -->
-    {{datarow.code}}
+    <!--  Section: {{rowdata.name}} -->
+    {{rowdata.code}}
 
-{%- elif datarow.type == 'image' %}
+{%- elif rowdata.type == 'image' %}
 
-    <!--  Image: {{datarow.name}} -->
-    <img alt="{{datarow.comment}}" {% if 'width' in datarow %}width="{{datarow.width}}" {% endif %}src="{{datarow.code}}">
+    <!--  Image: {{rowdata.name}} -->
+    <img alt="{{rowdata.comment}}" {% if 'width' in rowdata %}width="{{rowdata.width}}" {% endif %}src="{{rowdata.code}}">
 
-{%- elif datarow.type in ['var', 'const', 'calc'] %}
+{%- elif rowdata.type == 'buttons' %}
+
+    <!--  Buttons {{rowdata.name}} -->
+    <div class="row">
+      {{rowdata.name}}
+      {%- for button in rowdata.buttons %}
+      <input type="button" value="{{button.value}}" onclick="{{button.onclick}}">
+      {%- endfor %}
+    </div>
+
+{%- elif rowdata.type in ['var', 'const', 'calc', 'buttons'] %}
 
     <!--  Row  -->
     <div class="row">
-      <div class="sname">{{datarow.name}}</div>
+      <div class="sname">{{rowdata.name}}</div>
 
-    {%- if datarow.type == 'const' %}
-      <div class="sconst"> <form> <input disabled="disabled" type="text" id="{{datarow.id}}"> </form> </div>
+    {%- if rowdata.type == 'const' %}
+      <div class="sconst"> <form> <input disabled="disabled" type="text" id="{{rowdata.id}}"> </form> </div>
     {%- endif %}
 
-    {%- if datarow.type == 'var' %}
-      <div class="sval"> <form> <input type="text" id="{{datarow.id}}"> </form> </div>
+    {%- if rowdata.type == 'var' %}
+      <div class="sval"> <form> <input type="text" id="{{rowdata.id}}"> </form> </div>
     {%- endif %}
 
-    {%- if datarow.type == 'calc' %}
-      <div class="scalc"> <form> <input disabled="disabled" type="text" id="{{datarow.id}}"> </form> </div>
+    {%- if rowdata.type == 'calc' %}
+      <div class="scalc"> <form> <input disabled="disabled" type="text" id="{{rowdata.id}}"> </form> </div>
     {%- endif %}
-      <div class="sunit">{% if datarow.unit %}{{datarow.unit}}{% else %}&nbsp;{% endif %}</div>
-      <div class="scoment">{{datarow.comment}}</div>
+      <div class="sunit">{% if rowdata.unit %}{{rowdata.unit}}{% else %}&nbsp;{% endif %}</div>
+      <div class="scoment">{{rowdata.comment}}</div>
     </div>
 
 {%- endif %}
