@@ -3,13 +3,16 @@
   Read yaml databases in local directory
   and process all to make html pages
   for online calculations
+
+  # Picalc
+
+This work by 
+[Picuino](https://github.com/Picuino/picalc)
+is licensed under a
+[a GPL version 3 license](http://www.gnu.org/licenses/gpl-3.0.txt)
 """
 
-#import os
 import base64
-#from jinja2 import Environment, PackageLoader, select_autoescape
-#from picalc import Picalc
-
 import os
 import re
 import codecs
@@ -18,6 +21,11 @@ import yaml
 import time
 import hashlib
 
+
+__license__ = """
+This work by Picuino (https://github.com/picuino/picalc)
+is licensed under a GPL version 3 license (http://www.gnu.org/licenses/gpl-3.0.txt)
+"""
 
 # ********************************************************************
 
@@ -80,6 +88,7 @@ class Picalc(object):
 
    def load_includes(self):
       """Read all include files present in database"""
+      return
 
       # Load include files
       for include in self.include:
@@ -125,7 +134,7 @@ class Picalc(object):
          fill empty prefix with number according with unit prefix"""
       for row in self.rows:
          # Generate id string based on name
-         if not 'id' in row:
+         if not 'id' in row and not row['type'] in ['buttons']:
             row['id'] = re.sub(' ', '_', row['name'])
 
          # Translate units to exponential number prefix, if not exist.
@@ -143,14 +152,14 @@ class Picalc(object):
  
    def write(self, filename, data):
       """Write data to disk with utf-8 encoding"""
-      fo = codecs.open(filename, 'w', encoding='utf-8')
+      fo = codecs.open(filename, 'w', encoding='utf-8-sig')
       fo.write(data)
       fo.close()
 
 
    def read(self, filename):
       """Read data from disk with utf-8 encoding"""
-      fi = codecs.open(filename, 'r', encoding='utf-8')
+      fi = codecs.open(filename, 'r', encoding='utf-8-sig')
       data = fi.read()
       fi.close()
       return data

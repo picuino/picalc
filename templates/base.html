@@ -14,24 +14,24 @@
 
   <!-- Styles -->
   <style>
-  {% include "styles.html"  %}
+{% include "styles.css"  %}
   </style>
 
   <!-- Script -->
   <script>
-  {% include "script.html"  %}
+{% include "scripts.js"  %}
   </script>
 
 </head>
 
 
-<body onload="init()">
+<body onload="{{config.onload}}">
 
   <!-- Content -->
-  {% include "content.html"  %}
+{% include "content.html"  %}
 
   <!-- Footer -->
-  {% include "footer.html"  %}
+{% include "footer.html"  %}
 
 </body>
 

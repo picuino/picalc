@@ -3,24 +3,24 @@
 
   <h1>{{config.title}}</h1>
 
-  {%- for datarow in rows %}
+{%- for datarow in rows %}
 
-    {%- if datarow.type == 'header' %}
+{%- if datarow.type == 'header' %}
 
     <!--  Header: {{datarow.name}} -->
     <h2 {%- if 'id' in datarow %} id="{{datarow.id}}"{% endif %}>{{datarow.name}}</h2>
 
-    {%- elif datarow.type == 'html' %}
+{%- elif datarow.type == 'html' %}
 
     <!--  Section: {{datarow.name}} -->
     {{datarow.code}}
 
-    {%- elif datarow.type == 'image' %}
+{%- elif datarow.type == 'image' %}
 
     <!--  Image: {{datarow.name}} -->
     <img alt="{{datarow.comment}}" {% if 'width' in datarow %}width="{{datarow.width}}" {% endif %}src="{{datarow.code}}">
 
-    {%- elif datarow.type in ['var', 'const', 'calc'] %}
+{%- elif datarow.type in ['var', 'const', 'calc'] %}
 
     <!--  Row  -->
     <div class="row">
@@ -41,7 +41,7 @@
       <div class="scoment">{{datarow.comment}}</div>
     </div>
 
-    {%- endif %}
-  {%- endfor %}
+{%- endif %}
+{%- endfor %}
 
 </div>  <!-- End content -->

@@ -2,7 +2,6 @@
   template_path: templates
   template_name: base.html
 
-  include_path: include
   images_path: images
 
   font:
@@ -16,5 +15,7 @@
     value: 6em
     units: 6em
     comment: 20em
-
+  
+  onload: calc()
+  
   resolution: 5
