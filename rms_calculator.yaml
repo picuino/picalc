@@ -13,7 +13,6 @@
 
   resolution: 5
 
-
   onload: init()
 
 

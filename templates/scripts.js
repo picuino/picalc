@@ -13,8 +13,6 @@
 
 {#- Read variables, calculate formulaes and print results #}
 
-    var values = {};
-    
     // Setup variables onload 
     function setup() {
       reset_var();
@@ -23,57 +21,107 @@
 
     // Compute calculations
     function calc() {
-    {%- for rowdata in rows %} {%- if rowdata.type == 'var' %}
+      
+       // Test variable changes
+       if (test_var_change() == false)
+          return;
 
-       // Variable: {{rowdata.comment}}
-       {{rowdata.id}} = idtonum("{{rowdata.id}}")
-          {%- if rowdata.prefix != 1 %} * {{ to_numexp_1(rowdata.prefix|float) }}{% endif %};
-    {%- endif %} {%- endfor %}
+       read_vars();
+       copy_var_values();
+       add_query();
 
-    {%- for rowdata in rows -%} {%- if rowdata.type == 'const' %}
-
-       // Constant: {{rowdata.comment}}
-       {{rowdata.id}} = {{rowdata.value}};
-       document.getElementById("{{rowdata.id}}").value = "{{to_numexp_5(rowdata.value)}}";
-    {%- endif %} {%- endfor %}
-
-    {%- for rowdata in rows -%} {%- if rowdata.type == 'calc' %}
+       {%- for rowdata in rows -%} {%- if rowdata.type == 'calc' %}
 
        // Calculation: {{rowdata.comment}}
-       {%- if rowdata.calc is iterable and rowdata.calc is not string %}
-       {%- for calc in rowdata.calc %}
+          {%- if rowdata.calc is iterable and rowdata.calc is not string %}
+             {%- for calc in rowdata.calc %}
        {{calc}};
-       {%- endfor %}
-       {%- else %}
+             {%- endfor %}
+          {%- else %}
        {{rowdata.calc}};
-       {%- endif %}
-    {%- endif %} {%- endfor %}
+          {%- endif %}
+       
+       {%- endif %} {%- endfor %}
 
-    {%- for rowdata in rows -%} {%- if rowdata.type == 'calc' %}
+       // Print variables and calcs
+       print_var();
+    }
+    
+    // Add query string to url
+    function add_query () {
+       var url = document.URL.split('?')[0];
+       var query = '';
+       
+       {% for rowdata in rows -%} {%- if rowdata.type == 'var' %}
+       query = query + "{{rowdata.id}}=" + {{rowdata.id}} + '&'; 
+       {%- endif %} {%- endfor %}
+       
+       history.pushState({id: 'homepage'}, '{{config.title}}', url + '?' + query);       
+    }
+    
+    
+    // Print calcs
+    function print_var() {
+       {%- for rowdata in rows -%} {%- if rowdata.type == 'calc' %}
 
        // Print calc: {{rowdata.comment}}
        document.getElementById("{{rowdata.id}}").value = num_fix({{rowdata.id}}
           {%- if rowdata.prefix != 1 %} * {{ to_numexp_1(1.0/rowdata.prefix|float) }}{% endif %}, {{config.resolution}});
-    {%- endif %} {%- endfor %}
+          
+       {%- endif %} {%- endfor %}
     }
+    
+    // Test if there are variable changes
+    var var_values = {};    
 
+    function test_var_change() {
+       {%- for rowdata in rows %}{%- if rowdata.type == 'var' %}
+       if (var_values[{{rowdata.id}}] != document.getElementById("{{rowdata.id}}").value) return true;       
+       {%- endif %}{%- endfor %}
+       return false;
+    }
+    
+    // Read all variables
+    function read_vars() {
+       {%- for rowdata in rows %} {%- if rowdata.type == 'var' %}
 
-{#- Reset variables to default values or Clear to zero #}
+       // Variable: {{rowdata.comment}}
+       {{rowdata.id}} = idtonum("{{rowdata.id}}")
+          {%- if rowdata.prefix != 1 %} * {{ to_numexp_1(rowdata.prefix|float) }}{% endif %};
+       
+       {%- endif %} {%- endfor %}
+    }
+    
+    // Copy values of variables
+    function copy_var_values() {
+      
+       {%- for rowdata in rows %} {%- if rowdata.type == 'var' %}
+
+       var_values["{{rowdata.id}}"] = {{rowdata.id}};
+       
+       {%- endif %} {%- endfor %}
+    }
 
     // Reset variables to default values
     function reset_var() {
-       {%- for rowdata in rows %} {%- if rowdata.type == 'var' %}
-       document.getElementById("{{rowdata.id}}").value = {% if rowdata.value or rowdata.value == 0 %}{{rowdata.value}}{% else %}''{% endif %};
+      
+       {%- for rowdata in rows %} {%- if rowdata.type == 'var' -%}
+       document.getElementById("{{rowdata.id}}").value = 
+          {%- if rowdata.value or rowdata.value == 0 -%}{{rowdata.value}}{%- else %}''{% endif %};
+       {{rowdata.id}} = 
+          {%- if rowdata.value or rowdata.value == 0 -%}{{rowdata.value}}{%- else %}''{% endif %};
        {%- endif %} {%- endfor %}
-       calc();
     }
 
     // Clear variables
     function clear_var() {
+      
        {%- for rowdata in rows %} {%- if rowdata.type == 'var' %}
+       
        document.getElementById("{{rowdata.id}}").value = '';
+       {{rowdata.id}} = '';
+       
        {%- endif %} {%- endfor %}
-       calc();
     }
 
 
@@ -82,7 +130,6 @@
     // Evalue inputs with '.' or ',' as comma
     function idtonum(id) {
        val = document.getElementById(id).value.replace(',', '.');
-       if (val != values[val]) {
        if (isNaN(val)) return '';
        return val * 1.0; // return number
     }

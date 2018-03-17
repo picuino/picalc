@@ -8,7 +8,7 @@
   <meta charset="UTF-8">
   <meta name="Keywords" content="Inductance, magnetics, coil, calculator">
   <meta name="Description" content="Javascript Inductance calculator">
-  <meta name="Version" content="17/03/2018 - SHA:CDA318">
+  <meta name="Version" content="17/03/2018 - SHA:97AE2F">
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
   <title>Inductance Calculator</title>
 
@@ -179,8 +179,6 @@
     
     // End include/cookies.js
 
-    var values = {};
-    
     // Setup variables onload 
     function setup() {
       reset_var();
@@ -189,39 +187,14 @@
 
     // Compute calculations
     function calc() {
+      
+       // Test variable changes
+       if (test_var_change() == false)
+          return;
 
-       // Variable: Effective magnetic cross section
-       Ae = idtonum("Ae") * 1e-06;
-
-       // Variable: Max value of magnetic flux density
-       B_max = idtonum("B_max") * 1e-03;
-
-       // Variable: Inductance factor (permeability)
-       AL = idtonum("AL") * 1e-09;
-
-       // Variable: Air gap lenght
-       g = idtonum("g") * 1e-03;
-
-       // Variable: Inductance factor (permeability)
-       AL_2 = idtonum("AL_2") * 1e-09;
-
-       // Variable: Number of winding turns
-       N = idtonum("N");
-
-       // Variable: Frequency
-       f = idtonum("f") * 1e+03;
-
-       // Constant: Permeability of air
-       uo = 1.2566e-06;
-       document.getElementById("uo").value = "1.2566e-06";
-
-       // Constant: Resistivity of copper at 20ºC
-       ro_cu = 1.724e-08;
-       document.getElementById("ro_cu").value = "1.7240e-08";
-
-       // Constant: Coefficient of resistivity of copper with temperature
-       Cro_cu = 0.00393;
-       document.getElementById("Cro_cu").value = "3.9300e-03";
+       read_vars();
+       copy_var_values();
+       add_query();
 
        // Calculation: Relative lenght of air gap (g/√Ae)
        g_factor = g / Math.sqrt(Ae);
@@ -256,6 +229,31 @@
        T = 1.0 / f;
        V_sq = L * I_max * 2 / ( T / 2.0 );
 
+       // Print variables and calcs
+       print_var();
+    }
+    
+    // Add query string to url
+    function add_query () {
+       var url = document.URL.split('?')[0];
+       var query = '';
+       
+       
+       query = query + "Ae=" + Ae + '&';
+       query = query + "B_max=" + B_max + '&';
+       query = query + "AL=" + AL + '&';
+       query = query + "g=" + g + '&';
+       query = query + "AL_2=" + AL_2 + '&';
+       query = query + "N=" + N + '&';
+       query = query + "f=" + f + '&';
+       
+       history.pushState({id: 'homepage'}, 'Inductance Calculator', url + '?' + query);       
+    }
+    
+    
+    // Print calcs
+    function print_var() {
+
        // Print calc: Relative lenght of air gap (g/√Ae)
        document.getElementById("g_factor").value = num_fix(g_factor * 1e+02, 5);
 
@@ -286,35 +284,103 @@
        // Print calc: Maximum square wave voltage
        document.getElementById("V_sq").value = num_fix(V_sq, 5);
     }
+    
+    // Test if there are variable changes
+    var var_values = {};    
+
+    function test_var_change() {
+       if (var_values[Ae] != document.getElementById("Ae").value) return true;
+       if (var_values[B_max] != document.getElementById("B_max").value) return true;
+       if (var_values[AL] != document.getElementById("AL").value) return true;
+       if (var_values[g] != document.getElementById("g").value) return true;
+       if (var_values[AL_2] != document.getElementById("AL_2").value) return true;
+       if (var_values[N] != document.getElementById("N").value) return true;
+       if (var_values[f] != document.getElementById("f").value) return true;
+       return false;
+    }
+    
+    // Read all variables
+    function read_vars() {
+
+       // Variable: Effective magnetic cross section
+       Ae = idtonum("Ae") * 1e-06;
+
+       // Variable: Max value of magnetic flux density
+       B_max = idtonum("B_max") * 1e-03;
+
+       // Variable: Inductance factor (permeability)
+       AL = idtonum("AL") * 1e-09;
+
+       // Variable: Air gap lenght
+       g = idtonum("g") * 1e-03;
+
+       // Variable: Inductance factor (permeability)
+       AL_2 = idtonum("AL_2") * 1e-09;
+
+       // Variable: Number of winding turns
+       N = idtonum("N");
+
+       // Variable: Frequency
+       f = idtonum("f") * 1e+03;
+    }
+    
+    // Copy values of variables
+    function copy_var_values() {
+
+       var_values["Ae"] = Ae;
+
+       var_values["B_max"] = B_max;
+
+       var_values["AL"] = AL;
+
+       var_values["g"] = g;
+
+       var_values["AL_2"] = AL_2;
+
+       var_values["N"] = N;
+
+       var_values["f"] = f;
+    }
 
     // Reset variables to default values
-    function reset_var() {
-       document.getElementById("Ae").value = 683;
-       document.getElementById("B_max").value = 300;
-       document.getElementById("AL").value = 8100;
-       document.getElementById("g").value = 0;
-       document.getElementById("AL_2").value = tonum("AL");
-       document.getElementById("N").value = 10;
-       document.getElementById("f").value = 20;
-       calc();
+    function reset_var() {document.getElementById("Ae").value =683;
+       Ae =683;document.getElementById("B_max").value =300;
+       B_max =300;document.getElementById("AL").value =8100;
+       AL =8100;document.getElementById("g").value =0;
+       g =0;document.getElementById("AL_2").value =tonum("AL");
+       AL_2 =tonum("AL");document.getElementById("N").value =10;
+       N =10;document.getElementById("f").value =20;
+       f =20;
     }
 
     // Clear variables
     function clear_var() {
+       
        document.getElementById("Ae").value = '';
+       Ae = '';
+       
        document.getElementById("B_max").value = '';
+       B_max = '';
+       
        document.getElementById("AL").value = '';
+       AL = '';
+       
        document.getElementById("g").value = '';
+       g = '';
+       
        document.getElementById("AL_2").value = '';
+       AL_2 = '';
+       
        document.getElementById("N").value = '';
+       N = '';
+       
        document.getElementById("f").value = '';
-       calc();
+       f = '';
     }
 
     // Evalue inputs with '.' or ',' as comma
     function idtonum(id) {
        val = document.getElementById(id).value.replace(',', '.');
-       if (val != values[val]) {
        if (isNaN(val)) return '';
        return val * 1.0; // return number
     }
