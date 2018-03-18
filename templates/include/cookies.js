@@ -24,6 +24,7 @@
        {%- for datarow in rows %} {%- if datarow.type == 'var' %}
        document.getElementById("{{datarow.id}}").value = getCookie("{{datarow.id}}");
        {%- endif %} {%- endfor %}
+       calc();
     }
 
     // Read cookies
