@@ -13,7 +13,7 @@
 
   resolution: 5
 
-  onload: init()
+  onload: init_cookies()
 
 
 include:
@@ -41,8 +41,8 @@ rows:
   buttons:
   - { value: Reset,  onclick: reset_var() }
   - { value: Clear,  onclick: clear_var() }
-  - { value: Save,   onclick: save_var() }
-  - { value: Load,   onclick: load_var() }
+  - { value: Save,   onclick: save_var_cookie() }
+  - { value: Load,   onclick: load_var_cookie() }
 
 # ** INPUT PARAMETER **
 
@@ -203,11 +203,13 @@ rows:
 - type: var
   comment: V_rms of Wave 1
   name: V1_rms
+  value: 3
   unit: V
 
 - type: var
   comment: V_rms of Wave 2
   name: V2_rms
+  value: 4
   unit: V
 
 - type: var

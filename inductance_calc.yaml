@@ -13,7 +13,7 @@
 
   resolution: 5
   
-  onload: init()
+  onload: init_cookies()
 
 include:
   - type: script
@@ -51,8 +51,8 @@ rows:
   comment: Effective magnetic cross section
   name: Ae
   value: 683
-  unit: mm<sup>2</sup>
   prefix: 1.0e-06
+  unit: mm<sup>2</sup>
 
 - type: var
   comment: Max value of magnetic flux density
@@ -69,20 +69,20 @@ rows:
 - type: const
   comment: Permeability of air
   name: uo
+  value: "1.2566e-6"
   unit: "V·s/A·m"
-  value: 1.2566e-6
 
 - type: const
   comment: "Resistivity of copper at 20\xBAC"
   name: ro_cu
+  value: "17.24e-9"
   unit: Ohm/m
-  value: 17.24e-9
 
 - type: const
   comment: Coefficient of resistivity of copper with temperature
   name: Cro_cu
-  unit: "1/\xBAC"
-  value: 3.93e-3
+  value: "0.00393"
+  unit: "1/ºC"
 
 
 # ** Inductance Factor with Air Gap **
@@ -99,8 +99,8 @@ rows:
 - type: calc
   comment: Relative lenght of air gap (g/√Ae)
   name: g_factor
-  unit: '%'
   prefix: 1e-2
+  unit: '%'
   calc: g_factor = g / Math.sqrt(Ae)
 
 - type: calc
@@ -150,7 +150,7 @@ rows:
   comment: Inductance factor (permeability)
   name: AL
   id: AL_2
-  value:  'tonum("AL")'
+  value: 'idtonum("AL")'
   unit: nH/turn<sup>2</sup>
 
 - type: var
@@ -199,16 +199,16 @@ rows:
   comment: Maximum sine wave voltage
   name: V_sin
   unit: V
-#  Ip = Vp / (2*pi*f*L)
-#  V = Vp / sqrt(2)
   calc: V_sin = I_max * (2 * Math.PI * f) * L / Math.sqrt(2)
+  #  Ip = Vp / (2*pi*f*L)
+  #  V = Vp / sqrt(2)
 
 - type: calc
   comment: Maximum square wave voltage
   name: V_sq
   unit: V
-#  I * L = V * T
   calc:
+  #  I * L = V * T
   - T = 1.0 / f
   - V_sq = L * I_max * 2 / ( T / 2.0 )
 

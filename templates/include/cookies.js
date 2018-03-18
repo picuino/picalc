@@ -1,15 +1,15 @@
 
     // Init calculations
-    function init() {
+    function init_cookies() {
        if  (getCookie("saved") == 'true')
-          load_var();
+          load_var_cookie();
        else
           reset_var();
        calc();
     }
 
     // Save variables to cookie
-    function save_var() {
+    function save_var_cookie() {
        var expiresdate = new Date(2068, 1, 02, 11, 20);
        expiresdate = "expires=" + expiresdate.toUTCString();
        var names = [{%- for datarow in rows %} {%- if datarow.type == 'var' %}"{{datarow.id}}", {% endif %} {%- endfor %} ];
@@ -20,11 +20,10 @@
     }
 
     // Load variables from cookie
-    function load_var() {
+    function load_var_cookie() {
        {%- for datarow in rows %} {%- if datarow.type == 'var' %}
        document.getElementById("{{datarow.id}}").value = getCookie("{{datarow.id}}");
        {%- endif %} {%- endfor %}
-       calc();
     }
 
     // Read cookies
