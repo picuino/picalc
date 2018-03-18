@@ -8,7 +8,7 @@
   <meta charset="UTF-8">
   <meta name="Keywords" content="Inductance, magnetics, coil, calculator">
   <meta name="Description" content="Javascript Inductance calculator">
-  <meta name="Version" content="18/03/2018 - SHA:E75F31">
+  <meta name="Version" content="19/03/2018 - SHA:915C2A">
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
   <title>Inductance Calculator</title>
 
@@ -19,10 +19,6 @@
       background-color: #f0f4f4;
       margin: 0;
       min-width: 420px;
-    }
-    /* Responsive design for Small screen */
-    @media screen and (max-width: 640px) {
-      body { min-width: 420px !important; }
     }
 
     .content {
@@ -81,7 +77,8 @@
     /* Column 2: Variable Value (input form) */
     input[type=text], select, textarea {
       width: 100%;
-      padding: 0 4px 0 4px;
+      padding: 1px 4px 0 4px;
+      height: 22px;
       font: inherit;
       text-align: right;
       box-sizing: border-box;
@@ -129,7 +126,7 @@
     .scoment {
       display: inline-block;
       min-width: 20em;
-    }
+    } 
   </style>
 
   <!-- Script -->
@@ -186,7 +183,11 @@
 
     // Setup variables onload
     function setup() {
-      var_reset();
+      var config = query_read();
+      if (config.length > 0) {
+         var_write(config);
+      }
+      else var_reset();
       calc();
     }
 
@@ -195,11 +196,11 @@
 
        // Test variable changes
        var_read_id();
-       if (var_test_change() == false)
-          return;
-
-       var_copy_values();
-       query_write();
+       if (var_test_change() == true) {
+          var_backup();
+          query_write();
+       }
+       else return;
 
        // Calculation: Relative lenght of air gap (g/√Ae)
        g_factor = g / Math.sqrt(Ae);
@@ -241,18 +242,18 @@
     // Print calcs
     function print_calc() {
        document.getElementById("g_factor").value = num_fix(g_factor * 1e+02, 5);
-       document.getElementById("Fr_factor").value = num_fix(Fr_factor, 5);
+       document.getElementById("Fr_factor").value = num_fix(Fr_factor * 1.0, 5);
        document.getElementById("AL_gap").value = num_fix(AL_gap * 1e+09, 5);
        document.getElementById("AL_total").value = num_fix(AL_total * 1e+09, 5);
        document.getElementById("L").value = num_fix(L * 1e+06, 5);
-       document.getElementById("I_max").value = num_fix(I_max, 5);
+       document.getElementById("I_max").value = num_fix(I_max * 1.0, 5);
        document.getElementById("E_max").value = num_fix(E_max * 1e+06, 5);
        document.getElementById("T").value = num_fix(T * 1e+06, 5);
-       document.getElementById("V_sin").value = num_fix(V_sin, 5);
-       document.getElementById("V_sq").value = num_fix(V_sq, 5);
-       document.getElementById("uo").value = "1.2566e-6";
-       document.getElementById("ro_cu").value = "17.24e-9";
-       document.getElementById("Cro_cu").value = "0.00393";
+       document.getElementById("V_sin").value = num_fix(V_sin * 1.0, 5);
+       document.getElementById("V_sq").value = num_fix(V_sq * 1.0, 5);
+       document.getElementById("uo").value = num_fix(1.2566e-6 * 1.0, 5);
+       document.getElementById("ro_cu").value = num_fix(17.24e-9 * 1.0, 5);
+       document.getElementById("Cro_cu").value = num_fix(0.00393 * 1.0, 5);
     }
 
     // Read all variables
@@ -262,7 +263,7 @@
        AL = idtonum("AL") * 1e-09; // Variable: Inductance factor (permeability)
        g = idtonum("g") * 1e-03; // Variable: Air gap lenght
        AL_2 = idtonum("AL_2") * 1e-09; // Variable: Inductance factor (permeability)
-       N = idtonum("N"); // Variable: Number of winding turns
+       N = idtonum("N") * 1.0; // Variable: Number of winding turns
        f = idtonum("f") * 1e+03; // Variable: Frequency
        uo = "1.2566e-6"; // Constant: Permeability of air
        ro_cu = "17.24e-9"; // Constant: Resistivity of copper at 20ºC
@@ -310,7 +311,7 @@
     }
 
     // Copy values of variables
-    function var_copy_values() {
+    function var_backup() {
        var_values["Ae"] = Ae;
        var_values["B_max"] = B_max;
        var_values["AL"] = AL;
@@ -318,6 +319,13 @@
        var_values["AL_2"] = AL_2;
        var_values["N"] = N;
        var_values["f"] = f;
+    }
+    
+    // Write values to variables
+    function var_write(values) {
+       for(var i=0; i<values.length; i++) {
+          document.getElementById(values[i][0]).value = values[i][1];
+       }
     }
  
     // Write query string into url
@@ -343,18 +351,19 @@
        history.pushState({id: 'homepage'}, 'Inductance Calculator', url + '?' + query);
     }
 
-    // Read query string from URL to variables
+    // Read query string from URL
     function query_read() {
        var url = document.location.href.split('?');
-       if (url.length < 2) return;
+       if (url.length < 2)
+         return [];
        var values = url[1].split('&');
+       var vars = [];
        for(i=0; i<values.length; i++) {
           var value = values[i].split('=');
-          alert(value);
           if (value.length != 2) continue;
-          document.getElementById(value[0]).value = value[1];
+          vars.push[value]; 
        }
-       calc()
+       return vars;
     }
 
     // Evalue inputs with '.' or ',' as comma
@@ -606,7 +615,7 @@
     This work by <a href="https://github.com/picuino/picalc">Picuino</a>
     is licensed under a
     <a rel="GPL License" 
-       href="http://www.gnu.org/licenses/gpl-3.0.txt">
+       href="http://www.gnu.org/licenses/gpl-3.0.html">
        GPL version 3 license</a>.
   </div>
 

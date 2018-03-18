@@ -17,7 +17,11 @@
 
     // Setup variables onload
     function setup() {
-      var_reset();
+      var config = query_read();
+      if (config.length > 0) {
+         var_write(config);
+      }
+      else var_reset();
       calc();
     }
 
@@ -26,11 +30,11 @@
 
        // Test variable changes
        var_read_id();
-       if (var_test_change() == false)
-          return;
-
-       var_copy_values();
-       query_write();
+       if (var_test_change() == true) {
+          var_backup();
+          query_write();
+       }
+       else return;
 
        {%- for rowdata in rows -%} {%- if rowdata.type == 'calc' %}
 
@@ -51,13 +55,14 @@
 
     // Print calcs
     function print_calc() {
+      
        {%- for rowdata in rows -%} {%- if rowdata.type in ['calc'] %}
        document.getElementById("{{rowdata.id}}").value = num_fix({{rowdata.id}}
-          {%- if rowdata.prefix != 1 %} * {{ to_numexp_1(1.0/rowdata.prefix|float) }}{% endif %}, {{config.resolution}});
+          {%- if rowdata.prefix == 1 %} * 1.0{% else %} * {{ to_numexp_1(1.0/rowdata.prefix|float) }}{% endif %}, {{config.resolution}});
        {%- endif %} {%- endfor %}
 
        {%- for rowdata in rows -%} {%- if rowdata.type in ['const'] %}
-       document.getElementById("{{rowdata.id}}").value = "{{rowdata.value}}";
+       document.getElementById("{{rowdata.id}}").value = num_fix({{rowdata.value}} * 1.0, {{config.resolution}});
        {%- endif %} {%- endfor %}
     }
 
@@ -65,9 +70,10 @@
 
     // Read all variables
     function var_read_id() {
+      
        {%- for rowdata in rows %} {%- if rowdata.type in ['var'] %}
        {{rowdata.id}} = idtonum("{{rowdata.id}}")
-          {%- if rowdata.prefix != 1 %} * {{ to_numexp_1(rowdata.prefix|float) }}
+          {%- if rowdata.prefix == 1 %} * 1.0{% else %} * {{ to_numexp_1(rowdata.prefix|float) }} 
           {%- endif %}; // Variable: {{rowdata.comment}}
        {%- endif %} {%- endfor %}
        
@@ -108,14 +114,21 @@
     }
 
     // Copy values of variables
-    function var_copy_values() {
+    function var_backup() {
 
        {%- for rowdata in rows %} {%- if rowdata.type in ['var'] %}
        var_values["{{rowdata.id}}"] = {{rowdata.id}};
-
        {%- endif %} {%- endfor %}
     }
-
+    
+    // Write values to variables
+    function var_write(values) {
+       for(var i=0; i<values.length; i++) {
+          document.getElementById(values[i][0]).value = values[i][1];
+       }
+    }
+    
+    
 {#- ********** Manage query strings ********** #}
  
     // Write query string into url
@@ -132,18 +145,19 @@
        history.pushState({id: 'homepage'}, '{{config.title}}', url + '?' + query);
     }
 
-    // Read query string from URL to variables
+    // Read query string from URL
     function query_read() {
        var url = document.location.href.split('?');
-       if (url.length < 2) return;
+       if (url.length < 2)
+         return [];
        var values = url[1].split('&');
+       var vars = [];
        for(i=0; i<values.length; i++) {
           var value = values[i].split('=');
-          alert(value);
           if (value.length != 2) continue;
-          document.getElementById(value[0]).value = value[1];
+          vars.push[value]; 
        }
-       calc()
+       return vars;
     } 
     
 {#- ********** Manage numbers ********** #}

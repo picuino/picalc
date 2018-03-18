@@ -1,0 +1,208 @@
+#****************************************************************
+# Example database with all features of picalc 
+#
+# Picalc is a Python and Jinja2 program for make online and
+# offline calculators based on standalone html and javascript.
+# A yaml database stores all information about the content
+# and style options of the calculator.
+#
+#  This example yaml database have 3 sections:
+#    1. Configuration
+#    2. Import modules
+#    3. Content of calculator in a list of rows 
+#  
+#****************************************************************
+
+# 
+# 1. CONFIGURATION
+# ================
+#
+config:
+  title: Picalc example calculator
+  description: Picalc example calculator with all features of picalc showed
+  keywords: Picalc, yaml, help, online calculator
+
+  width:
+     # Max and min width of html page
+     max: 640px    
+     min: 320px
+
+     # Minimun widths of calculator columns:
+     # name        |   value | units | comment           |
+     # Car_speed   |    25.8 |  m/s  | Speed of car      |
+     name: 5em
+     value: 5em
+     units: 4em
+     comment: 20em
+
+  # Resolution of numbers. 
+  # Resolution: 5 means 5 significative digits.  1234500 or 12.345 or 0.0012345
+  resolution: 5
+
+  # Function executed on page load. setup() is the default one.
+  onload: setup()
+
+# 
+# 1.1 Default configuration
+# -------------------------
+# Configuration included in default config.yaml
+
+  # Paths of templates and images
+  template_path: templates
+  template_name: base.html
+  images_path: images
+
+  # Font sizes always in pixels
+  font:
+    normal_size: 16
+    license_size: 12
+  
+  
+#
+# 2. INCLUDE FILES
+# ================
+#
+
+# List of include template files
+include:
+  - type: script
+    name: include/example.js
+  - type: style
+    name: include/example.css
+    
+    
+#
+# 3. CONTENT ROWS
+# ===============
+#
+
+rows:
+
+# 3.1 IMAGES
+# ----------
+# Images are read and encoded in base64 for embbed it in html code
+- type: image
+  width: 320px
+  name: example.png
+  comment: example of embed image
+
+  
+# 3.2 RAW HTML CODE
+# -----------------
+# Allows inserting all kind of raw html code.
+- type: html
+  name: Horizontal line
+  code: |
+      {% raw %}
+      <hr /> <br />
+      {% endraw %}
+
+  
+# 3.3 BUTTONS
+# -----------
+# Insert a file of buttons preceded of 'name'.      
+- type: buttons
+  name: Values
+  buttons:
+  # value: text to show in button
+  # onclick: function to call on click event
+  # Included functions:
+  #   Reset: load default values in variables.
+  #   Clear: load empty string to all variables.
+  # Other external functions must be loaded in include section 
+  # before use it in this database.
+  - { value: Reset,  onclick: var_reset() }
+  - { value: Clear,  onclick: var_clear() }
+
+
+# 3.4 HEADERS
+# -----------
+# Insert a header of level 2 <h2>header</h2>
+- type: header
+  name: Example help calculation
+  
+  
+# 3.5 VARIABLES AND CONSTANTS 
+# ---------------------------
+# Variables creates an html form where user can write values.
+# Constants show constant values used in calculations. 
+#   Constants are no editable forms.
+#
+# Fields of both:
+#   type: var or const
+#   name:   1st column. text with the name of variable showed.
+#   id:     (optional) name of internal variable only in case this 
+#           must be different of name showed.
+#   value:  2nd column. default value writed by var_reset() function.
+#           Or stored in constants.
+#   unit:   3th column. units used by the variable.
+#           Could be preceded by standard prefix:
+#             n for nano  (1e-9)
+#             u for micro (1e-6)
+#             m for milli (1e-3)
+#             k for kilo  (1e3)
+#             M for Mega  (1e6)
+#             G for Giga  (1e9)
+#           The template understand prefix for simple units.
+#           If the prefix don't match the real unit prefix
+#           (e.g. in mm^2 the real prefix is 1e-6) field 
+#           prefix must be used.
+#   prefix: (optional) multiplicand for the unit used.
+#           If the unit is mm, the prefix must be 1e-3
+#           The template is capable of understand simple prefix
+#           n, u, m, k, M, G. 
+#   comment: 4th column. Text explaining the variable.
+- type: var
+  comment: Diameter of wire 
+  name: D_wire
+  value: 10
+  unit: mm
+  
+- type: const
+  comment: Pi. Ratio of a circle's circumference to its diameter.
+  name: Pi
+  value: Math.PI
+  unit: ''
+
+  
+# 3.6 CALCULATIONS
+# ----------------
+# Calculations made with variables and constants
+#
+# Units used:
+#   First, the html page read variables and constants and multiply 
+#   them by corresponding prefix to obtain standard units.
+#   All calculations are made always in standard units.
+#   After calculations, the results are divided by corresponding
+#   prefixes in order to obtain correct numbers for print.
+#
+# Fields:
+#   type: calc
+#   name:   1st column. text with the name of variable showed.
+#   id:     (optional) name of internal variable only in case this 
+#           must be different of name showed.
+#   calc:   2nd column. Formulae or list of formulaes to make
+#           calculations.
+#           Could be complemented by standar javascript functions
+#           and external javascript include modules.
+#   unit:   3th column. units used by the variable.
+#           Like in vars and constants, using prefix is allowed.
+#   prefix: the multiplicand for the unit used.
+#           All the internal calcs are made in standar units
+#           If the unit is mm, the prefix must be 1e-3
+#           The template is capable of understand simple prefix
+#           n, u, m, k, M, G. 
+#   comment: 4th column. Text explaining the variable.
+- type: calc
+  comment: Section area of wire
+  name: S_wire
+  unit: mm<sup>2</sup>
+  prefix: 1e-6
+  id: Section_of_wire
+  calc: 
+    - foo = 25 * 6
+    - Section_of_wire = Math.PI * 0.25 * Math.pow(D_wire, 2)
+
+  
+  
+  

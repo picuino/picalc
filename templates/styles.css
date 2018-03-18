@@ -1,12 +1,8 @@
 ﻿    body {
-      font: {{config.font.normal_size}} sans-serif;
+      font: {{config.font.normal_size}}px sans-serif;
       background-color: #f0f4f4;
       margin: 0;
       min-width: {{config.width.min}};
-    }
-    /* Responsive design for Small screen */
-    @media screen and (max-width: {{config.width.max}}) {
-      body { min-width: {{config.width.min}} !important; }
     }
 
     .content {
@@ -25,7 +21,7 @@
       margin: 0 auto;
       text-align: center;
       padding: 20px 16px 60px 16px;
-      font-size: {{config.font.license_size}};
+      font-size: {{config.font.license_size}}px;
       font-weight: bold;
       background-color: #ddd;
     }
@@ -65,7 +61,8 @@
     /* Column 2: Variable Value (input form) */
     input[type=text], select, textarea {
       width: 100%;
-      padding: 0 4px 0 4px;
+      padding: 1px 4px 0 4px;
+      height: {{6 + config.font.normal_size|int}}px;
       font: inherit;
       text-align: right;
       box-sizing: border-box;
@@ -114,3 +111,15 @@
       display: inline-block;
       min-width: {{config.width.comment}};
     }
+    
+    
+{#- ********** Include external files ********** #}
+
+{%- for inc in include %} {% if inc.type == 'style' %}
+
+    /* Include script: {{inc.name}} */
+    {% include inc.name %}
+
+    /* End {{inc.name}}             */
+
+{%- endif %}{%- endfor %}

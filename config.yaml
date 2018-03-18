@@ -4,9 +4,10 @@
 
   images_path: images
 
+  # Font sizes always in pixels
   font:
-    normal_size: 16px
-    license_size: 12px
+    normal_size: 16
+    license_size: 12
 
   width:
     max: 640px

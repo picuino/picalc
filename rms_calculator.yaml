@@ -18,7 +18,7 @@
 
 include:
   - type: script
-    name: include/cookies.js
+    name: include/zeros.js
     
 
 # *******************************************************************

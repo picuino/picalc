@@ -18,7 +18,10 @@
 {%- elif rowdata.type == 'image' %}
 
     <!--  Image: {{rowdata.name}} -->
-    <img alt="{{rowdata.comment}}" {% if 'width' in rowdata %}width="{{rowdata.width}}" {% endif %}src="{{rowdata.code}}">
+    <img alt="{{rowdata.comment}}" 
+         {%- if 'width' in rowdata %} width="{{rowdata.width}}"{% endif %}
+         {%- if 'height' in rowdata %} height="{{rowdata.height}}"{% endif %}
+         src="{{rowdata.code}}">
 
 {%- elif rowdata.type == 'buttons' %}
 

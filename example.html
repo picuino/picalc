@@ -1,0 +1,523 @@
+﻿<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+
+  <!-- Head -->
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="UTF-8">
+  <meta name="Keywords" content="Picalc, yaml, help, online calculator">
+  <meta name="Description" content="Picalc example calculator with all features of picalc showed">
+  <meta name="Version" content="19/03/2018 - SHA:A6CFE5">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
+  <title>Picalc example calculator</title>
+
+  <!-- Styles -->
+  <style>
+    body {
+      font: 16px sans-serif;
+      background-color: #f0f4f4;
+      margin: 0;
+      min-width: 320px;
+    }
+
+    .content {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 16px 16px 32px 16px;
+      background-color: #fff;
+    }
+
+    .row {
+      padding-bottom: 2px;
+    }
+
+    .footer {
+      max-width: 640px;
+      margin: 0 auto;
+      text-align: center;
+      padding: 20px 16px 60px 16px;
+      font-size: 12px;
+      font-weight: bold;
+      background-color: #ddd;
+    }
+
+    h1 {
+      font-size: 140%;
+      font-weight: bold;
+      text-transform: uppercase;
+      margin: 20px 0 10px 0;
+    }
+
+    h2 {
+      font-size: 120%;
+      font-weight: bold;
+      margin: 20px 0 6px 0;
+    }
+
+    img {
+      padding: 2px 0 2px 0;
+      max-width: 100%;
+    }
+
+    input[type=button] {
+      font: inherit;
+      text-align: center;
+      background-color: #eee;
+      border: 1px solid #888;
+      border-radius: 4px;
+    }
+
+    /* Column 1: Variable name */
+    .sname {
+      display: inline-block;
+      min-width: 5em;
+    }
+
+    /* Column 2: Variable Value (input form) */
+    input[type=text], select, textarea {
+      width: 100%;
+      padding: 1px 4px 0 4px;
+      height: 22px;
+      font: inherit;
+      text-align: right;
+      box-sizing: border-box;
+      border: 1px solid #888;
+      border-radius: 4px;
+    }
+    input[type=text]:disabled {
+       color: inherit;
+    }
+
+    .sval {
+      display: inline-block;
+      width: 5em;
+    }
+    .sval input[type=text] {
+      background-color: #FFFFC0;
+    }
+
+    .sconst {
+      display: inline-block;
+      width: 5em;
+    }
+    .sconst input[type=text] {
+      background-color: #FFFFFF;
+    }
+
+    .scalc  {
+      display: inline-block;
+      width: 5em;
+    }
+    .scalc input[type=text] {
+      background-color: #C0FFFF;
+    }
+
+    /* Column 3: Variable Units */
+    .sunit {
+      display: inline-block;
+      min-width: 4em;
+      text-align: center;
+      border: 1px solid #888;
+      border-radius: 4px;
+    }
+
+    /* Column 4: Variable comment */
+    .scoment {
+      display: inline-block;
+      min-width: 20em;
+    }  
+
+    /* Include script: include/example.css */
+    
+    /* Example CSS file */
+    /* Example of include style template file */
+    .example {
+      color: black;
+    }
+
+    /* End include/example.css             */
+  </style>
+
+  <!-- Script -->
+  <script>
+ 
+
+    // Include script: include/example.js
+    
+    // Example function 
+    // Example of include script template file
+    function example() {
+      return 'This is an example JavaScript function';
+    }
+
+    // End include/example.js 
+
+    // Setup variables onload
+    function setup() {
+      var config = query_read();
+      if (config.length > 0) {
+         var_write(config);
+      }
+      else var_reset();
+      calc();
+    }
+
+    // Compute calculations
+    function calc() {
+
+       // Test variable changes
+       var_read_id();
+       if (var_test_change() == true) {
+          var_backup();
+          query_write();
+       }
+       else return;
+
+       // Calculation: Section area of wire
+       foo = 25 * 6;
+       Section_of_wire = Math.PI * 0.25 * Math.pow(D_wire, 2);
+
+       // Print variables and calcs
+       print_calc();
+    }
+
+    // Print calcs
+    function print_calc() {
+       document.getElementById("Section_of_wire").value = num_fix(Section_of_wire * 1e+06, 5);
+       document.getElementById("Pi").value = num_fix(Math.PI * 1.0, 5);
+    }
+
+    // Read all variables
+    function var_read_id() {
+       D_wire = idtonum("D_wire") * 1e-03; // Variable: Diameter of wire
+       Pi = "Math.PI"; // Constant: Pi. Ratio of a circle's circumference to its diameter.
+    }
+
+    // Reset variables to default values
+    function var_reset() {
+       document.getElementById("D_wire").value = 10;
+
+       calc();
+    }
+
+    // Clear variables
+    function var_clear() {
+       document.getElementById("D_wire").value = '';
+
+       calc();
+    }
+
+    // Test if there are variable changes
+    var var_values = {};
+
+    function var_test_change() {
+       if (var_values["D_wire"] != D_wire) return true;
+       return false;
+    }
+
+    // Copy values of variables
+    function var_backup() {
+       var_values["D_wire"] = D_wire;
+    }
+    
+    // Write values to variables
+    function var_write(values) {
+       for(var i=0; i<values.length; i++) {
+          document.getElementById(values[i][0]).value = values[i][1];
+       }
+    }
+ 
+    // Write query string into url
+    function query_write () {
+       var url = document.location.href.split('?')[0];
+       var query = '';
+       var value;
+       value = encodeURIComponent(document.getElementById("D_wire").value)
+       if (value.length) query = query + "D_wire=" + value + '&';
+
+       history.pushState({id: 'homepage'}, 'Picalc example calculator', url + '?' + query);
+    }
+
+    // Read query string from URL
+    function query_read() {
+       var url = document.location.href.split('?');
+       if (url.length < 2)
+         return [];
+       var values = url[1].split('&');
+       var vars = [];
+       for(i=0; i<values.length; i++) {
+          var value = values[i].split('=');
+          if (value.length != 2) continue;
+          vars.push[value]; 
+       }
+       return vars;
+    }
+
+    // Evalue inputs with '.' or ',' as comma
+    function idtonum(id) {
+       val = document.getElementById(id).value.replace(',', '.');
+       if (isNaN(val)) return '';
+       return val * 1.0; // return number
+    }
+
+    // Format number with fix digits
+    function num_fix(number, digits) {
+       if (!isFinite(number)) return '';
+       if (number == 0) return '0';
+       if (Math.sign(number) < 0)
+          var sign = '-';
+       else
+          var sign = '';
+       number = Math.abs(number)
+       exp = Math.ceil(Math.log10(number) + 0.000001);
+       number = Math.round(number * Math.pow(10, digits - exp)) + '';
+       // Number have fractional part
+       if (digits > exp) {
+         // number have only fractional part
+         if (exp <= 0) {
+            return sign + '0.0000000'.substr(0, 2 - exp) + number;
+         }
+         // Number have integer and fractional part
+         else {
+            return sign + number.substr(0, exp) + '.' + number.substr(exp, digits - exp);
+         }
+       }
+       // Number with only integer part
+       else {
+          number = number  + '0000000000'
+          return sign + number.substr(0, exp);
+       }
+    }
+
+    // Manage keys [Enter] and [tab]
+    function OnKeyPress(evt) {
+       var evt = (evt) ? evt : ((event) ? event : null);
+       var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null);
+       if (node.type=="text") {
+          if (evt.keyCode == 9) { calc(); return; }
+         if (evt.keyCode == 13) { calc(); return false; }
+       }
+    }
+    document.onkeypress = OnKeyPress;
+  </script>
+
+</head>
+
+
+<body onload="setup()">
+
+  <!-- Content -->
+
+<div class="content">
+
+  <h1>Picalc example calculator</h1>
+
+    <!--  Image: example.png -->
+    <img alt="example of embed image" width="320px"
+         src="data:image/png;base64,
+iVBORw0KGgoAAAANSUhEUgAAAyAAAACgCAYAAAD0KAgtAAAACXBIWXMAAA7EAAAOxQGMMD9aAAAg
+Y0lEQVR42u3dfWxb533o8SeA4jssKIYCkoWrP5yOIpUe26pmNBfLVSQ5VUK7R0IqVfN0haQz4RaR
+GNAJCSFuU8eQYcZpVjvllVZpEYkb5zJtElb1FCutzdVMhVmWeBOghcNSEhORUtEE14MkYgW2ayDz
+NPiS8nvkFz2Hh+Qh+f0EAuwkFMnnnPN7nt/zWnbp0iUBAAAAALlQRhEAAAAAIAEBAAAAQAICAAAA
+ACQgAAAAAEhAAAAAAIAEBAAAAAAJCAAAAAASEAAAAAAgAQEAAABAAgIAAAAAJCAAAAAASEAAAAAA
+kIAAAAAAAAkIAAAAABIQAAAAACABAQAAAEACAgAAAIAEBAAAAABIQAAAAACQgAAAAAAACQgAAAAA
+EhAAAAAAJCAAAAAAQAICAAAAgAQEAAAAAEhAAAAAAJCAAAAAACABAQAAAAASEAAAAAAkIAAAAABA
+AgIAAACABAQAAAAASEAAAAAAkIAAAAAAIAEBAAAAABIQAAAAACQgAAAAAEACAgAAAIAEBAAAAAAJ
+CADAEJKhYNOyEPet/xWWFcVqDlFyAAASEACApERZzNPy3HhEPL7ul9T1n3NYneFyIS5QfgAAEhAA
+AAAAJCAAAAAAQAICAAAAgAREXqIsGYrXyy2kzKNq9VPFJKa5VQAARqsbK6zqBGt8AJCA3FW8bMLW
+8pOoEJsKoYAq++JuxW4mAQEAGKxurL/YPKk2NZrEB5QfABIQAAAAACABAQAAAEACAgAAAIAEBAAA
+AABIQAAAAACQgAAAAAAACQgAAAAAEhAZtf5LT3ZYxVtcMgAAAIAEBAAAAABIQAAAAACQgAAAAAAg
+AQEAAAAAEhAAAAAAJCAAAAAAQAICAAAAgAQEAAAAAAkIkGfJhYRZiPi9y/PiS3f6/yqqLXEhzP9Z
+bhK/L86SSJQlF8SXlufjllv/d8tKRbX4fbnJnMjK2y8kqpIi/me3vw5Zfn8j3Ifz8aplIe4rxe+f
+n3s6pdryzxVC/D/KtVTvAeIa9Sb1UqnFUBIQPW6MULz+9g2WO6hWP1VMYjr7D29wU2xebJF5SYVV
+nSgX4kK2yisWPNE2E5t+aDESrtf8q+rqP6pt63xT2eE8kZNy1FSWqcBoNYfvVJbJ0MCjseBI23gg
+/Izc9++ONvfuO6hYzae1X6v09Ti5fcIzsi8aCe+UL/8D/ia7+uPs3Cs5KP9UxRY7fbTtzJjvO4sR
+8VW5D1N/sbKr82fb97Z6FJP5Q2KhDvfUjffVDvVnxdvRYLQGHnEtr3Gt2OtNDffj2dMnOmfGfF3S
+cfmO8SNRFgvFrVJtoWr1o9zHodKIoSQgGTOvLActbSMB0St/k/SfcwSdjdkNcqkHbrDFKfX50p/L
+qjbqGkwGTzhnAr49i0J8UbffGwl/OfVwvhh1u15cfeB6/S93WM1vZPNqJ08ffmzEHX5t/a/ovtB5
+3mtae41T12X46FPaGr5Xv7+vdtzmGx1PfffmXv/+Rqv5HZmXx4YffuaMO3xI8zVZLf+Wl6Pu+kO1
+ff4XOuzmV7L9tOlW/gsDplGH67VoRDyi/dOENywGwn8zEnD9TToZqfX7n8r2/Wf0RuzZwcPPSTc4
+b3tfiZdXG6ND3qcaTeID6hriWrHGtWKvN9d9H4Z6dh73+F7SfO98Pn509Z/s3Nt64FoH0cLJTWds
+rjdlyrPWf+nJjlw14ksshpKA6EDxxL/XHLNYxiPicbmbxLVtqLfmpwc96jez9uFCRx+SS47qLzYP
+OZ/OOCm68iDNBMLf0jV43umBs1n80bp+l2PI+VeG7jnVpfF783cft1lGZ7pOvb7Loz5zt2uX7pk8
+7nH9MKMg/7mGeNRtORod63+ic8i527C9aqtln6iKDdr2jgTC39f3F6fK4Mr9Z/gyyIJ0oy/VgP07
+/Z/rVGO0wff+6r29V32REREjJ6DENb0aoCVXb+p971wVcLWOpH4qV+OH5QfLp2etRn18SjGGkoDo
+wrzSONTvmmlwNUgHjUBL+6h66YkOq3grGw/1sM33rsxLKvv8f5tRphwaeGjY4xrUrxKQfdhSSZ1j
+dqxzyPuEERuByeGHvz0k1dO4fouBlj1Don+jw+P8H7errLMW5K6U/Yhj9i2jln363hz1uF7WvZL7
+fBk0jPy2ZEZDstVwuNW9Het+kNEQYyKuZR6bSrXezOq1u/EeCog9xFBjxVASEL2YnAt2/+w3Dtl8
+Z2VfGrU9/LrwTwl9k5BE2VmHq18qIarrP7fLbj6SUUU0P7I5b0H0hox/xCEM1hBOlMV6bW79e94/
+n9C6WodEzU8dHvVbN1fWqfuh1zI4HhA92S/7zW9kf2qhbAXf05BOxnPSq3hlNET446KYk5DkcM/u
+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
+KDNa1/18rSL+z9V/W7HXe4ypWaWaiPhqoxHfy1G3eDm9+1xl19bR1QpdTN+7FAi3ZxqwC37q1eel
+D0KdFA8Oa61ArzagIi3Xy7xu6/sbFfFRhdr+npg/cf/y3PTmpVj4K4sR8VVuUBRrQ7Q0681UA/z8
+qQeEltkaeVF/saJazBNDSUAKgMZ1H0Hn1/XaHSej9SCOgVeVoLNR9rNkssAsf41OUXutkah6zwgS
+EKSegcVAWLcKPfNRzSJOQm4s80j48pSKgK+bexClonTrzfQowKlG4Wjx52yb3Lr+c51Drd8Wp4/+
+d0NMPyKGkoDoLbfrPm4ng/UgEde248OtGtaDZDisqLWB11X/DyIQbs70PTkjBLrfm6nko6jPwFit
+QGv+YjSXjQigqJRwvWlSP+kIxq0VvTZPtrfMrew69fq1Ldh3bP7XM27xEjGUBKS4aFj3kb3FqdoD
+m+bDf9IPk3/2G4e07nIh1ZvRHb26ECsm7vlRxova2KIXuqm/WOv3P3XLBaJFl4RcbkQovTb3SCD8
+fa49oKERWrL1pnml0TP1rKL2nDzu8b2k+3ShG76v9l+y9T/KTeL3xFASEOPSuO7D4VG/lc3Atqtv
+5LkhTYf/aDwfxOqdPOgXjemyyFaPzk29GUKnRW15OmUWudB9oXOy/ZGYo+Vo1nuZUhVe55D3CZnd
+8gqfeUXxTO13qAO/Ns7Jw0ABKfF6s9zq/ZU99bN6WKIeiUg68bjdmSHzs1XG28yidGMoCUjGEmWx
+QZdD7qauv9g85Hw62w3ecvvUsc65e7Zo2Xda63qQdDC1T7brPqyY3vt7+5DXsbZxl+H+4ih+q71M
+l77WdOU0YP0roPqLtX0HDq5nR5JiVW51/roj9dOkVyNCtsHR1u5V7Or/phMBhZqElHq9eTURWW1T
+hU62xIKzrUux6a0iElbuFLMr6+rDQtn6yRZ134hiNZ/WNQbUbZ6ryFFMKcUYSgKSofS6D9kGfq1/
+ak+udl3S3NMRcW0b6q356UGP+k3tDb6BRzPN6Cu7+n+yfa/zyB17ldM9SJObq7Uu6KpUaj7kTi6F
+RnKqgju/b2MydPRRfQI8icdtGxG6n0dwc4NjY1tnUNnR+kvFZObZRZF1lJR6vWleUazOdxWreFfv
+35ycn64hhhonhuYhAUlvw3bp/o5iqXDtU8cO2sUx437C/JX31Yy+48rhN7Gx6bYlES6/U8Nv9cFQ
+Oj9U1NYTitUcWn/wdi7Yz7emGpcnt094RvbdaU/0q+9Roba+t+6D6AxyvUv9/fWo3Nb2tI20L8XE
+A4uRcP3dgvZqT1tN+6SyQz2V1bnBt/nsjcFL32gskMZUo0d9ttEjnl09/Gr+5IPJ4Oz2mdj0Q0KE
+/8tdk7+6+o8qhfiXdHlvrNk8o1S3flBRbU7kvsxLJFYT1wwT14qx3jSK5bnwFqkXKDV/yFvnUgnE
+UEZAkIMHyXxesXtfVezi1ew3Lq8Eb0od67hfLve0Od+lLLL8/JtSZWwV7zZSGgD1Zl4kypIxYZF5
+RWWN5XfEUBIQAAAAQIN42XJE1Mm8YmO1+WPKjQQEAAAAkBc68aDcWtgsnIIOEhAAAACUhljQJ7eh
+Tl3nTGltqU4CAgAAAOhjYcB0JiD2SL0mnwvQSUAAAACAwiV/VpsQtar6c0qOBAQAAACQE+ppkD+M
+ufuCYhXvUXgkIAAAAChoibLkgvjStb+azP+c1WlOqeRj2OaT3ma9sm/fjxQhlrheJCAAAAAoYMlh
+2+4hd/i16/+m/mJl34FXdtnVH+idiCRDPTuP23xvy5/y3n1hu908xNUiAQEAAECBW3sSeXjDortl
+/5Bb7Bd13dHm3n0HMz5lfSG46ayjZXA8Ih7X8nJGP0hAAAAAUAoivtpxm290PP3ndDLS1u5Vdlh+
+VW4yJ9bz8mQo2BQLHt41Hgg/o/kz1PWf22U3H+FikIAAAACg4CXKkjFhWXcyEvENjruvJgb1H1WK
+rUsbFfFRRU3778qrxUIyeOKxZTH9xaVY+CuLEfHVzD9f94XOoPPrbL1LAgIAAICiEC9bjog6TS+N
+hL+8KFI/EdEkhC8Ln63+YvOk91GmXpGAAAAAoFgszFWlWvdfMN4HSycfU02NJvEBF4kEBAAAAMVi
+frZKfkeqLKvrjnYOeZ9QTGKaC0QCAgAAgCKSnJ+uMc6nqb9Y2+d/ocNufoUrQwICAACAIlRunzrm
+qB74Qyw40pbRTlUZJx4HDjbZ1R+z2JwEBAAAAMWehFidv25M/3jEs+nzOmKnT7TGxqbbopHwzmwm
+HZVdnT/bvrfVo5jMH3IVSEAAQL4Cs08dO2gXxygJAChgJvUTxa6+qtjFqx3pvy8kqpLzcfPy/FxN
+bG72v4nY9P2ri9YjYWVda0dWt+oV/yKUrZ9srNk8o1S3flBhNYcZ6SABAQAAAG6RkJjPl6d/rOqE
+IsT/okBIQAAAAACABAQAAAAACQgAAAAAkIAAAAAAIAEBAAAAQAICAAAAACQgAAAAAEhAAAAAAIAE
+BAAAAAAJCAAAAAASEAAAAAAgAQEAAABAAgIAAAAAJCAAAAAASEAAAAAAkIAAAAAAAAkIAAAAABIQ
+AAAAACABAQAAAEACAgAAAAAkIAAAAABy6v8Dq6+5goP0/ZQAAAAASUVORK5CYII=
+">
+
+    <!--  Section: Horizontal line -->
+    
+<hr /> <br />
+
+
+
+    <!--  Buttons Values -->
+    <div class="row">
+      Values
+      <input type="button" value="Reset" onclick="var_reset()">
+      <input type="button" value="Clear" onclick="var_clear()">
+    </div>
+
+    <!--  Header: Example help calculation -->
+    <h2 id="Example_help_calculation">Example help calculation</h2>
+
+    <!--  Row  -->
+    <div class="row">
+      <div class="sname">D_wire</div>
+      <div class="sval"> <form> <input type="text" id="D_wire"> </form> </div>
+      <div class="sunit">mm</div>
+      <div class="scoment">Diameter of wire</div>
+    </div>
+
+    <!--  Row  -->
+    <div class="row">
+      <div class="sname">Pi</div>
+      <div class="sconst"> <form> <input disabled="disabled" type="text" id="Pi"> </form> </div>
+      <div class="sunit">&nbsp;</div>
+      <div class="scoment">Pi. Ratio of a circle's circumference to its diameter.</div>
+    </div>
+
+    <!--  Row  -->
+    <div class="row">
+      <div class="sname">S_wire</div>
+      <div class="scalc"> <form> <input disabled="disabled" type="text" id="Section_of_wire"> </form> </div>
+      <div class="sunit">mm<sup>2</sup></div>
+      <div class="scoment">Section area of wire</div>
+    </div>
+
+</div>  <!-- End content -->
+
+  <!-- Footer -->
+
+  <div class="footer">
+    <!-- License -->
+    This work by <a href="https://github.com/picuino/picalc">Picuino</a>
+    is licensed under a
+    <a rel="GPL License" 
+       href="http://www.gnu.org/licenses/gpl-3.0.html">
+       GPL version 3 license</a>.
+  </div>
+
+</body>
+
+</html>

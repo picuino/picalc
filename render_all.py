@@ -1,15 +1,18 @@
 # -*- coding: utf-8 -*-
 """
-  Read yaml databases in local directory
-  and process all to make html pages
-  for online calculations
+Picalc is a Python and Jinja2 program for make online and
+offline calculators based on standalone html and javascript.
+A yaml database stores all information about the content
+and style options of the calculator.
 
-  # Picalc
+For more extensive information see example.yaml
 
-This work by 
-[Picuino](https://github.com/Picuino/picalc)
-is licensed under a
-[a GPL version 3 license](http://www.gnu.org/licenses/gpl-3.0.txt)
+Picalc
+======
+This work by Picuino(https://github.com/picuino/picalc)
+is licensed under a GPL version 3 license
+(http://www.gnu.org/licenses/gpl-3.0.html)
+
 """
 
 import base64
@@ -29,6 +32,7 @@ is licensed under a GPL version 3 license (http://www.gnu.org/licenses/gpl-3.0.t
 
 # ********************************************************************
 
+CONFIG_NAME = 'config.yaml'
 
 class Container(dict):
    """Object for contain dicts"""
@@ -46,12 +50,16 @@ class Picalc(object):
    
    def __init__(self, database_name):
       self.database_name = database_name
-      self.config_name = 'templates/config.yaml'
-      self.load_config()
-      self.load_database()
-      self.load_template()
+      self.config_name = CONFIG_NAME
+      self.load()
 
-   
+
+   def load(self):
+      self.load_config()    # Load default config.yaml
+      self.load_database()  # Load database.yaml
+      self.load_template()  # Load template.html
+
+
    def load_config(self):
       """Read default options"""
       config = yaml.load(self.read(self.config_name))['config']
@@ -167,19 +175,25 @@ class Picalc(object):
 
 def findfiles(extensions, path='.'):
    """Return all files of path with matching extensions"""
+   if not isinstance(extensions, list):
+      extensions = [extensions]
+
    for filename in os.listdir(path):
       ext = os.path.splitext(filename)[1].lower()
-      if isinstance(extensions, list) and ext in extensions:
-         yield os.path.join(path, filename).replace('\\', '/')
-      if isinstance(extensions, str) and ext == extensions:
+      if not ext in extensions:
+         continue
+      if path == '.':
+         yield filename.replace('\\', '/')
+      else:
          yield os.path.join(path, filename).replace('\\', '/')
 
 
 def process(database):
    """Process and render database"""
-   print('\nDatabase: ' + database)
-
    pc = Picalc(database)
+   if pc.config_name == database:
+      return
+   print('\nDatabase: ' + database)
    print('   Template: ' + pc.config.template_name)
 
    output = pc.render()
@@ -192,7 +206,9 @@ def process(database):
 def main():
    # Process all yaml databases
    for filename in findfiles(['.yaml']):
-       process(filename)
+      if (filename == CONFIG_NAME):
+         continue
+      process(filename)
 
 
 if __name__ == "__main__":
