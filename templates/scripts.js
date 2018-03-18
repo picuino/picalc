@@ -1,6 +1,8 @@
 ﻿{%- macro to_numexp_1(num) -%} {{"%1.0e"|format(num|float)}} {%- endmacro %}
 {%- macro to_numexp_5(num) -%} {{"%5.4e"|format(num|float)}} {%- endmacro %}
 
+{#- ********** Include external files ********** #}
+
 {%- for inc in include %} {% if inc.type == 'script' %}
 
     // Include script: {{inc.name}}
@@ -11,11 +13,11 @@
 {%- endif %}{%- endfor %}
 
 
-{#- Read variables, calculate formulaes and print results #}
+{#- ********** Calculate formulaes ********** #}
 
     // Setup variables onload
     function setup() {
-      reset_var();
+      var_reset();
       calc();
     }
 
@@ -23,12 +25,12 @@
     function calc() {
 
        // Test variable changes
-       read_var();
-       if (test_var_change() == false)
+       var_read_id();
+       if (var_test_change() == false)
           return;
 
-       copy_var_values();
-       add_query();
+       var_copy_values();
+       query_write();
 
        {%- for rowdata in rows -%} {%- if rowdata.type == 'calc' %}
 
@@ -47,19 +49,6 @@
        print_calc();
     }
 
-    // Add query string to url
-    function add_query () {
-       var url = document.URL.split('?')[0];
-       var query = '';
-
-       {%- for rowdata in rows %} {%- if rowdata.type in ['var'] %}
-       query = query + "{{rowdata.id}}=" + {{rowdata.id}} + '&';
-       {%- endif %} {%- endfor %}
-
-       history.pushState({id: 'homepage'}, '{{config.title}}', url + '?' + query);
-    }
-
-
     // Print calcs
     function print_calc() {
        {%- for rowdata in rows -%} {%- if rowdata.type in ['calc'] %}
@@ -72,18 +61,10 @@
        {%- endif %} {%- endfor %}
     }
 
-    // Test if there are variable changes
-    var var_values = {};
-
-    function test_var_change() {
-       {%- for rowdata in rows %}{%- if rowdata.type in ['var'] %}
-       if (var_values["{{rowdata.id}}"] != {{rowdata.id}}) return true;
-       {%- endif %}{%- endfor %}
-       return false;
-    }
+{#- ********** Manage variables ********** #}
 
     // Read all variables
-    function read_var() {
+    function var_read_id() {
        {%- for rowdata in rows %} {%- if rowdata.type in ['var'] %}
        {{rowdata.id}} = idtonum("{{rowdata.id}}")
           {%- if rowdata.prefix != 1 %} * {{ to_numexp_1(rowdata.prefix|float) }}
@@ -95,17 +76,8 @@
        {%- endif %} {%- endfor %}
     }
 
-    // Copy values of variables
-    function copy_var_values() {
-
-       {%- for rowdata in rows %} {%- if rowdata.type in ['var'] %}
-       var_values["{{rowdata.id}}"] = {{rowdata.id}};
-
-       {%- endif %} {%- endfor %}
-    }
-
     // Reset variables to default values
-    function reset_var() {
+    function var_reset() {
 
        {%- for rowdata in rows %} {%- if rowdata.type in ['var'] %}
        document.getElementById("{{rowdata.id}}").value =
@@ -116,7 +88,7 @@
     }
 
     // Clear variables
-    function clear_var() {
+    function var_clear() {
 
        {%- for rowdata in rows %} {%- if rowdata.type in ['var'] %}
        document.getElementById("{{rowdata.id}}").value = '';
@@ -125,8 +97,56 @@
        calc();
     }
 
+    // Test if there are variable changes
+    var var_values = {};
 
-{#- Manage numbers #}
+    function var_test_change() {
+       {%- for rowdata in rows %}{%- if rowdata.type in ['var'] %}
+       if (var_values["{{rowdata.id}}"] != {{rowdata.id}}) return true;
+       {%- endif %}{%- endfor %}
+       return false;
+    }
+
+    // Copy values of variables
+    function var_copy_values() {
+
+       {%- for rowdata in rows %} {%- if rowdata.type in ['var'] %}
+       var_values["{{rowdata.id}}"] = {{rowdata.id}};
+
+       {%- endif %} {%- endfor %}
+    }
+
+{#- ********** Manage query strings ********** #}
+ 
+    // Write query string into url
+    function query_write () {
+       var url = document.location.href.split('?')[0];
+       var query = '';
+       var value;
+
+       {%- for rowdata in rows %} {%- if rowdata.type in ['var'] %}
+       value = encodeURIComponent(document.getElementById("{{rowdata.id}}").value)
+       if (value.length) query = query + "{{rowdata.id}}=" + value + '&';
+       {%- endif %} {%- endfor %}
+
+       history.pushState({id: 'homepage'}, '{{config.title}}', url + '?' + query);
+    }
+
+    // Read query string from URL to variables
+    function query_read() {
+       var url = document.location.href.split('?');
+       if (url.length < 2) return;
+       var values = url[1].split('&');
+       for(i=0; i<values.length; i++) {
+          var value = values[i].split('=');
+          alert(value);
+          if (value.length != 2) continue;
+          document.getElementById(value[0]).value = value[1];
+       }
+       calc()
+    } 
+    
+{#- ********** Manage numbers ********** #}
 
     // Evalue inputs with '.' or ',' as comma
     function idtonum(id) {
@@ -165,7 +185,7 @@
     }
 
 
-{#- Manage Keyboard events #}
+{#- ********** Manage Keyboard events ********** #}
 
     // Manage keys [Enter] and [tab]
     function OnKeyPress(evt) {

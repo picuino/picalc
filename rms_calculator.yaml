@@ -13,7 +13,7 @@
 
   resolution: 5
 
-  onload: init_cookies()
+  onload: cookies_setup()
 
 
 include:
@@ -39,10 +39,11 @@ rows:
 - type: buttons
   name: Values
   buttons:
-  - { value: Reset,  onclick: reset_var() }
-  - { value: Clear,  onclick: clear_var() }
-  - { value: Save,   onclick: save_var_cookie() }
-  - { value: Load,   onclick: load_var_cookie() }
+  - { value: Reset,  onclick: var_reset() }
+  - { value: Clear,  onclick: var_clear() }
+  - { value: Save,   onclick: cookies_var_save() }
+  - { value: Load,   onclick: cookies_var_load() }
+  - { value: Query read,   onclick: query_read() }
 
 # ** INPUT PARAMETER **
 

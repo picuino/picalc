@@ -8,7 +8,7 @@
   <meta charset="UTF-8">
   <meta name="Keywords" content="Inductance, magnetics, coil, calculator">
   <meta name="Description" content="Javascript Inductance calculator">
-  <meta name="Version" content="18/03/2018 - SHA:210B19">
+  <meta name="Version" content="18/03/2018 - SHA:E75F31">
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
   <title>Inductance Calculator</title>
 
@@ -139,16 +139,16 @@
     // Include script: include/cookies.js
     
     // Init calculations
-    function init_cookies() {
-       if  (getCookie("saved") == 'true')
-          load_var_cookie();
+    function cookies_setup() {
+       if  (cookies_read("saved") == 'true')
+          cookies_var_load();
        else
-          reset_var();
+          var_reset();
        calc();
     }
 
     // Save variables to cookie
-    function save_var_cookie() {
+    function cookies_var_save() {
        var expiresdate = new Date(2068, 1, 02, 11, 20);
        expiresdate = "expires=" + expiresdate.toUTCString();
        var names = ["Ae", "B_max", "AL", "g", "AL_2", "N", "f",  ];
@@ -159,29 +159,34 @@
     }
 
     // Load variables from cookie
-    function load_var_cookie() {
-       document.getElementById("Ae").value = getCookie("Ae");
-       document.getElementById("B_max").value = getCookie("B_max");
-       document.getElementById("AL").value = getCookie("AL");
-       document.getElementById("g").value = getCookie("g");
-       document.getElementById("AL_2").value = getCookie("AL_2");
-       document.getElementById("N").value = getCookie("N");
-       document.getElementById("f").value = getCookie("f");
+    function cookies_var_load() {
+       document.getElementById("Ae").value = cookies_read("Ae");
+       document.getElementById("B_max").value = cookies_read("B_max");
+       document.getElementById("AL").value = cookies_read("AL");
+       document.getElementById("g").value = cookies_read("g");
+       document.getElementById("AL_2").value = cookies_read("AL_2");
+       document.getElementById("N").value = cookies_read("N");
+       document.getElementById("f").value = cookies_read("f");
        calc();
     }
 
     // Read cookies
-    function getCookie(name) {
-       var re = new RegExp(name + "=([^;]+)");
-       var value = re.exec(document.cookie);
-       return (value != null) ? unescape(value[1]) : null;
+    function cookies_read(name) {
+       var re = new RegExp(name + "=([^;&]+)");
+       var value = decodeURIComponent(re.exec(document.cookie));
+       if (isFinite(value)) {
+          return value;
+       } 
+       else {
+         return '';
+       }
     }
 
     // End include/cookies.js
 
     // Setup variables onload
     function setup() {
-      reset_var();
+      var_reset();
       calc();
     }
 
@@ -189,12 +194,12 @@
     function calc() {
 
        // Test variable changes
-       read_var();
-       if (test_var_change() == false)
+       var_read_id();
+       if (var_test_change() == false)
           return;
 
-       copy_var_values();
-       add_query();
+       var_copy_values();
+       query_write();
 
        // Calculation: Relative lenght of air gap (g/√Ae)
        g_factor = g / Math.sqrt(Ae);
@@ -233,22 +238,6 @@
        print_calc();
     }
 
-    // Add query string to url
-    function add_query () {
-       var url = document.URL.split('?')[0];
-       var query = '';
-       query = query + "Ae=" + Ae + '&';
-       query = query + "B_max=" + B_max + '&';
-       query = query + "AL=" + AL + '&';
-       query = query + "g=" + g + '&';
-       query = query + "AL_2=" + AL_2 + '&';
-       query = query + "N=" + N + '&';
-       query = query + "f=" + f + '&';
-
-       history.pushState({id: 'homepage'}, 'Inductance Calculator', url + '?' + query);
-    }
-
-
     // Print calcs
     function print_calc() {
        document.getElementById("g_factor").value = num_fix(g_factor * 1e+02, 5);
@@ -266,22 +255,8 @@
        document.getElementById("Cro_cu").value = "0.00393";
     }
 
-    // Test if there are variable changes
-    var var_values = {};
-
-    function test_var_change() {
-       if (var_values["Ae"] != Ae) return true;
-       if (var_values["B_max"] != B_max) return true;
-       if (var_values["AL"] != AL) return true;
-       if (var_values["g"] != g) return true;
-       if (var_values["AL_2"] != AL_2) return true;
-       if (var_values["N"] != N) return true;
-       if (var_values["f"] != f) return true;
-       return false;
-    }
-
     // Read all variables
-    function read_var() {
+    function var_read_id() {
        Ae = idtonum("Ae") * 1e-06; // Variable: Effective magnetic cross section
        B_max = idtonum("B_max") * 1e-03; // Variable: Max value of magnetic flux density
        AL = idtonum("AL") * 1e-09; // Variable: Inductance factor (permeability)
@@ -294,19 +269,8 @@
        Cro_cu = "0.00393"; // Constant: Coefficient of resistivity of copper with temperature
     }
 
-    // Copy values of variables
-    function copy_var_values() {
-       var_values["Ae"] = Ae;
-       var_values["B_max"] = B_max;
-       var_values["AL"] = AL;
-       var_values["g"] = g;
-       var_values["AL_2"] = AL_2;
-       var_values["N"] = N;
-       var_values["f"] = f;
-    }
-
     // Reset variables to default values
-    function reset_var() {
+    function var_reset() {
        document.getElementById("Ae").value = 683;
        document.getElementById("B_max").value = 300;
        document.getElementById("AL").value = 8100;
@@ -319,7 +283,7 @@
     }
 
     // Clear variables
-    function clear_var() {
+    function var_clear() {
        document.getElementById("Ae").value = '';
        document.getElementById("B_max").value = '';
        document.getElementById("AL").value = '';
@@ -329,6 +293,68 @@
        document.getElementById("f").value = '';
 
        calc();
+    }
+
+    // Test if there are variable changes
+    var var_values = {};
+
+    function var_test_change() {
+       if (var_values["Ae"] != Ae) return true;
+       if (var_values["B_max"] != B_max) return true;
+       if (var_values["AL"] != AL) return true;
+       if (var_values["g"] != g) return true;
+       if (var_values["AL_2"] != AL_2) return true;
+       if (var_values["N"] != N) return true;
+       if (var_values["f"] != f) return true;
+       return false;
+    }
+
+    // Copy values of variables
+    function var_copy_values() {
+       var_values["Ae"] = Ae;
+       var_values["B_max"] = B_max;
+       var_values["AL"] = AL;
+       var_values["g"] = g;
+       var_values["AL_2"] = AL_2;
+       var_values["N"] = N;
+       var_values["f"] = f;
+    }
+ 
+    // Write query string into url
+    function query_write () {
+       var url = document.location.href.split('?')[0];
+       var query = '';
+       var value;
+       value = encodeURIComponent(document.getElementById("Ae").value)
+       if (value.length) query = query + "Ae=" + value + '&';
+       value = encodeURIComponent(document.getElementById("B_max").value)
+       if (value.length) query = query + "B_max=" + value + '&';
+       value = encodeURIComponent(document.getElementById("AL").value)
+       if (value.length) query = query + "AL=" + value + '&';
+       value = encodeURIComponent(document.getElementById("g").value)
+       if (value.length) query = query + "g=" + value + '&';
+       value = encodeURIComponent(document.getElementById("AL_2").value)
+       if (value.length) query = query + "AL_2=" + value + '&';
+       value = encodeURIComponent(document.getElementById("N").value)
+       if (value.length) query = query + "N=" + value + '&';
+       value = encodeURIComponent(document.getElementById("f").value)
+       if (value.length) query = query + "f=" + value + '&';
+
+       history.pushState({id: 'homepage'}, 'Inductance Calculator', url + '?' + query);
+    }
+
+    // Read query string from URL to variables
+    function query_read() {
+       var url = document.location.href.split('?');
+       if (url.length < 2) return;
+       var values = url[1].split('&');
+       for(i=0; i<values.length; i++) {
+          var value = values[i].split('=');
+          alert(value);
+          if (value.length != 2) continue;
+          document.getElementById(value[0]).value = value[1];
+       }
+       calc()
     }
 
     // Evalue inputs with '.' or ',' as comma
@@ -382,7 +408,7 @@
 </head>
 
 
-<body onload="init_cookies()">
+<body onload="cookies_setup()">
 
   <!-- Content -->
 
@@ -393,10 +419,10 @@
     <!--  Buttons Values -->
     <div class="row">
       Values
-      <input type="button" value="Reset" onclick="reset_var()">
-      <input type="button" value="Clear" onclick="clear_var()">
-      <input type="button" value="Save" onclick="save_var()">
-      <input type="button" value="Load" onclick="load_var()">
+      <input type="button" value="Reset" onclick="var_reset()">
+      <input type="button" value="Clear" onclick="var_clear()">
+      <input type="button" value="Save" onclick="cookies_var_save()">
+      <input type="button" value="Load" onclick="cookies_var_load()">
     </div>
 
     <!--  Header: Core and phisical constants -->
