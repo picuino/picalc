@@ -11,7 +11,7 @@ Picalc
 ======
 This work by Picuino(https://github.com/picuino/picalc)
 is licensed under a GPL version 3 license
-(http://www.gnu.org/licenses/gpl-3.0.html)
+(http://www.gnu.org/licenses/gpl-3.0-standalone.html)
 
 """
 

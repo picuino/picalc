@@ -70,7 +70,6 @@ include:
   - type: style
     name: include/example.css
     
-    
 #
 # 3. CONTENT ROWS
 # ===============
@@ -111,15 +110,16 @@ rows:
   #   Clear: load empty string to all variables.
   # Other external functions must be loaded in include section 
   # before use it in this database.
-  - { value: Reset,  onclick: var_reset() }
-  - { value: Clear,  onclick: var_clear() }
+  - { value: Reset,    onclick: var_reset() }
+  - { value: Clear,    onclick: var_clear() }
+  - { value: Copy URL, onclick: query_copy() }
 
 
 # 3.4 HEADERS
 # -----------
 # Insert a header of level 2 <h2>header</h2>
 - type: header
-  name: Example help calculation
+  name: Example calculation
   
   
 # 3.5 VARIABLES AND CONSTANTS 
@@ -157,11 +157,12 @@ rows:
   name: D_wire
   value: 10
   unit: mm
-  
+
+# In const type, value is represented as text without converting to number
 - type: const
   comment: Pi. Ratio of a circle's circumference to its diameter.
   name: Pi
-  value: Math.PI
+  value: 3.14159
   unit: ''
 
   

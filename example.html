@@ -1,38 +1,39 @@
 ﻿<!DOCTYPE html>
 <html lang="en-US">
 
+<!-- ********** HEAD ********** -->
 <head>
 
-  <!-- Head -->
-  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-  <meta charset="UTF-8">
-  <meta name="Keywords" content="Picalc, yaml, help, online calculator">
-  <meta name="Description" content="Picalc example calculator with all features of picalc showed">
-  <meta name="Version" content="19/03/2018 - SHA:A6CFE5">
-  <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
-  <title>Picalc example calculator</title>
+   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+   <meta charset="UTF-8">
+   <meta name="Keywords" content="Picalc, yaml, help, online calculator">
+   <meta name="Description" content="Picalc example calculator with all features of picalc showed">
+   <meta name="Version" content="19/03/2018 - SHA:A04790">
+   <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
+   <title>Picalc example calculator</title>
 
-  <!-- Styles -->
-  <style>
-    body {
+
+<!-- ********** STYLES ********** -->
+<style>
+   body {
       font: 16px sans-serif;
       background-color: #f0f4f4;
       margin: 0;
       min-width: 320px;
-    }
+   }
 
-    .content {
+   .content {
       max-width: 640px;
       margin: 0 auto;
       padding: 16px 16px 32px 16px;
       background-color: #fff;
-    }
+   }
 
-    .row {
+   .row {
       padding-bottom: 2px;
-    }
+   }
 
-    .footer {
+   .footer {
       max-width: 640px;
       margin: 0 auto;
       text-align: center;
@@ -40,42 +41,42 @@
       font-size: 12px;
       font-weight: bold;
       background-color: #ddd;
-    }
+   }
 
-    h1 {
+   h1 {
       font-size: 140%;
       font-weight: bold;
       text-transform: uppercase;
       margin: 20px 0 10px 0;
-    }
+   }
 
-    h2 {
+   h2 {
       font-size: 120%;
       font-weight: bold;
       margin: 20px 0 6px 0;
-    }
+   }
 
-    img {
+   img {
       padding: 2px 0 2px 0;
       max-width: 100%;
-    }
+   }
 
-    input[type=button] {
+   input[type=button] {
       font: inherit;
       text-align: center;
       background-color: #eee;
       border: 1px solid #888;
       border-radius: 4px;
-    }
+   }
 
-    /* Column 1: Variable name */
-    .sname {
+   /* Column 1: Variable name */
+   .sname {
       display: inline-block;
       min-width: 5em;
-    }
+   }
 
-    /* Column 2: Variable Value (input form) */
-    input[type=text], select, textarea {
+   /* Column 2: Variable Value (input form) */
+   input[type=text], select, textarea {
       width: 100%;
       padding: 1px 4px 0 4px;
       height: 22px;
@@ -84,196 +85,209 @@
       box-sizing: border-box;
       border: 1px solid #888;
       border-radius: 4px;
-    }
+   }
     input[type=text]:disabled {
        color: inherit;
-    }
+   }
 
-    .sval {
+   .sval {
       display: inline-block;
       width: 5em;
-    }
-    .sval input[type=text] {
+   }
+   .sval input[type=text] {
       background-color: #FFFFC0;
-    }
+   }
 
-    .sconst {
+   .sconst {
       display: inline-block;
       width: 5em;
-    }
-    .sconst input[type=text] {
+   }
+   .sconst input[type=text] {
       background-color: #FFFFFF;
-    }
+   }
 
-    .scalc  {
+   .scalc  {
       display: inline-block;
       width: 5em;
-    }
-    .scalc input[type=text] {
+   }
+   .scalc input[type=text] {
       background-color: #C0FFFF;
-    }
+   }
 
-    /* Column 3: Variable Units */
-    .sunit {
+   /* Column 3: Variable Units */
+   .sunit {
       display: inline-block;
       min-width: 4em;
       text-align: center;
       border: 1px solid #888;
       border-radius: 4px;
-    }
+   }
 
-    /* Column 4: Variable comment */
-    .scoment {
+   /* Column 4: Variable comment */
+   .scoment {
       display: inline-block;
       min-width: 20em;
-    }  
+   }  
 
-    /* Include script: include/example.css */
-    
-    /* Example CSS file */
-    /* Example of include style template file */
-    .example {
+   /*********************************************************************/
+   /* Include styles: include/example.css                               */
+   /*                                                                   */
+   
+   /* Example CSS file */
+   /* Example of include style template file */
+   .example {
       color: black;
-    }
+   }
 
-    /* End include/example.css             */
-  </style>
+   /*                                                                   */
+   /* End Include: include/example.css                                  */
+   /*********************************************************************/
 
-  <!-- Script -->
-  <script>
+
+</style>
+
+
+<!-- ********** SCRIPTS ********** -->
+<script>
  
 
-    // Include script: include/example.js
-    
-    // Example function 
-    // Example of include script template file
-    function example() {
-      return 'This is an example JavaScript function';
-    }
 
-    // End include/example.js 
+   /*********************************************************************/
+   /* Include script: include/example.js                                */
+   /*                                                                   */
 
-    // Setup variables onload
-    function setup() {
+   // Example function
+   // Example of include script template file
+   function example() {
+      return 'This is an example of JavaScript function';
+   }
+
+   /*                                                                   */
+   /* End Include: include/example.js                                   */
+   /*********************************************************************/ 
+
+   // Setup variables onload
+   function setup() {
       var config = query_read();
       if (config.length > 0) {
          var_write(config);
+         var_backup();
       }
       else var_reset();
       calc();
-    }
+   }
 
-    // Compute calculations
-    function calc() {
+   // Compute calculations
+   function calc() {
 
-       // Test variable changes
-       var_read_id();
-       if (var_test_change() == true) {
-          var_backup();
-          query_write();
-       }
-       else return;
+      // Test variable changes
+      var_read_id();
+      if (var_test_change() == true) {
+         var_backup();
+         query_write();
+      }
+      else return;
 
-       // Calculation: Section area of wire
-       foo = 25 * 6;
-       Section_of_wire = Math.PI * 0.25 * Math.pow(D_wire, 2);
+      // Calculation: Section area of wire
+      foo = 25 * 6;
+      Section_of_wire = Math.PI * 0.25 * Math.pow(D_wire, 2);
 
-       // Print variables and calcs
-       print_calc();
-    }
+      // Print variables and calcs
+      print_calc();
+   }
 
-    // Print calcs
-    function print_calc() {
-       document.getElementById("Section_of_wire").value = num_fix(Section_of_wire * 1e+06, 5);
-       document.getElementById("Pi").value = num_fix(Math.PI * 1.0, 5);
-    }
+   // Print calcs
+   function print_calc() {
+      document.getElementById("Section_of_wire").value = num_fix(Section_of_wire * 1e+06, 5);
+      document.getElementById("Pi").value = "3.14159";
+   }
 
-    // Read all variables
-    function var_read_id() {
-       D_wire = idtonum("D_wire") * 1e-03; // Variable: Diameter of wire
-       Pi = "Math.PI"; // Constant: Pi. Ratio of a circle's circumference to its diameter.
-    }
+   // Read all variables
+   function var_read_id() {
+      D_wire = idtonum("D_wire") * 1e-03; // Variable: Diameter of wire
+      Pi = ( 3.14159 ) * 1e0; // Constant: Pi. Ratio of a circle's circumference to its diameter.
+   }
 
-    // Reset variables to default values
-    function var_reset() {
-       document.getElementById("D_wire").value = 10;
+   // Reset variables to default values
+   function var_reset() {
+      document.getElementById("D_wire").value = 10;
 
-       calc();
-    }
+      calc();
+   }
 
-    // Clear variables
-    function var_clear() {
-       document.getElementById("D_wire").value = '';
+   // Clear variables
+   function var_clear() {
+      document.getElementById("D_wire").value = '';
 
-       calc();
-    }
+      calc();
+   }
 
-    // Test if there are variable changes
-    var var_values = {};
+   // Test if there are variable changes
+   var var_values = {};
 
-    function var_test_change() {
-       if (var_values["D_wire"] != D_wire) return true;
-       return false;
-    }
+   function var_test_change() {
+      if (var_values["D_wire"] != D_wire) return true;
+      return false;
+   }
 
-    // Copy values of variables
-    function var_backup() {
-       var_values["D_wire"] = D_wire;
-    }
-    
-    // Write values to variables
-    function var_write(values) {
-       for(var i=0; i<values.length; i++) {
-          document.getElementById(values[i][0]).value = values[i][1];
-       }
-    }
- 
-    // Write query string into url
-    function query_write () {
-       var url = document.location.href.split('?')[0];
-       var query = '';
-       var value;
-       value = encodeURIComponent(document.getElementById("D_wire").value)
-       if (value.length) query = query + "D_wire=" + value + '&';
+   // Copy values of variables
+   function var_backup() {
+      var_values["D_wire"] = D_wire;
+   }
 
-       history.pushState({id: 'homepage'}, 'Picalc example calculator', url + '?' + query);
-    }
+   // Write values to variables
+   function var_write(values) {
+      for(var i=0; i<values.length; i++) {
+         document.getElementById(values[i][0]).value = values[i][1];
+      }
+   }
 
-    // Read query string from URL
-    function query_read() {
-       var url = document.location.href.split('?');
-       if (url.length < 2)
+   // Write query string into url
+   function query_write () {
+      var url = document.location.href.split('?')[0];
+      var query = '?';
+      var value;
+      value = encodeURIComponent(document.getElementById("D_wire").value)
+      if (value.length) query = query + "D_wire=" + value + '&';
+      if (query.length > 1) url = url + query
+      history.pushState({id: 'homepage'}, 'Picalc example calculator', url);
+   }
+
+   // Read query string from URL
+   function query_read() {
+      var url = document.location.href.split('?');
+      if (url.length < 2)
          return [];
-       var values = url[1].split('&');
-       var vars = [];
-       for(i=0; i<values.length; i++) {
-          var value = values[i].split('=');
-          if (value.length != 2) continue;
-          vars.push[value]; 
-       }
-       return vars;
-    }
+      var values = url[1].split('&');
+      var vars = [];
+      for(i=0; i<values.length; i++) {
+         var value = values[i].split('=');
+         if (value.length != 2) continue;
+         vars.push(value);
+      }
+      return vars;
+   }
 
-    // Evalue inputs with '.' or ',' as comma
-    function idtonum(id) {
-       val = document.getElementById(id).value.replace(',', '.');
-       if (isNaN(val)) return '';
-       return val * 1.0; // return number
-    }
+   // Evalue inputs with '.' or ',' as comma
+   function idtonum(id) {
+      val = document.getElementById(id).value.replace(',', '.');
+      if (isNaN(val)) return '';
+      return val * 1e0; // return number
+   }
 
-    // Format number with fix digits
-    function num_fix(number, digits) {
-       if (!isFinite(number)) return '';
-       if (number == 0) return '0';
-       if (Math.sign(number) < 0)
-          var sign = '-';
-       else
-          var sign = '';
-       number = Math.abs(number)
-       exp = Math.ceil(Math.log10(number) + 0.000001);
-       number = Math.round(number * Math.pow(10, digits - exp)) + '';
-       // Number have fractional part
-       if (digits > exp) {
+   // Format number with fix digits
+   function num_fix(number, digits) {
+      if (!isFinite(number)) return '';
+      if (number == 0) return '0';
+      if (Math.sign(number) < 0)
+         var sign = '-';
+      else
+         var sign = '';
+      number = Math.abs(number)
+      exp = Math.ceil(Math.log10(number) + 0.000001);
+      number = Math.round(number * Math.pow(10, digits - exp)) + '';
+      // Number have fractional part
+      if (digits > exp) {
          // number have only fractional part
          if (exp <= 0) {
             return sign + '0.0000000'.substr(0, 2 - exp) + number;
@@ -282,40 +296,40 @@
          else {
             return sign + number.substr(0, exp) + '.' + number.substr(exp, digits - exp);
          }
-       }
-       // Number with only integer part
-       else {
-          number = number  + '0000000000'
-          return sign + number.substr(0, exp);
-       }
-    }
+      }
+      // Number with only integer part
+      else {
+         number = number  + '0000000000'
+         return sign + number.substr(0, exp);
+      }
+   }
 
-    // Manage keys [Enter] and [tab]
-    function OnKeyPress(evt) {
-       var evt = (evt) ? evt : ((event) ? event : null);
-       var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null);
-       if (node.type=="text") {
-          if (evt.keyCode == 9) { calc(); return; }
+   // Manage keys [Enter] and [tab]
+   function OnKeyPress(evt) {
+      var evt = (evt) ? evt : ((event) ? event : null);
+      var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null);
+      if (node.type=="text") {
+         if (evt.keyCode == 9) { calc(); return; }
          if (evt.keyCode == 13) { calc(); return false; }
-       }
-    }
-    document.onkeypress = OnKeyPress;
-  </script>
+      }
+   }
+   document.onkeypress = OnKeyPress;
+</script>
 
 </head>
 
 
 <body onload="setup()">
 
-  <!-- Content -->
+<!-- ********** BODY CONTENT ********** -->
 
-<div class="content">
+   <div class="content"> <!-- Start content -->
 
-  <h1>Picalc example calculator</h1>
+   <h1>Picalc example calculator</h1>
 
-    <!--  Image: example.png -->
-    <img alt="example of embed image" width="320px"
-         src="data:image/png;base64,
+   <!--  Image: example.png -->
+   <img alt="example of embed image" width="320px"
+      src="data:image/png;base64,
 iVBORw0KGgoAAAANSUhEUgAAAyAAAACgCAYAAAD0KAgtAAAACXBIWXMAAA7EAAAOxQGMMD9aAAAg
 Y0lEQVR42u3dfWxb533o8SeA4jssKIYCkoWrP5yOIpUe26pmNBfLVSQ5VUK7R0IqVfN0haQz4RaR
 GNAJCSFuU8eQYcZpVjvllVZpEYkb5zJtElb1FCutzdVMhVmWeBOghcNSEhORUtEE14MkYgW2ayDz
@@ -465,58 +479,59 @@ BAAAAAAJCAAAAAASEAAAAAAgAQEAAABAAgIAAAAAJCAAAAAASEAAAAAAkIAAAAAAAAkIAAAAABIQ
 AAAAACABAQAAAEACAgAAAAAkIAAAAABy6v8Dq6+5goP0/ZQAAAAASUVORK5CYII=
 ">
 
-    <!--  Section: Horizontal line -->
-    
+   <!--  Code HTML: Horizontal line -->
+   
 <hr /> <br />
 
 
 
-    <!--  Buttons Values -->
-    <div class="row">
+   <!--  Buttons: Values -->
+   <div class="row">
       Values
       <input type="button" value="Reset" onclick="var_reset()">
       <input type="button" value="Clear" onclick="var_clear()">
-    </div>
+   </div>
 
-    <!--  Header: Example help calculation -->
-    <h2 id="Example_help_calculation">Example help calculation</h2>
+   <!--  Header: Example calculation -->
+   <h2 id="Example_calculation">Example calculation</h2>
 
-    <!--  Row  -->
-    <div class="row">
+   <!--  Row: D_wire  -->
+   <div class="row">
       <div class="sname">D_wire</div>
       <div class="sval"> <form> <input type="text" id="D_wire"> </form> </div>
       <div class="sunit">mm</div>
       <div class="scoment">Diameter of wire</div>
-    </div>
+   </div>
 
-    <!--  Row  -->
-    <div class="row">
+   <!--  Row: Pi  -->
+   <div class="row">
       <div class="sname">Pi</div>
       <div class="sconst"> <form> <input disabled="disabled" type="text" id="Pi"> </form> </div>
       <div class="sunit">&nbsp;</div>
       <div class="scoment">Pi. Ratio of a circle's circumference to its diameter.</div>
-    </div>
+   </div>
 
-    <!--  Row  -->
-    <div class="row">
+   <!--  Row: S_wire  -->
+   <div class="row">
       <div class="sname">S_wire</div>
       <div class="scalc"> <form> <input disabled="disabled" type="text" id="Section_of_wire"> </form> </div>
       <div class="sunit">mm<sup>2</sup></div>
       <div class="scoment">Section area of wire</div>
-    </div>
+   </div>
 
-</div>  <!-- End content -->
+   </div>  <!-- End content -->
 
-  <!-- Footer -->
 
-  <div class="footer">
-    <!-- License -->
-    This work by <a href="https://github.com/picuino/picalc">Picuino</a>
-    is licensed under a
-    <a rel="GPL License" 
-       href="http://www.gnu.org/licenses/gpl-3.0.html">
-       GPL version 3 license</a>.
-  </div>
+<!-- ********** BODY FOOTER ********** -->
+
+   <div class="footer">
+      <!-- License -->
+      This work by <a href="https://github.com/picuino/picalc">Picuino</a>
+      is licensed under a
+      <a rel="GPL License"
+         href="http://www.gnu.org/licenses/gpl-3.0-standalone.html">
+         GPL version 3 license</a>.
+   </div>
 
 </body>
 

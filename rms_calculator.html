@@ -1,38 +1,39 @@
 ﻿<!DOCTYPE html>
 <html lang="en-US">
 
+<!-- ********** HEAD ********** -->
 <head>
 
-  <!-- Head -->
-  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-  <meta charset="UTF-8">
-  <meta name="Keywords" content="RMS, average, median, value, calculator">
-  <meta name="Description" content="JavaScript average and RMS value Calculator">
-  <meta name="Version" content="19/03/2018 - SHA:F7B1C8">
-  <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
-  <title>Average and RMS value Calculator</title>
+   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+   <meta charset="UTF-8">
+   <meta name="Keywords" content="RMS, average, median, value, calculator">
+   <meta name="Description" content="JavaScript average and RMS value Calculator">
+   <meta name="Version" content="19/03/2018 - SHA:32F562">
+   <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
+   <title>Average and RMS value Calculator</title>
 
-  <!-- Styles -->
-  <style>
-    body {
+
+<!-- ********** STYLES ********** -->
+<style>
+   body {
       font: 16px sans-serif;
       background-color: #f0f4f4;
       margin: 0;
       min-width: 320px;
-    }
+   }
 
-    .content {
+   .content {
       max-width: 640px;
       margin: 0 auto;
       padding: 16px 16px 32px 16px;
       background-color: #fff;
-    }
+   }
 
-    .row {
+   .row {
       padding-bottom: 2px;
-    }
+   }
 
-    .footer {
+   .footer {
       max-width: 640px;
       margin: 0 auto;
       text-align: center;
@@ -40,42 +41,42 @@
       font-size: 12px;
       font-weight: bold;
       background-color: #ddd;
-    }
+   }
 
-    h1 {
+   h1 {
       font-size: 140%;
       font-weight: bold;
       text-transform: uppercase;
       margin: 20px 0 10px 0;
-    }
+   }
 
-    h2 {
+   h2 {
       font-size: 120%;
       font-weight: bold;
       margin: 20px 0 6px 0;
-    }
+   }
 
-    img {
+   img {
       padding: 2px 0 2px 0;
       max-width: 100%;
-    }
+   }
 
-    input[type=button] {
+   input[type=button] {
       font: inherit;
       text-align: center;
       background-color: #eee;
       border: 1px solid #888;
       border-radius: 4px;
-    }
+   }
 
-    /* Column 1: Variable name */
-    .sname {
+   /* Column 1: Variable name */
+   .sname {
       display: inline-block;
       min-width: 7em;
-    }
+   }
 
-    /* Column 2: Variable Value (input form) */
-    input[type=text], select, textarea {
+   /* Column 2: Variable Value (input form) */
+   input[type=text], select, textarea {
       width: 100%;
       padding: 1px 4px 0 4px;
       height: 22px;
@@ -84,334 +85,342 @@
       box-sizing: border-box;
       border: 1px solid #888;
       border-radius: 4px;
-    }
+   }
     input[type=text]:disabled {
        color: inherit;
-    }
+   }
 
-    .sval {
+   .sval {
       display: inline-block;
       width: 5em;
-    }
-    .sval input[type=text] {
+   }
+   .sval input[type=text] {
       background-color: #FFFFC0;
-    }
+   }
 
-    .sconst {
+   .sconst {
       display: inline-block;
       width: 5em;
-    }
-    .sconst input[type=text] {
+   }
+   .sconst input[type=text] {
       background-color: #FFFFFF;
-    }
+   }
 
-    .scalc  {
+   .scalc  {
       display: inline-block;
       width: 5em;
-    }
-    .scalc input[type=text] {
+   }
+   .scalc input[type=text] {
       background-color: #C0FFFF;
-    }
+   }
 
-    /* Column 3: Variable Units */
-    .sunit {
+   /* Column 3: Variable Units */
+   .sunit {
       display: inline-block;
       min-width: 2em;
       text-align: center;
       border: 1px solid #888;
       border-radius: 4px;
-    }
+   }
 
-    /* Column 4: Variable comment */
-    .scoment {
+   /* Column 4: Variable comment */
+   .scoment {
       display: inline-block;
       min-width: 20em;
-    } 
-  </style>
+   } 
+</style>
 
-  <!-- Script -->
-  <script>
+
+<!-- ********** SCRIPTS ********** -->
+<script>
  
 
-    // Include script: include/zeros.js
-    
-    // Zero finding with secant method. https://en.wikipedia.org/wiki/Secant_method
-    function zero_secant(x, fn) {
-       var iter, x0, x1, x2, y0, y1;
-       x1 = x * 1.0;
-       y1 = fn(x1);
-       x2 = x1 * 1.001 + 1e-8;
-       for(iter=0; iter<40; iter++) {
-          x0 = x1;
-          y0 = y1;
-          x1 = x2
-          y1 = fn(x1);
-          if ((Math.abs(y1) < 1e-50) || Math.abs((x1-x0)/x1) < 1e-12)     
-             break;
-          if (y0 == y1)
-             x2 = x1 * 1.001 + 1e-8;
-          else 
-             x2 = x1 - y1*(x1-x0)/(y1-y0);
-       }
-       return x1;
-    }
 
-    
-    // Zero finding between two points
-    function zero_bisect(x0, x1, fn) {
-       var iter, x2, y0, y1, y2;
-       x0 = x0 * 1.0;
-       x1 = x1 * 1.0;
-       y0 = fn(x0);
-       y1 = func_1(x1);
-       if (Math.sign(y0 * y1) != -1) 
-          return '';
-       for(iter=0; iter<80; iter++) {
-          x2 = 0.5 * (x0 + x1);
-          y2 = func_1(x2);
-          if ((Math.abs(y2) < 1e-50) || Math.abs((x1-x0)/x1) < 1e-12)
-             break;
-          if (Math.sign(y2) == Math.sign(y1)) {
-             y1 = y2;
-             x1 = x2;
-          }
-          else {
-             y0 = y2;
-             x0 = x2;
-          }
-       }
-       return x2;
-    }
+   /*********************************************************************/
+   /* Include script: include/zeros.js                                  */
+   /*                                                                   */
 
-    // End include/zeros.js
+   
+   // Zero finding with secant method. https://en.wikipedia.org/wiki/Secant_method
+   function zero_secant(x, fn) {
+      var iter, x0, x1, x2, y0, y1;
+      x1 = x * 1.0;
+      y1 = fn(x1);
+      x2 = x1 * 1.001 + 1e-8;
+      for(iter=0; iter<40; iter++) {
+         x0 = x1;
+         y0 = y1;
+         x1 = x2
+         y1 = fn(x1);
+         if ((Math.abs(y1) < 1e-50) || Math.abs((x1-x0)/x1) < 1e-12)
+            break;
+         if (y0 == y1)
+            x2 = x1 * 1.001 + 1e-8;
+         else
+            x2 = x1 - y1*(x1-x0)/(y1-y0);
+      }
+      return x1;
+   }
 
-    // Setup variables onload
-    function setup() {
+
+   // Zero finding between two points
+   function zero_bisect(x0, x1, fn) {
+      var iter, x2, y0, y1, y2;
+      x0 = x0 * 1.0;
+      x1 = x1 * 1.0;
+      y0 = fn(x0);
+      y1 = func_1(x1);
+      if (Math.sign(y0 * y1) != -1)
+         return '';
+      for(iter=0; iter<80; iter++) {
+         x2 = 0.5 * (x0 + x1);
+         y2 = func_1(x2);
+         if ((Math.abs(y2) < 1e-50) || Math.abs((x1-x0)/x1) < 1e-12)
+            break;
+         if (Math.sign(y2) == Math.sign(y1)) {
+            y1 = y2;
+            x1 = x2;
+         }
+         else {
+            y0 = y2;
+            x0 = x2;
+         }
+      }
+      return x2;
+   }
+
+   /*                                                                   */
+   /* End Include: include/zeros.js                                     */
+   /*********************************************************************/
+
+   // Setup variables onload
+   function setup() {
       var config = query_read();
       if (config.length > 0) {
          var_write(config);
+         var_backup();
       }
       else var_reset();
       calc();
-    }
+   }
 
-    // Compute calculations
-    function calc() {
+   // Compute calculations
+   function calc() {
 
-       // Test variable changes
-       var_read_id();
-       if (var_test_change() == true) {
-          var_backup();
-          query_write();
-       }
-       else return;
+      // Test variable changes
+      var_read_id();
+      if (var_test_change() == true) {
+         var_backup();
+         query_write();
+      }
+      else return;
 
-       // Calculation: Average value of sine wave (offset)
-       V_offset1 = V_min + 0.5 * (V_max - V_min);
+      // Calculation: Average value of sine wave (offset)
+      V_offset1 = V_min + 0.5 * (V_max - V_min);
 
-       // Calculation: RMS value of sine wave (without offset)
-       V_sin_ac_rms = Math.abs(V_max - V_min) * Math.sqrt(0.125);
+      // Calculation: RMS value of sine wave (without offset)
+      V_sin_ac_rms = Math.abs(V_max - V_min) * Math.sqrt(0.125);
 
-       // Calculation: RMS value of sine wave (with offset)
-       V_sin_rms = Math.sqrt(V_sin_ac_rms * V_sin_ac_rms + V_offset1 * V_offset1);
+      // Calculation: RMS value of sine wave (with offset)
+      V_sin_rms = Math.sqrt(V_sin_ac_rms * V_sin_ac_rms + V_offset1 * V_offset1);
 
-       // Calculation: Average value of Triangle wave (offset)
-       V_offset2 = V_min + 0.5 * (V_max - V_min);
+      // Calculation: Average value of Triangle wave (offset)
+      V_offset2 = V_min + 0.5 * (V_max - V_min);
 
-       // Calculation: RMS value of Triangle wave (without offset)
-       V_tri_ac_rms = Math.abs(V_max - V_min) * Math.sqrt(1.0/12);
+      // Calculation: RMS value of Triangle wave (without offset)
+      V_tri_ac_rms = Math.abs(V_max - V_min) * Math.sqrt(1.0/12);
 
-       // Calculation: RMS value of Triangle wave (with offset)
-       V_tri_rms = Math.sqrt(V_tri_ac_rms * V_tri_ac_rms + V_offset2 * V_offset2);
+      // Calculation: RMS value of Triangle wave (with offset)
+      V_tri_rms = Math.sqrt(V_tri_ac_rms * V_tri_ac_rms + V_offset2 * V_offset2);
 
-       // Calculation: Average value of Rectified Sine wave (offset)
-       V_offset3 = V_min + (V_max - V_min) * 2 * D / Math.PI;
+      // Calculation: Average value of Rectified Sine wave (offset)
+      V_offset3 = V_min + (V_max - V_min) * 2 * D / Math.PI;
 
-       // Calculation: RMS value of of Rectified Sine wave (without offset)
-       V_rsin_ac_rms = Math.abs(V_max - V_min) * Math.sqrt(D*(0.5 - 4.0 /(Math.PI*Math.PI)));
+      // Calculation: RMS value of of Rectified Sine wave (without offset)
+      V_rsin_ac_rms = Math.abs(V_max - V_min) * Math.sqrt(D*(0.5 - 4.0 /(Math.PI*Math.PI)));
 
-       // Calculation: RMS value of of Rectified Sine wave (with offset)
-       V_rsin_rms = Math.sqrt(V_rsin_ac_rms * V_rsin_ac_rms + V_offset3 * V_offset3);
+      // Calculation: RMS value of of Rectified Sine wave (with offset)
+      V_rsin_rms = Math.sqrt(V_rsin_ac_rms * V_rsin_ac_rms + V_offset3 * V_offset3);
 
-       // Calculation: Average value of Sawtooth wave (offset)
-       V_offset4 = V_min + D * 0.5 * (V_max - V_min);
+      // Calculation: Average value of Sawtooth wave (offset)
+      V_offset4 = V_min + D * 0.5 * (V_max - V_min);
 
-       // Calculation: RMS value of Sawtooth wave (without offset)
-       V_saw_ac_rms = Math.abs(V_max - V_min) * Math.sqrt(D * 0.0833333);
+      // Calculation: RMS value of Sawtooth wave (without offset)
+      V_saw_ac_rms = Math.abs(V_max - V_min) * Math.sqrt(D * 0.0833333);
 
-       // Calculation: RMS value of Sawtooth wave (with offset)
-       V_saw_rms = Math.sqrt(V_saw_ac_rms * V_saw_ac_rms + V_offset4 * V_offset4);
+      // Calculation: RMS value of Sawtooth wave (with offset)
+      V_saw_rms = Math.sqrt(V_saw_ac_rms * V_saw_ac_rms + V_offset4 * V_offset4);
 
-       // Calculation: Average value of Square wave (offset)
-       V_offset5 = V_min +  D * (V_max - V_min);
+      // Calculation: Average value of Square wave (offset)
+      V_offset5 = V_min +  D * (V_max - V_min);
 
-       // Calculation: RMS value of Square wave (without offset)
-       V_sq_rms = Math.sqrt(V_max*V_max*D + V_min*V_min*(1-D));
-       V_sq_ac_rms = Math.sqrt(V_sq_rms*V_sq_rms - V_offset5 * V_offset5);
+      // Calculation: RMS value of Square wave (without offset)
+      V_sq_rms = Math.sqrt(V_max*V_max*D + V_min*V_min*(1-D));
+      V_sq_ac_rms = Math.sqrt(V_sq_rms*V_sq_rms - V_offset5 * V_offset5);
 
-       // Calculation: RMS value of Square wave (with offset)
+      // Calculation: RMS value of Square wave (with offset)
 
-       // Calculation: RMS value of all waves
-       V_add_rms = Math.sqrt(V1_rms*V1_rms + V2_rms*V2_rms + V3_rms*V3_rms + V4_rms*V4_rms + V5_rms*V5_rms);
+      // Calculation: RMS value of all waves
+      V_add_rms = Math.sqrt(V1_rms*V1_rms + V2_rms*V2_rms + V3_rms*V3_rms + V4_rms*V4_rms + V5_rms*V5_rms);
 
-       // Print variables and calcs
-       print_calc();
-    }
+      // Print variables and calcs
+      print_calc();
+   }
 
-    // Print calcs
-    function print_calc() {
-       document.getElementById("V_offset1").value = num_fix(V_offset1 * 1.0, 5);
-       document.getElementById("V_sin_ac_rms").value = num_fix(V_sin_ac_rms * 1.0, 5);
-       document.getElementById("V_sin_rms").value = num_fix(V_sin_rms * 1.0, 5);
-       document.getElementById("V_offset2").value = num_fix(V_offset2 * 1.0, 5);
-       document.getElementById("V_tri_ac_rms").value = num_fix(V_tri_ac_rms * 1.0, 5);
-       document.getElementById("V_tri_rms").value = num_fix(V_tri_rms * 1.0, 5);
-       document.getElementById("V_offset3").value = num_fix(V_offset3 * 1.0, 5);
-       document.getElementById("V_rsin_ac_rms").value = num_fix(V_rsin_ac_rms * 1.0, 5);
-       document.getElementById("V_rsin_rms").value = num_fix(V_rsin_rms * 1.0, 5);
-       document.getElementById("V_offset4").value = num_fix(V_offset4 * 1.0, 5);
-       document.getElementById("V_saw_ac_rms").value = num_fix(V_saw_ac_rms * 1.0, 5);
-       document.getElementById("V_saw_rms").value = num_fix(V_saw_rms * 1.0, 5);
-       document.getElementById("V_offset5").value = num_fix(V_offset5 * 1.0, 5);
-       document.getElementById("V_sq_ac_rms").value = num_fix(V_sq_ac_rms * 1.0, 5);
-       document.getElementById("V_sq_rms").value = num_fix(V_sq_rms * 1.0, 5);
-       document.getElementById("V_add_rms").value = num_fix(V_add_rms * 1.0, 5);
-    }
+   // Print calcs
+   function print_calc() {
+      document.getElementById("V_offset1").value = num_fix(V_offset1 * 1.0, 5);
+      document.getElementById("V_sin_ac_rms").value = num_fix(V_sin_ac_rms * 1.0, 5);
+      document.getElementById("V_sin_rms").value = num_fix(V_sin_rms * 1.0, 5);
+      document.getElementById("V_offset2").value = num_fix(V_offset2 * 1.0, 5);
+      document.getElementById("V_tri_ac_rms").value = num_fix(V_tri_ac_rms * 1.0, 5);
+      document.getElementById("V_tri_rms").value = num_fix(V_tri_rms * 1.0, 5);
+      document.getElementById("V_offset3").value = num_fix(V_offset3 * 1.0, 5);
+      document.getElementById("V_rsin_ac_rms").value = num_fix(V_rsin_ac_rms * 1.0, 5);
+      document.getElementById("V_rsin_rms").value = num_fix(V_rsin_rms * 1.0, 5);
+      document.getElementById("V_offset4").value = num_fix(V_offset4 * 1.0, 5);
+      document.getElementById("V_saw_ac_rms").value = num_fix(V_saw_ac_rms * 1.0, 5);
+      document.getElementById("V_saw_rms").value = num_fix(V_saw_rms * 1.0, 5);
+      document.getElementById("V_offset5").value = num_fix(V_offset5 * 1.0, 5);
+      document.getElementById("V_sq_ac_rms").value = num_fix(V_sq_ac_rms * 1.0, 5);
+      document.getElementById("V_sq_rms").value = num_fix(V_sq_rms * 1.0, 5);
+      document.getElementById("V_add_rms").value = num_fix(V_add_rms * 1.0, 5);
+   }
 
-    // Read all variables
-    function var_read_id() {
-       V_max = idtonum("V_max") * 1.0; // Variable: Maximum value of signal
-       V_min = idtonum("V_min") * 1.0; // Variable: Minimum value of signal
-       D = idtonum("D") * 1e-02; // Variable: Duty cycle
-       V1_rms = idtonum("V1_rms") * 1.0; // Variable: V_rms of Wave 1
-       V2_rms = idtonum("V2_rms") * 1.0; // Variable: V_rms of Wave 2
-       V3_rms = idtonum("V3_rms") * 1.0; // Variable: V_rms of Wave 3
-       V4_rms = idtonum("V4_rms") * 1.0; // Variable: V_rms of Wave 4
-       V5_rms = idtonum("V5_rms") * 1.0; // Variable: V_rms of Wave 5
-    }
+   // Read all variables
+   function var_read_id() {
+      V_max = idtonum("V_max") * 1.0; // Variable: Maximum value of signal
+      V_min = idtonum("V_min") * 1.0; // Variable: Minimum value of signal
+      D = idtonum("D") * 1e-02; // Variable: Duty cycle
+      V1_rms = idtonum("V1_rms") * 1.0; // Variable: V_rms of Wave 1
+      V2_rms = idtonum("V2_rms") * 1.0; // Variable: V_rms of Wave 2
+      V3_rms = idtonum("V3_rms") * 1.0; // Variable: V_rms of Wave 3
+      V4_rms = idtonum("V4_rms") * 1.0; // Variable: V_rms of Wave 4
+      V5_rms = idtonum("V5_rms") * 1.0; // Variable: V_rms of Wave 5
+   }
 
-    // Reset variables to default values
-    function var_reset() {
-       document.getElementById("V_max").value = 5;
-       document.getElementById("V_min").value = 1;
-       document.getElementById("D").value = 50;
-       document.getElementById("V1_rms").value = 3;
-       document.getElementById("V2_rms").value = 4;
-       document.getElementById("V3_rms").value = '';
-       document.getElementById("V4_rms").value = '';
-       document.getElementById("V5_rms").value = '';
+   // Reset variables to default values
+   function var_reset() {
+      document.getElementById("V_max").value = 5;
+      document.getElementById("V_min").value = 1;
+      document.getElementById("D").value = 50;
+      document.getElementById("V1_rms").value = 3;
+      document.getElementById("V2_rms").value = 4;
+      document.getElementById("V3_rms").value = '';
+      document.getElementById("V4_rms").value = '';
+      document.getElementById("V5_rms").value = '';
 
-       calc();
-    }
+      calc();
+   }
 
-    // Clear variables
-    function var_clear() {
-       document.getElementById("V_max").value = '';
-       document.getElementById("V_min").value = '';
-       document.getElementById("D").value = '';
-       document.getElementById("V1_rms").value = '';
-       document.getElementById("V2_rms").value = '';
-       document.getElementById("V3_rms").value = '';
-       document.getElementById("V4_rms").value = '';
-       document.getElementById("V5_rms").value = '';
+   // Clear variables
+   function var_clear() {
+      document.getElementById("V_max").value = '';
+      document.getElementById("V_min").value = '';
+      document.getElementById("D").value = '';
+      document.getElementById("V1_rms").value = '';
+      document.getElementById("V2_rms").value = '';
+      document.getElementById("V3_rms").value = '';
+      document.getElementById("V4_rms").value = '';
+      document.getElementById("V5_rms").value = '';
 
-       calc();
-    }
+      calc();
+   }
 
-    // Test if there are variable changes
-    var var_values = {};
+   // Test if there are variable changes
+   var var_values = {};
 
-    function var_test_change() {
-       if (var_values["V_max"] != V_max) return true;
-       if (var_values["V_min"] != V_min) return true;
-       if (var_values["D"] != D) return true;
-       if (var_values["V1_rms"] != V1_rms) return true;
-       if (var_values["V2_rms"] != V2_rms) return true;
-       if (var_values["V3_rms"] != V3_rms) return true;
-       if (var_values["V4_rms"] != V4_rms) return true;
-       if (var_values["V5_rms"] != V5_rms) return true;
-       return false;
-    }
+   function var_test_change() {
+      if (var_values["V_max"] != V_max) return true;
+      if (var_values["V_min"] != V_min) return true;
+      if (var_values["D"] != D) return true;
+      if (var_values["V1_rms"] != V1_rms) return true;
+      if (var_values["V2_rms"] != V2_rms) return true;
+      if (var_values["V3_rms"] != V3_rms) return true;
+      if (var_values["V4_rms"] != V4_rms) return true;
+      if (var_values["V5_rms"] != V5_rms) return true;
+      return false;
+   }
 
-    // Copy values of variables
-    function var_backup() {
-       var_values["V_max"] = V_max;
-       var_values["V_min"] = V_min;
-       var_values["D"] = D;
-       var_values["V1_rms"] = V1_rms;
-       var_values["V2_rms"] = V2_rms;
-       var_values["V3_rms"] = V3_rms;
-       var_values["V4_rms"] = V4_rms;
-       var_values["V5_rms"] = V5_rms;
-    }
-    
-    // Write values to variables
-    function var_write(values) {
-       for(var i=0; i<values.length; i++) {
-          document.getElementById(values[i][0]).value = values[i][1];
-       }
-    }
- 
-    // Write query string into url
-    function query_write () {
-       var url = document.location.href.split('?')[0];
-       var query = '';
-       var value;
-       value = encodeURIComponent(document.getElementById("V_max").value)
-       if (value.length) query = query + "V_max=" + value + '&';
-       value = encodeURIComponent(document.getElementById("V_min").value)
-       if (value.length) query = query + "V_min=" + value + '&';
-       value = encodeURIComponent(document.getElementById("D").value)
-       if (value.length) query = query + "D=" + value + '&';
-       value = encodeURIComponent(document.getElementById("V1_rms").value)
-       if (value.length) query = query + "V1_rms=" + value + '&';
-       value = encodeURIComponent(document.getElementById("V2_rms").value)
-       if (value.length) query = query + "V2_rms=" + value + '&';
-       value = encodeURIComponent(document.getElementById("V3_rms").value)
-       if (value.length) query = query + "V3_rms=" + value + '&';
-       value = encodeURIComponent(document.getElementById("V4_rms").value)
-       if (value.length) query = query + "V4_rms=" + value + '&';
-       value = encodeURIComponent(document.getElementById("V5_rms").value)
-       if (value.length) query = query + "V5_rms=" + value + '&';
+   // Copy values of variables
+   function var_backup() {
+      var_values["V_max"] = V_max;
+      var_values["V_min"] = V_min;
+      var_values["D"] = D;
+      var_values["V1_rms"] = V1_rms;
+      var_values["V2_rms"] = V2_rms;
+      var_values["V3_rms"] = V3_rms;
+      var_values["V4_rms"] = V4_rms;
+      var_values["V5_rms"] = V5_rms;
+   }
 
-       history.pushState({id: 'homepage'}, 'Average and RMS value Calculator', url + '?' + query);
-    }
+   // Write values to variables
+   function var_write(values) {
+      for(var i=0; i<values.length; i++) {
+         document.getElementById(values[i][0]).value = values[i][1];
+      }
+   }
 
-    // Read query string from URL
-    function query_read() {
-       var url = document.location.href.split('?');
-       if (url.length < 2)
+   // Write query string into url
+   function query_write () {
+      var url = document.location.href.split('?')[0];
+      var query = '?';
+      var value;
+      value = encodeURIComponent(document.getElementById("V_max").value)
+      if (value.length) query = query + "V_max=" + value + '&';
+      value = encodeURIComponent(document.getElementById("V_min").value)
+      if (value.length) query = query + "V_min=" + value + '&';
+      value = encodeURIComponent(document.getElementById("D").value)
+      if (value.length) query = query + "D=" + value + '&';
+      value = encodeURIComponent(document.getElementById("V1_rms").value)
+      if (value.length) query = query + "V1_rms=" + value + '&';
+      value = encodeURIComponent(document.getElementById("V2_rms").value)
+      if (value.length) query = query + "V2_rms=" + value + '&';
+      value = encodeURIComponent(document.getElementById("V3_rms").value)
+      if (value.length) query = query + "V3_rms=" + value + '&';
+      value = encodeURIComponent(document.getElementById("V4_rms").value)
+      if (value.length) query = query + "V4_rms=" + value + '&';
+      value = encodeURIComponent(document.getElementById("V5_rms").value)
+      if (value.length) query = query + "V5_rms=" + value + '&';
+      if (query.length > 1) url = url + query
+      history.pushState({id: 'homepage'}, 'Average and RMS value Calculator', url);
+   }
+
+   // Read query string from URL
+   function query_read() {
+      var url = document.location.href.split('?');
+      if (url.length < 2)
          return [];
-       var values = url[1].split('&');
-       var vars = [];
-       for(i=0; i<values.length; i++) {
-          var value = values[i].split('=');
-          if (value.length != 2) continue;
-          vars.push[value]; 
-       }
-       return vars;
-    }
+      var values = url[1].split('&');
+      var vars = [];
+      for(i=0; i<values.length; i++) {
+         var value = values[i].split('=');
+         if (value.length != 2) continue;
+         vars.push(value);
+      }
+      return vars;
+   }
 
-    // Evalue inputs with '.' or ',' as comma
-    function idtonum(id) {
-       val = document.getElementById(id).value.replace(',', '.');
-       if (isNaN(val)) return '';
-       return val * 1.0; // return number
-    }
+   // Evalue inputs with '.' or ',' as comma
+   function idtonum(id) {
+      val = document.getElementById(id).value.replace(',', '.');
+      if (isNaN(val)) return '';
+      return val * 1e0; // return number
+   }
 
-    // Format number with fix digits
-    function num_fix(number, digits) {
-       if (!isFinite(number)) return '';
-       if (number == 0) return '0';
-       if (Math.sign(number) < 0)
-          var sign = '-';
-       else
-          var sign = '';
-       number = Math.abs(number)
-       exp = Math.ceil(Math.log10(number) + 0.000001);
-       number = Math.round(number * Math.pow(10, digits - exp)) + '';
-       // Number have fractional part
-       if (digits > exp) {
+   // Format number with fix digits
+   function num_fix(number, digits) {
+      if (!isFinite(number)) return '';
+      if (number == 0) return '0';
+      if (Math.sign(number) < 0)
+         var sign = '-';
+      else
+         var sign = '';
+      number = Math.abs(number)
+      exp = Math.ceil(Math.log10(number) + 0.000001);
+      number = Math.round(number * Math.pow(10, digits - exp)) + '';
+      // Number have fractional part
+      if (digits > exp) {
          // number have only fractional part
          if (exp <= 0) {
             return sign + '0.0000000'.substr(0, 2 - exp) + number;
@@ -420,40 +429,40 @@
          else {
             return sign + number.substr(0, exp) + '.' + number.substr(exp, digits - exp);
          }
-       }
-       // Number with only integer part
-       else {
-          number = number  + '0000000000'
-          return sign + number.substr(0, exp);
-       }
-    }
+      }
+      // Number with only integer part
+      else {
+         number = number  + '0000000000'
+         return sign + number.substr(0, exp);
+      }
+   }
 
-    // Manage keys [Enter] and [tab]
-    function OnKeyPress(evt) {
-       var evt = (evt) ? evt : ((event) ? event : null);
-       var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null);
-       if (node.type=="text") {
-          if (evt.keyCode == 9) { calc(); return; }
+   // Manage keys [Enter] and [tab]
+   function OnKeyPress(evt) {
+      var evt = (evt) ? evt : ((event) ? event : null);
+      var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null);
+      if (node.type=="text") {
+         if (evt.keyCode == 9) { calc(); return; }
          if (evt.keyCode == 13) { calc(); return false; }
-       }
-    }
-    document.onkeypress = OnKeyPress;
-  </script>
+      }
+   }
+   document.onkeypress = OnKeyPress;
+</script>
 
 </head>
 
 
 <body onload="cookies_setup()">
 
-  <!-- Content -->
+<!-- ********** BODY CONTENT ********** -->
 
-<div class="content">
+   <div class="content"> <!-- Start content -->
 
-  <h1>Average and RMS value Calculator</h1>
+   <h1>Average and RMS value Calculator</h1>
 
-    <!--  Image: waves.png -->
-    <img alt="Wave Types"
-         src="data:image/png;base64,
+   <!--  Image: waves.png -->
+   <img alt="Wave Types"
+      src="data:image/png;base64,
 iVBORw0KGgoAAAANSUhEUgAAAi8AAAGnCAYAAAB/37dsAAAACXBIWXMAAA7EAAAOxAGVKw4bAABX
 OklEQVR42u2dC3Qb1bnvPzsvExziYEidFIiTSI4xySWv8pCBOIdHGLnuMQV8Ar09droWMr2XHg2c
 +jZpfRvSZU56SAG5l7NghlVin95LqKHFXGOJVw8JRdMkJ4FwY0JsiWAITVwag01CcBIT3fkkjy0r
@@ -850,247 +859,248 @@ XgAAAAAAIF4AAAAAACBeAAAAAADxAgAAAAAA8QIAAAAAAPECAAAAAAPy/wFOsZ2LOGgqVwAAAABJ
 RU5ErkJggg==
 ">
 
-    <!--  Section: Horizontal line -->
-    
+   <!--  Code HTML: Horizontal line -->
+   
 <hr /> <br />
 
 
 
-    <!--  Buttons Values -->
-    <div class="row">
+   <!--  Buttons: Values -->
+   <div class="row">
       Values
       <input type="button" value="Reset" onclick="var_reset()">
       <input type="button" value="Clear" onclick="var_clear()">
       <input type="button" value="Save" onclick="cookies_var_save()">
       <input type="button" value="Load" onclick="cookies_var_load()">
       <input type="button" value="Query read" onclick="query_read()">
-    </div>
+   </div>
 
-    <!--  Header: Maximum and Minimum values of wave (peak to peak) -->
-    <h2 id="Maximum_and_Minimum_values_of_wave_(peak_to_peak)">Maximum and Minimum values of wave (peak to peak)</h2>
+   <!--  Header: Maximum and Minimum values of wave (peak to peak) -->
+   <h2 id="Maximum_and_Minimum_values_of_wave_(peak_to_peak)">Maximum and Minimum values of wave (peak to peak)</h2>
 
-    <!--  Row  -->
-    <div class="row">
+   <!--  Row: V_max  -->
+   <div class="row">
       <div class="sname">V_max</div>
       <div class="sval"> <form> <input type="text" id="V_max"> </form> </div>
       <div class="sunit">V</div>
       <div class="scoment">Maximum value of signal</div>
-    </div>
+   </div>
 
-    <!--  Row  -->
-    <div class="row">
+   <!--  Row: V_min  -->
+   <div class="row">
       <div class="sname">V_min</div>
       <div class="sval"> <form> <input type="text" id="V_min"> </form> </div>
       <div class="sunit">V</div>
       <div class="scoment">Minimum value of signal</div>
-    </div>
+   </div>
 
-    <!--  Row  -->
-    <div class="row">
+   <!--  Row: D  -->
+   <div class="row">
       <div class="sname">D</div>
       <div class="sval"> <form> <input type="text" id="D"> </form> </div>
       <div class="sunit">%</div>
       <div class="scoment">Duty cycle</div>
-    </div>
+   </div>
 
-    <!--  Header: Sine wave -->
-    <h2 id="Sine_wave">Sine wave</h2>
+   <!--  Header: Sine wave -->
+   <h2 id="Sine_wave">Sine wave</h2>
 
-    <!--  Row  -->
-    <div class="row">
+   <!--  Row: V_offset  -->
+   <div class="row">
       <div class="sname">V_offset</div>
       <div class="scalc"> <form> <input disabled="disabled" type="text" id="V_offset1"> </form> </div>
       <div class="sunit">V</div>
       <div class="scoment">Average value of sine wave (offset)</div>
-    </div>
+   </div>
 
-    <!--  Row  -->
-    <div class="row">
+   <!--  Row: V_sin_ac_rms  -->
+   <div class="row">
       <div class="sname">V_sin_ac_rms</div>
       <div class="scalc"> <form> <input disabled="disabled" type="text" id="V_sin_ac_rms"> </form> </div>
       <div class="sunit">V</div>
       <div class="scoment">RMS value of sine wave (without offset)</div>
-    </div>
+   </div>
 
-    <!--  Row  -->
-    <div class="row">
+   <!--  Row: V_sin_rms  -->
+   <div class="row">
       <div class="sname">V_sin_rms</div>
       <div class="scalc"> <form> <input disabled="disabled" type="text" id="V_sin_rms"> </form> </div>
       <div class="sunit">V</div>
       <div class="scoment">RMS value of sine wave (with offset)</div>
-    </div>
+   </div>
 
-    <!--  Header: Triangle wave -->
-    <h2 id="Triangle_wave">Triangle wave</h2>
+   <!--  Header: Triangle wave -->
+   <h2 id="Triangle_wave">Triangle wave</h2>
 
-    <!--  Row  -->
-    <div class="row">
+   <!--  Row: V_offset  -->
+   <div class="row">
       <div class="sname">V_offset</div>
       <div class="scalc"> <form> <input disabled="disabled" type="text" id="V_offset2"> </form> </div>
       <div class="sunit">V</div>
       <div class="scoment">Average value of Triangle wave (offset)</div>
-    </div>
+   </div>
 
-    <!--  Row  -->
-    <div class="row">
+   <!--  Row: V_tri_ac_rms  -->
+   <div class="row">
       <div class="sname">V_tri_ac_rms</div>
       <div class="scalc"> <form> <input disabled="disabled" type="text" id="V_tri_ac_rms"> </form> </div>
       <div class="sunit">V</div>
       <div class="scoment">RMS value of Triangle wave (without offset)</div>
-    </div>
+   </div>
 
-    <!--  Row  -->
-    <div class="row">
+   <!--  Row: V_tri_rms  -->
+   <div class="row">
       <div class="sname">V_tri_rms</div>
       <div class="scalc"> <form> <input disabled="disabled" type="text" id="V_tri_rms"> </form> </div>
       <div class="sunit">V</div>
       <div class="scoment">RMS value of Triangle wave (with offset)</div>
-    </div>
+   </div>
 
-    <!--  Header: Rectified Sine wave -->
-    <h2 id="Rectified_Sine_wave">Rectified Sine wave</h2>
+   <!--  Header: Rectified Sine wave -->
+   <h2 id="Rectified_Sine_wave">Rectified Sine wave</h2>
 
-    <!--  Row  -->
-    <div class="row">
+   <!--  Row: V_offset  -->
+   <div class="row">
       <div class="sname">V_offset</div>
       <div class="scalc"> <form> <input disabled="disabled" type="text" id="V_offset3"> </form> </div>
       <div class="sunit">V</div>
       <div class="scoment">Average value of Rectified Sine wave (offset)</div>
-    </div>
+   </div>
 
-    <!--  Row  -->
-    <div class="row">
+   <!--  Row: V_rsin_ac_rms  -->
+   <div class="row">
       <div class="sname">V_rsin_ac_rms</div>
       <div class="scalc"> <form> <input disabled="disabled" type="text" id="V_rsin_ac_rms"> </form> </div>
       <div class="sunit">V</div>
       <div class="scoment">RMS value of of Rectified Sine wave (without offset)</div>
-    </div>
+   </div>
 
-    <!--  Row  -->
-    <div class="row">
+   <!--  Row: V_rsin_rms  -->
+   <div class="row">
       <div class="sname">V_rsin_rms</div>
       <div class="scalc"> <form> <input disabled="disabled" type="text" id="V_rsin_rms"> </form> </div>
       <div class="sunit">V</div>
       <div class="scoment">RMS value of of Rectified Sine wave (with offset)</div>
-    </div>
+   </div>
 
-    <!--  Header: Sawtooth wave -->
-    <h2 id="Sawtooth_wave">Sawtooth wave</h2>
+   <!--  Header: Sawtooth wave -->
+   <h2 id="Sawtooth_wave">Sawtooth wave</h2>
 
-    <!--  Row  -->
-    <div class="row">
+   <!--  Row: V_offset  -->
+   <div class="row">
       <div class="sname">V_offset</div>
       <div class="scalc"> <form> <input disabled="disabled" type="text" id="V_offset4"> </form> </div>
       <div class="sunit">V</div>
       <div class="scoment">Average value of Sawtooth wave (offset)</div>
-    </div>
+   </div>
 
-    <!--  Row  -->
-    <div class="row">
+   <!--  Row: V_saw_ac_rms  -->
+   <div class="row">
       <div class="sname">V_saw_ac_rms</div>
       <div class="scalc"> <form> <input disabled="disabled" type="text" id="V_saw_ac_rms"> </form> </div>
       <div class="sunit">V</div>
       <div class="scoment">RMS value of Sawtooth wave (without offset)</div>
-    </div>
+   </div>
 
-    <!--  Row  -->
-    <div class="row">
+   <!--  Row: V_saw_rms  -->
+   <div class="row">
       <div class="sname">V_saw_rms</div>
       <div class="scalc"> <form> <input disabled="disabled" type="text" id="V_saw_rms"> </form> </div>
       <div class="sunit">V</div>
       <div class="scoment">RMS value of Sawtooth wave (with offset)</div>
-    </div>
+   </div>
 
-    <!--  Header: Square wave -->
-    <h2 id="Square_wave">Square wave</h2>
+   <!--  Header: Square wave -->
+   <h2 id="Square_wave">Square wave</h2>
 
-    <!--  Row  -->
-    <div class="row">
+   <!--  Row: V_offset  -->
+   <div class="row">
       <div class="sname">V_offset</div>
       <div class="scalc"> <form> <input disabled="disabled" type="text" id="V_offset5"> </form> </div>
       <div class="sunit">V</div>
       <div class="scoment">Average value of Square wave (offset)</div>
-    </div>
+   </div>
 
-    <!--  Row  -->
-    <div class="row">
+   <!--  Row: V_sq_ac_rms  -->
+   <div class="row">
       <div class="sname">V_sq_ac_rms</div>
       <div class="scalc"> <form> <input disabled="disabled" type="text" id="V_sq_ac_rms"> </form> </div>
       <div class="sunit">V</div>
       <div class="scoment">RMS value of Square wave (without offset)</div>
-    </div>
+   </div>
 
-    <!--  Row  -->
-    <div class="row">
+   <!--  Row: V_sq_rms  -->
+   <div class="row">
       <div class="sname">V_sq_rms</div>
       <div class="scalc"> <form> <input disabled="disabled" type="text" id="V_sq_rms"> </form> </div>
       <div class="sunit">V</div>
       <div class="scoment">RMS value of Square wave (with offset)</div>
-    </div>
+   </div>
 
-    <!--  Header: Sum of waves RMS value -->
-    <h2 id="Sum_of_waves_RMS_value">Sum of waves RMS value</h2>
+   <!--  Header: Sum of waves RMS value -->
+   <h2 id="Sum_of_waves_RMS_value">Sum of waves RMS value</h2>
 
-    <!--  Row  -->
-    <div class="row">
+   <!--  Row: V1_rms  -->
+   <div class="row">
       <div class="sname">V1_rms</div>
       <div class="sval"> <form> <input type="text" id="V1_rms"> </form> </div>
       <div class="sunit">V</div>
       <div class="scoment">V_rms of Wave 1</div>
-    </div>
+   </div>
 
-    <!--  Row  -->
-    <div class="row">
+   <!--  Row: V2_rms  -->
+   <div class="row">
       <div class="sname">V2_rms</div>
       <div class="sval"> <form> <input type="text" id="V2_rms"> </form> </div>
       <div class="sunit">V</div>
       <div class="scoment">V_rms of Wave 2</div>
-    </div>
+   </div>
 
-    <!--  Row  -->
-    <div class="row">
+   <!--  Row: V3_rms  -->
+   <div class="row">
       <div class="sname">V3_rms</div>
       <div class="sval"> <form> <input type="text" id="V3_rms"> </form> </div>
       <div class="sunit">V</div>
       <div class="scoment">V_rms of Wave 3</div>
-    </div>
+   </div>
 
-    <!--  Row  -->
-    <div class="row">
+   <!--  Row: V4_rms  -->
+   <div class="row">
       <div class="sname">V4_rms</div>
       <div class="sval"> <form> <input type="text" id="V4_rms"> </form> </div>
       <div class="sunit">V</div>
       <div class="scoment">V_rms of Wave 4</div>
-    </div>
+   </div>
 
-    <!--  Row  -->
-    <div class="row">
+   <!--  Row: V5_rms  -->
+   <div class="row">
       <div class="sname">V5_rms</div>
       <div class="sval"> <form> <input type="text" id="V5_rms"> </form> </div>
       <div class="sunit">V</div>
       <div class="scoment">V_rms of Wave 5</div>
-    </div>
+   </div>
 
-    <!--  Row  -->
-    <div class="row">
+   <!--  Row: V_add_rms  -->
+   <div class="row">
       <div class="sname">V_add_rms</div>
       <div class="scalc"> <form> <input disabled="disabled" type="text" id="V_add_rms"> </form> </div>
       <div class="sunit">V</div>
       <div class="scoment">RMS value of all waves</div>
-    </div>
+   </div>
 
-</div>  <!-- End content -->
+   </div>  <!-- End content -->
 
-  <!-- Footer -->
 
-  <div class="footer">
-    <!-- License -->
-    This work by <a href="https://github.com/picuino/picalc">Picuino</a>
-    is licensed under a
-    <a rel="GPL License" 
-       href="http://www.gnu.org/licenses/gpl-3.0.html">
-       GPL version 3 license</a>.
-  </div>
+<!-- ********** BODY FOOTER ********** -->
+
+   <div class="footer">
+      <!-- License -->
+      This work by <a href="https://github.com/picuino/picalc">Picuino</a>
+      is licensed under a
+      <a rel="GPL License"
+         href="http://www.gnu.org/licenses/gpl-3.0-standalone.html">
+         GPL version 3 license</a>.
+   </div>
 
 </body>
 

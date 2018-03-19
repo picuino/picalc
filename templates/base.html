@@ -1,36 +1,39 @@
 ﻿<!DOCTYPE html>
 <html lang="en-US">
 
+<!-- ********** HEAD ********** -->
 <head>
 
-  <!-- Head -->
-  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-  <meta charset="UTF-8">
-  <meta name="Keywords" content="{{config.keywords}}">
-  <meta name="Description" content="{{config.description}}">
-  <meta name="Version" content="{{version}}">
-  <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
-  <title>{{config.title}}</title>
+   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+   <meta charset="UTF-8">
+   <meta name="Keywords" content="{{config.keywords}}">
+   <meta name="Description" content="{{config.description}}">
+   <meta name="Version" content="{{version}}">
+   <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
+   <title>{{config.title}}</title>
 
-  <!-- Styles -->
-  <style>
+
+<!-- ********** STYLES ********** -->
+<style>
 {% include "styles.css"  %}
-  </style>
+</style>
 
-  <!-- Script -->
-  <script>
+
+<!-- ********** SCRIPTS ********** -->
+<script>
 {% include "scripts.js"  %}
-  </script>
+</script>
 
 </head>
 
 
 <body onload="{{config.onload}}">
 
-  <!-- Content -->
+<!-- ********** BODY CONTENT ********** -->
 {% include "content.html"  %}
 
-  <!-- Footer -->
+
+<!-- ********** BODY FOOTER ********** -->
 {% include "footer.html"  %}
 
 </body>

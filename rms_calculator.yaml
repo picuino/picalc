@@ -12,13 +12,6 @@
      comment: 20em
 
   resolution: 5
-
-  onload: cookies_setup()
-
-
-include:
-  - type: script
-    name: include/zeros.js
     
 
 # *******************************************************************
@@ -39,11 +32,10 @@ rows:
 - type: buttons
   name: Values
   buttons:
-  - { value: Reset,  onclick: var_reset() }
-  - { value: Clear,  onclick: var_clear() }
-  - { value: Save,   onclick: cookies_var_save() }
-  - { value: Load,   onclick: cookies_var_load() }
-  - { value: Query read,   onclick: query_read() }
+  - { value: Reset,    onclick: var_reset() }
+  - { value: Clear,    onclick: var_clear() }
+  - { value: Copy URL, onclick: query_copy() }
+
 
 # ** INPUT PARAMETER **
 

@@ -1,22 +1,22 @@
-﻿    body {
+﻿   body {
       font: {{config.font.normal_size}}px sans-serif;
       background-color: #f0f4f4;
       margin: 0;
       min-width: {{config.width.min}};
-    }
+   }
 
-    .content {
+   .content {
       max-width: {{config.width.max}};
       margin: 0 auto;
       padding: 16px 16px 32px 16px;
       background-color: #fff;
-    }
+   }
 
-    .row {
+   .row {
       padding-bottom: 2px;
-    }
+   }
 
-    .footer {
+   .footer {
       max-width: {{config.width.max}};
       margin: 0 auto;
       text-align: center;
@@ -24,42 +24,42 @@
       font-size: {{config.font.license_size}}px;
       font-weight: bold;
       background-color: #ddd;
-    }
+   }
 
-    h1 {
+   h1 {
       font-size: 140%;
       font-weight: bold;
       text-transform: uppercase;
       margin: 20px 0 10px 0;
-    }
+   }
 
-    h2 {
+   h2 {
       font-size: 120%;
       font-weight: bold;
       margin: 20px 0 6px 0;
-    }
+   }
 
-    img {
+   img {
       padding: 2px 0 2px 0;
       max-width: 100%;
-    }
+   }
 
-    input[type=button] {
+   input[type=button] {
       font: inherit;
       text-align: center;
       background-color: #eee;
       border: 1px solid #888;
       border-radius: 4px;
-    }
+   }
 
-    /* Column 1: Variable name */
-    .sname {
+   /* Column 1: Variable name */
+   .sname {
       display: inline-block;
       min-width: {{config.width.name}};
-    }
+   }
 
-    /* Column 2: Variable Value (input form) */
-    input[type=text], select, textarea {
+   /* Column 2: Variable Value (input form) */
+   input[type=text], select, textarea {
       width: 100%;
       padding: 1px 4px 0 4px;
       height: {{6 + config.font.normal_size|int}}px;
@@ -68,58 +68,64 @@
       box-sizing: border-box;
       border: 1px solid #888;
       border-radius: 4px;
-    }
+   }
     input[type=text]:disabled {
        color: inherit;
-    }
+   }
 
-    .sval {
+   .sval {
       display: inline-block;
       width: {{config.width.value}};
-    }
-    .sval input[type=text] {
+   }
+   .sval input[type=text] {
       background-color: #FFFFC0;
-    }
+   }
 
-    .sconst {
+   .sconst {
       display: inline-block;
       width: {{config.width.value}};
-    }
-    .sconst input[type=text] {
+   }
+   .sconst input[type=text] {
       background-color: #FFFFFF;
-    }
+   }
 
-    .scalc  {
+   .scalc  {
       display: inline-block;
       width: {{config.width.value}};
-    }
-    .scalc input[type=text] {
+   }
+   .scalc input[type=text] {
       background-color: #C0FFFF;
-    }
+   }
 
-    /* Column 3: Variable Units */
-    .sunit {
+   /* Column 3: Variable Units */
+   .sunit {
       display: inline-block;
       min-width: {{config.width.units}};
       text-align: center;
       border: 1px solid #888;
       border-radius: 4px;
-    }
+   }
 
-    /* Column 4: Variable comment */
-    .scoment {
+   /* Column 4: Variable comment */
+   .scoment {
       display: inline-block;
       min-width: {{config.width.comment}};
-    }
-    
-    
+   }
+
+
 {#- ********** Include external files ********** #}
 
 {%- for inc in include %} {% if inc.type == 'style' %}
 
-    /* Include script: {{inc.name}} */
-    {% include inc.name %}
+   /*********************************************************************/
+   /* Include styles: {{inc.name}}{{' '*(49 - inc.name|length)}} */
+   /*                                                                   */
+   {%- macro include_style(name) %}{% include name %}{% endmacro %}
+   
+   {{ include_style(inc.name)|indent(3) }}
 
-    /* End {{inc.name}}             */
+   /*                                                                   */
+   /* End Include: {{inc.name}}{{' '*(52 - inc.name|length)}} */
+   /*********************************************************************/
 
-{%- endif %}{%- endfor %}
+{% endif %}{%- endfor %}

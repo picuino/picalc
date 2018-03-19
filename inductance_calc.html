@@ -1,38 +1,39 @@
 ﻿<!DOCTYPE html>
 <html lang="en-US">
 
+<!-- ********** HEAD ********** -->
 <head>
 
-  <!-- Head -->
-  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-  <meta charset="UTF-8">
-  <meta name="Keywords" content="Inductance, magnetics, coil, calculator">
-  <meta name="Description" content="Javascript Inductance calculator">
-  <meta name="Version" content="19/03/2018 - SHA:915C2A">
-  <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
-  <title>Inductance Calculator</title>
+   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+   <meta charset="UTF-8">
+   <meta name="Keywords" content="Inductance, magnetics, coil, calculator">
+   <meta name="Description" content="Javascript Inductance calculator">
+   <meta name="Version" content="19/03/2018 - SHA:A0A3CA">
+   <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
+   <title>Inductance Calculator</title>
 
-  <!-- Styles -->
-  <style>
-    body {
+
+<!-- ********** STYLES ********** -->
+<style>
+   body {
       font: 16px sans-serif;
       background-color: #f0f4f4;
       margin: 0;
       min-width: 420px;
-    }
+   }
 
-    .content {
+   .content {
       max-width: 640px;
       margin: 0 auto;
       padding: 16px 16px 32px 16px;
       background-color: #fff;
-    }
+   }
 
-    .row {
+   .row {
       padding-bottom: 2px;
-    }
+   }
 
-    .footer {
+   .footer {
       max-width: 640px;
       margin: 0 auto;
       text-align: center;
@@ -40,42 +41,42 @@
       font-size: 12px;
       font-weight: bold;
       background-color: #ddd;
-    }
+   }
 
-    h1 {
+   h1 {
       font-size: 140%;
       font-weight: bold;
       text-transform: uppercase;
       margin: 20px 0 10px 0;
-    }
+   }
 
-    h2 {
+   h2 {
       font-size: 120%;
       font-weight: bold;
       margin: 20px 0 6px 0;
-    }
+   }
 
-    img {
+   img {
       padding: 2px 0 2px 0;
       max-width: 100%;
-    }
+   }
 
-    input[type=button] {
+   input[type=button] {
       font: inherit;
       text-align: center;
       background-color: #eee;
       border: 1px solid #888;
       border-radius: 4px;
-    }
+   }
 
-    /* Column 1: Variable name */
-    .sname {
+   /* Column 1: Variable name */
+   .sname {
       display: inline-block;
       min-width: 5em;
-    }
+   }
 
-    /* Column 2: Variable Value (input form) */
-    input[type=text], select, textarea {
+   /* Column 2: Variable Value (input form) */
+   input[type=text], select, textarea {
       width: 100%;
       padding: 1px 4px 0 4px;
       height: 22px;
@@ -84,308 +85,315 @@
       box-sizing: border-box;
       border: 1px solid #888;
       border-radius: 4px;
-    }
+   }
     input[type=text]:disabled {
        color: inherit;
-    }
+   }
 
-    .sval {
+   .sval {
       display: inline-block;
       width: 6em;
-    }
-    .sval input[type=text] {
+   }
+   .sval input[type=text] {
       background-color: #FFFFC0;
-    }
+   }
 
-    .sconst {
+   .sconst {
       display: inline-block;
       width: 6em;
-    }
-    .sconst input[type=text] {
+   }
+   .sconst input[type=text] {
       background-color: #FFFFFF;
-    }
+   }
 
-    .scalc  {
+   .scalc  {
       display: inline-block;
       width: 6em;
-    }
-    .scalc input[type=text] {
+   }
+   .scalc input[type=text] {
       background-color: #C0FFFF;
-    }
+   }
 
-    /* Column 3: Variable Units */
-    .sunit {
+   /* Column 3: Variable Units */
+   .sunit {
       display: inline-block;
       min-width: 5em;
       text-align: center;
       border: 1px solid #888;
       border-radius: 4px;
-    }
+   }
 
-    /* Column 4: Variable comment */
-    .scoment {
+   /* Column 4: Variable comment */
+   .scoment {
       display: inline-block;
       min-width: 20em;
-    } 
-  </style>
+   } 
+</style>
 
-  <!-- Script -->
-  <script>
+
+<!-- ********** SCRIPTS ********** -->
+<script>
  
 
-    // Include script: include/cookies.js
-    
-    // Init calculations
-    function cookies_setup() {
-       if  (cookies_read("saved") == 'true')
-          cookies_var_load();
-       else
-          var_reset();
-       calc();
-    }
 
-    // Save variables to cookie
-    function cookies_var_save() {
-       var expiresdate = new Date(2068, 1, 02, 11, 20);
-       expiresdate = "expires=" + expiresdate.toUTCString();
-       var names = ["Ae", "B_max", "AL", "g", "AL_2", "N", "f",  ];
-       for(var i=0; i<names.length; i++) {
-          document.cookie = names[i] + " = " + encodeURIComponent(idtonum(names[i])) + "; " + expiresdate;
-       }
-       document.cookie = "saved = true; " + expiresdate
-    }
+   /*********************************************************************/
+   /* Include script: include/cookies.js                                */
+   /*                                                                   */
 
-    // Load variables from cookie
-    function cookies_var_load() {
-       document.getElementById("Ae").value = cookies_read("Ae");
-       document.getElementById("B_max").value = cookies_read("B_max");
-       document.getElementById("AL").value = cookies_read("AL");
-       document.getElementById("g").value = cookies_read("g");
-       document.getElementById("AL_2").value = cookies_read("AL_2");
-       document.getElementById("N").value = cookies_read("N");
-       document.getElementById("f").value = cookies_read("f");
-       calc();
-    }
+   // Init calculations
+   function cookies_setup() {
+      if  (cookies_read("saved") == 'true')
+         cookies_var_load();
+      else
+         var_reset();
+      calc();
+   }
 
-    // Read cookies
-    function cookies_read(name) {
-       var re = new RegExp(name + "=([^;&]+)");
-       var value = decodeURIComponent(re.exec(document.cookie));
-       if (isFinite(value)) {
-          return value;
-       } 
-       else {
+   // Save variables to cookie
+   function cookies_var_save() {
+      var expiresdate = new Date(2068, 1, 02, 11, 20);
+      expiresdate = "expires=" + expiresdate.toUTCString();
+      var names = ["Ae", "B_max", "AL", "g", "AL_2", "N", "f",  ];
+      for(var i=0; i<names.length; i++) {
+         document.cookie = names[i] + " = " + encodeURIComponent(idtonum(names[i])) + "; " + expiresdate;
+      }
+      document.cookie = "saved = true; " + expiresdate
+   }
+
+   // Load variables from cookie
+   function cookies_var_load() {
+      document.getElementById("Ae").value = cookies_read("Ae");
+      document.getElementById("B_max").value = cookies_read("B_max");
+      document.getElementById("AL").value = cookies_read("AL");
+      document.getElementById("g").value = cookies_read("g");
+      document.getElementById("AL_2").value = cookies_read("AL_2");
+      document.getElementById("N").value = cookies_read("N");
+      document.getElementById("f").value = cookies_read("f");
+      calc();
+   }
+
+   // Read cookies
+   function cookies_read(name) {
+      var re = new RegExp(name + "=([^;&]+)");
+      var value = decodeURIComponent(re.exec(document.cookie));
+      if (isFinite(value)) {
+         return value;
+      }
+      else {
          return '';
-       }
-    }
+      }
+   }
 
-    // End include/cookies.js
+   /*                                                                   */
+   /* End Include: include/cookies.js                                   */
+   /*********************************************************************/
 
-    // Setup variables onload
-    function setup() {
+   // Setup variables onload
+   function setup() {
       var config = query_read();
       if (config.length > 0) {
          var_write(config);
+         var_backup();
       }
       else var_reset();
       calc();
-    }
+   }
 
-    // Compute calculations
-    function calc() {
+   // Compute calculations
+   function calc() {
 
-       // Test variable changes
-       var_read_id();
-       if (var_test_change() == true) {
-          var_backup();
-          query_write();
-       }
-       else return;
+      // Test variable changes
+      var_read_id();
+      if (var_test_change() == true) {
+         var_backup();
+         query_write();
+      }
+      else return;
 
-       // Calculation: Relative lenght of air gap (g/√Ae)
-       g_factor = g / Math.sqrt(Ae);
+      // Calculation: Relative lenght of air gap (g/√Ae)
+      g_factor = g / Math.sqrt(Ae);
 
-       // Calculation: Fringing factor of air gap (+-15% error)
-       Fr_K1 = 2.15;
-       Fr_K2 = 0.74;
-       Fr_factor = 1 + Fr_K1 * Math.pow(g_factor, Fr_K2);
+      // Calculation: Fringing factor of air gap (+-15% error)
+      Fr_K1 = 2.15;
+      Fr_K2 = 0.74;
+      Fr_factor = 1 + Fr_K1 * Math.pow(g_factor, Fr_K2);
 
-       // Calculation: Inductance factor (permeability) of air gap
-       AL_gap = uo * Ae * Fr_factor / g;
+      // Calculation: Inductance factor (permeability) of air gap
+      AL_gap = uo * Ae * Fr_factor / g;
 
-       // Calculation: Total Inductance factor with gap
-       AL_total = 1.0 / ( (1.0 / AL_gap) + (1.0 / AL) );
+      // Calculation: Total Inductance factor with gap
+      AL_total = 1.0 / ( (1.0 / AL_gap) + (1.0 / AL) );
 
-       // Calculation: Coil Inductance
-       L = AL_2 * Math.pow(N, 2);
+      // Calculation: Coil Inductance
+      L = AL_2 * Math.pow(N, 2);
 
-       // Calculation: Maximum Inductor Current
-       I_max = (Ae * B_max) / (AL * N);
+      // Calculation: Maximum Inductor Current
+      I_max = (Ae * B_max) / (AL * N);
 
-       // Calculation: Energy stored in Inductance
-       E_max = 0.5 * Math.pow(I_max, 2) * L;
+      // Calculation: Energy stored in Inductance
+      E_max = 0.5 * Math.pow(I_max, 2) * L;
 
-       // Calculation: Period
-       T = 1.0 / f;
+      // Calculation: Period
+      T = 1.0 / f;
 
-       // Calculation: Maximum sine wave voltage
-       V_sin = I_max * (2 * Math.PI * f) * L / Math.sqrt(2);
+      // Calculation: Maximum sine wave voltage
+      V_sin = I_max * (2 * Math.PI * f) * L / Math.sqrt(2);
 
-       // Calculation: Maximum square wave voltage
-       T = 1.0 / f;
-       V_sq = L * I_max * 2 / ( T / 2.0 );
+      // Calculation: Maximum square wave voltage
+      T = 1.0 / f;
+      V_sq = L * I_max * 2 / ( T / 2.0 );
 
-       // Print variables and calcs
-       print_calc();
-    }
+      // Print variables and calcs
+      print_calc();
+   }
 
-    // Print calcs
-    function print_calc() {
-       document.getElementById("g_factor").value = num_fix(g_factor * 1e+02, 5);
-       document.getElementById("Fr_factor").value = num_fix(Fr_factor * 1.0, 5);
-       document.getElementById("AL_gap").value = num_fix(AL_gap * 1e+09, 5);
-       document.getElementById("AL_total").value = num_fix(AL_total * 1e+09, 5);
-       document.getElementById("L").value = num_fix(L * 1e+06, 5);
-       document.getElementById("I_max").value = num_fix(I_max * 1.0, 5);
-       document.getElementById("E_max").value = num_fix(E_max * 1e+06, 5);
-       document.getElementById("T").value = num_fix(T * 1e+06, 5);
-       document.getElementById("V_sin").value = num_fix(V_sin * 1.0, 5);
-       document.getElementById("V_sq").value = num_fix(V_sq * 1.0, 5);
-       document.getElementById("uo").value = num_fix(1.2566e-6 * 1.0, 5);
-       document.getElementById("ro_cu").value = num_fix(17.24e-9 * 1.0, 5);
-       document.getElementById("Cro_cu").value = num_fix(0.00393 * 1.0, 5);
-    }
+   // Print calcs
+   function print_calc() {
+      document.getElementById("g_factor").value = num_fix(g_factor * 1e+02, 5);
+      document.getElementById("Fr_factor").value = num_fix(Fr_factor * 1.0, 5);
+      document.getElementById("AL_gap").value = num_fix(AL_gap * 1e+09, 5);
+      document.getElementById("AL_total").value = num_fix(AL_total * 1e+09, 5);
+      document.getElementById("L").value = num_fix(L * 1e+06, 5);
+      document.getElementById("I_max").value = num_fix(I_max * 1.0, 5);
+      document.getElementById("E_max").value = num_fix(E_max * 1e+06, 5);
+      document.getElementById("T").value = num_fix(T * 1e+06, 5);
+      document.getElementById("V_sin").value = num_fix(V_sin * 1.0, 5);
+      document.getElementById("V_sq").value = num_fix(V_sq * 1.0, 5);
+      document.getElementById("uo").value = "1.2566e-6";
+      document.getElementById("ro_cu").value = "17.24e-9";
+      document.getElementById("Cro_cu").value = "0.00393";
+   }
 
-    // Read all variables
-    function var_read_id() {
-       Ae = idtonum("Ae") * 1e-06; // Variable: Effective magnetic cross section
-       B_max = idtonum("B_max") * 1e-03; // Variable: Max value of magnetic flux density
-       AL = idtonum("AL") * 1e-09; // Variable: Inductance factor (permeability)
-       g = idtonum("g") * 1e-03; // Variable: Air gap lenght
-       AL_2 = idtonum("AL_2") * 1e-09; // Variable: Inductance factor (permeability)
-       N = idtonum("N") * 1.0; // Variable: Number of winding turns
-       f = idtonum("f") * 1e+03; // Variable: Frequency
-       uo = "1.2566e-6"; // Constant: Permeability of air
-       ro_cu = "17.24e-9"; // Constant: Resistivity of copper at 20ºC
-       Cro_cu = "0.00393"; // Constant: Coefficient of resistivity of copper with temperature
-    }
+   // Read all variables
+   function var_read_id() {
+      Ae = idtonum("Ae") * 1e-06; // Variable: Effective magnetic cross section
+      B_max = idtonum("B_max") * 1e-03; // Variable: Max value of magnetic flux density
+      AL = idtonum("AL") * 1e-09; // Variable: Inductance factor (permeability)
+      g = idtonum("g") * 1e-03; // Variable: Air gap lenght
+      AL_2 = idtonum("AL_2") * 1e-09; // Variable: Inductance factor (permeability)
+      N = idtonum("N") * 1.0; // Variable: Number of winding turns
+      f = idtonum("f") * 1e+03; // Variable: Frequency
+      uo = ( 1.2566e-6 ) * 1e0; // Constant: Permeability of air
+      ro_cu = ( 17.24e-9 ) * 1e0; // Constant: Resistivity of copper at 20ºC
+      Cro_cu = ( 0.00393 ) * 1e0; // Constant: Coefficient of resistivity of copper with temperature
+   }
 
-    // Reset variables to default values
-    function var_reset() {
-       document.getElementById("Ae").value = 683;
-       document.getElementById("B_max").value = 300;
-       document.getElementById("AL").value = 8100;
-       document.getElementById("g").value = 0;
-       document.getElementById("AL_2").value = idtonum("AL");
-       document.getElementById("N").value = 10;
-       document.getElementById("f").value = 20;
+   // Reset variables to default values
+   function var_reset() {
+      document.getElementById("Ae").value = 683;
+      document.getElementById("B_max").value = 300;
+      document.getElementById("AL").value = 8100;
+      document.getElementById("g").value = 0;
+      document.getElementById("AL_2").value = idtonum("AL");
+      document.getElementById("N").value = 10;
+      document.getElementById("f").value = 20;
 
-       calc();
-    }
+      calc();
+   }
 
-    // Clear variables
-    function var_clear() {
-       document.getElementById("Ae").value = '';
-       document.getElementById("B_max").value = '';
-       document.getElementById("AL").value = '';
-       document.getElementById("g").value = '';
-       document.getElementById("AL_2").value = '';
-       document.getElementById("N").value = '';
-       document.getElementById("f").value = '';
+   // Clear variables
+   function var_clear() {
+      document.getElementById("Ae").value = '';
+      document.getElementById("B_max").value = '';
+      document.getElementById("AL").value = '';
+      document.getElementById("g").value = '';
+      document.getElementById("AL_2").value = '';
+      document.getElementById("N").value = '';
+      document.getElementById("f").value = '';
 
-       calc();
-    }
+      calc();
+   }
 
-    // Test if there are variable changes
-    var var_values = {};
+   // Test if there are variable changes
+   var var_values = {};
 
-    function var_test_change() {
-       if (var_values["Ae"] != Ae) return true;
-       if (var_values["B_max"] != B_max) return true;
-       if (var_values["AL"] != AL) return true;
-       if (var_values["g"] != g) return true;
-       if (var_values["AL_2"] != AL_2) return true;
-       if (var_values["N"] != N) return true;
-       if (var_values["f"] != f) return true;
-       return false;
-    }
+   function var_test_change() {
+      if (var_values["Ae"] != Ae) return true;
+      if (var_values["B_max"] != B_max) return true;
+      if (var_values["AL"] != AL) return true;
+      if (var_values["g"] != g) return true;
+      if (var_values["AL_2"] != AL_2) return true;
+      if (var_values["N"] != N) return true;
+      if (var_values["f"] != f) return true;
+      return false;
+   }
 
-    // Copy values of variables
-    function var_backup() {
-       var_values["Ae"] = Ae;
-       var_values["B_max"] = B_max;
-       var_values["AL"] = AL;
-       var_values["g"] = g;
-       var_values["AL_2"] = AL_2;
-       var_values["N"] = N;
-       var_values["f"] = f;
-    }
-    
-    // Write values to variables
-    function var_write(values) {
-       for(var i=0; i<values.length; i++) {
-          document.getElementById(values[i][0]).value = values[i][1];
-       }
-    }
- 
-    // Write query string into url
-    function query_write () {
-       var url = document.location.href.split('?')[0];
-       var query = '';
-       var value;
-       value = encodeURIComponent(document.getElementById("Ae").value)
-       if (value.length) query = query + "Ae=" + value + '&';
-       value = encodeURIComponent(document.getElementById("B_max").value)
-       if (value.length) query = query + "B_max=" + value + '&';
-       value = encodeURIComponent(document.getElementById("AL").value)
-       if (value.length) query = query + "AL=" + value + '&';
-       value = encodeURIComponent(document.getElementById("g").value)
-       if (value.length) query = query + "g=" + value + '&';
-       value = encodeURIComponent(document.getElementById("AL_2").value)
-       if (value.length) query = query + "AL_2=" + value + '&';
-       value = encodeURIComponent(document.getElementById("N").value)
-       if (value.length) query = query + "N=" + value + '&';
-       value = encodeURIComponent(document.getElementById("f").value)
-       if (value.length) query = query + "f=" + value + '&';
+   // Copy values of variables
+   function var_backup() {
+      var_values["Ae"] = Ae;
+      var_values["B_max"] = B_max;
+      var_values["AL"] = AL;
+      var_values["g"] = g;
+      var_values["AL_2"] = AL_2;
+      var_values["N"] = N;
+      var_values["f"] = f;
+   }
 
-       history.pushState({id: 'homepage'}, 'Inductance Calculator', url + '?' + query);
-    }
+   // Write values to variables
+   function var_write(values) {
+      for(var i=0; i<values.length; i++) {
+         document.getElementById(values[i][0]).value = values[i][1];
+      }
+   }
 
-    // Read query string from URL
-    function query_read() {
-       var url = document.location.href.split('?');
-       if (url.length < 2)
+   // Write query string into url
+   function query_write () {
+      var url = document.location.href.split('?')[0];
+      var query = '?';
+      var value;
+      value = encodeURIComponent(document.getElementById("Ae").value)
+      if (value.length) query = query + "Ae=" + value + '&';
+      value = encodeURIComponent(document.getElementById("B_max").value)
+      if (value.length) query = query + "B_max=" + value + '&';
+      value = encodeURIComponent(document.getElementById("AL").value)
+      if (value.length) query = query + "AL=" + value + '&';
+      value = encodeURIComponent(document.getElementById("g").value)
+      if (value.length) query = query + "g=" + value + '&';
+      value = encodeURIComponent(document.getElementById("AL_2").value)
+      if (value.length) query = query + "AL_2=" + value + '&';
+      value = encodeURIComponent(document.getElementById("N").value)
+      if (value.length) query = query + "N=" + value + '&';
+      value = encodeURIComponent(document.getElementById("f").value)
+      if (value.length) query = query + "f=" + value + '&';
+      if (query.length > 1) url = url + query
+      history.pushState({id: 'homepage'}, 'Inductance Calculator', url);
+   }
+
+   // Read query string from URL
+   function query_read() {
+      var url = document.location.href.split('?');
+      if (url.length < 2)
          return [];
-       var values = url[1].split('&');
-       var vars = [];
-       for(i=0; i<values.length; i++) {
-          var value = values[i].split('=');
-          if (value.length != 2) continue;
-          vars.push[value]; 
-       }
-       return vars;
-    }
+      var values = url[1].split('&');
+      var vars = [];
+      for(i=0; i<values.length; i++) {
+         var value = values[i].split('=');
+         if (value.length != 2) continue;
+         vars.push(value);
+      }
+      return vars;
+   }
 
-    // Evalue inputs with '.' or ',' as comma
-    function idtonum(id) {
-       val = document.getElementById(id).value.replace(',', '.');
-       if (isNaN(val)) return '';
-       return val * 1.0; // return number
-    }
+   // Evalue inputs with '.' or ',' as comma
+   function idtonum(id) {
+      val = document.getElementById(id).value.replace(',', '.');
+      if (isNaN(val)) return '';
+      return val * 1e0; // return number
+   }
 
-    // Format number with fix digits
-    function num_fix(number, digits) {
-       if (!isFinite(number)) return '';
-       if (number == 0) return '0';
-       if (Math.sign(number) < 0)
-          var sign = '-';
-       else
-          var sign = '';
-       number = Math.abs(number)
-       exp = Math.ceil(Math.log10(number) + 0.000001);
-       number = Math.round(number * Math.pow(10, digits - exp)) + '';
-       // Number have fractional part
-       if (digits > exp) {
+   // Format number with fix digits
+   function num_fix(number, digits) {
+      if (!isFinite(number)) return '';
+      if (number == 0) return '0';
+      if (Math.sign(number) < 0)
+         var sign = '-';
+      else
+         var sign = '';
+      number = Math.abs(number)
+      exp = Math.ceil(Math.log10(number) + 0.000001);
+      number = Math.round(number * Math.pow(10, digits - exp)) + '';
+      // Number have fractional part
+      if (digits > exp) {
          // number have only fractional part
          if (exp <= 0) {
             return sign + '0.0000000'.substr(0, 2 - exp) + number;
@@ -394,230 +402,231 @@
          else {
             return sign + number.substr(0, exp) + '.' + number.substr(exp, digits - exp);
          }
-       }
-       // Number with only integer part
-       else {
-          number = number  + '0000000000'
-          return sign + number.substr(0, exp);
-       }
-    }
+      }
+      // Number with only integer part
+      else {
+         number = number  + '0000000000'
+         return sign + number.substr(0, exp);
+      }
+   }
 
-    // Manage keys [Enter] and [tab]
-    function OnKeyPress(evt) {
-       var evt = (evt) ? evt : ((event) ? event : null);
-       var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null);
-       if (node.type=="text") {
-          if (evt.keyCode == 9) { calc(); return; }
+   // Manage keys [Enter] and [tab]
+   function OnKeyPress(evt) {
+      var evt = (evt) ? evt : ((event) ? event : null);
+      var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null);
+      if (node.type=="text") {
+         if (evt.keyCode == 9) { calc(); return; }
          if (evt.keyCode == 13) { calc(); return false; }
-       }
-    }
-    document.onkeypress = OnKeyPress;
-  </script>
+      }
+   }
+   document.onkeypress = OnKeyPress;
+</script>
 
 </head>
 
 
 <body onload="cookies_setup()">
 
-  <!-- Content -->
+<!-- ********** BODY CONTENT ********** -->
 
-<div class="content">
+   <div class="content"> <!-- Start content -->
 
-  <h1>Inductance Calculator</h1>
+   <h1>Inductance Calculator</h1>
 
-    <!--  Buttons Values -->
-    <div class="row">
+   <!--  Buttons: Values -->
+   <div class="row">
       Values
       <input type="button" value="Reset" onclick="var_reset()">
       <input type="button" value="Clear" onclick="var_clear()">
       <input type="button" value="Save" onclick="cookies_var_save()">
       <input type="button" value="Load" onclick="cookies_var_load()">
-    </div>
+   </div>
 
-    <!--  Header: Core and phisical constants -->
-    <h2 id="Core_and_phisical_constants">Core and phisical constants</h2>
+   <!--  Header: Core and phisical constants -->
+   <h2 id="Core_and_phisical_constants">Core and phisical constants</h2>
 
-    <!--  Row  -->
-    <div class="row">
+   <!--  Row: Ae  -->
+   <div class="row">
       <div class="sname">Ae</div>
       <div class="sval"> <form> <input type="text" id="Ae"> </form> </div>
       <div class="sunit">mm<sup>2</sup></div>
       <div class="scoment">Effective magnetic cross section</div>
-    </div>
+   </div>
 
-    <!--  Row  -->
-    <div class="row">
+   <!--  Row: B_max  -->
+   <div class="row">
       <div class="sname">B_max</div>
       <div class="sval"> <form> <input type="text" id="B_max"> </form> </div>
       <div class="sunit">mT</div>
       <div class="scoment">Max value of magnetic flux density</div>
-    </div>
+   </div>
 
-    <!--  Row  -->
-    <div class="row">
+   <!--  Row: AL  -->
+   <div class="row">
       <div class="sname">AL</div>
       <div class="sval"> <form> <input type="text" id="AL"> </form> </div>
       <div class="sunit">nH/turn<sup>2</sup></div>
       <div class="scoment">Inductance factor (permeability)</div>
-    </div>
+   </div>
 
-    <!--  Row  -->
-    <div class="row">
+   <!--  Row: uo  -->
+   <div class="row">
       <div class="sname">uo</div>
       <div class="sconst"> <form> <input disabled="disabled" type="text" id="uo"> </form> </div>
       <div class="sunit">V·s/A·m</div>
       <div class="scoment">Permeability of air</div>
-    </div>
+   </div>
 
-    <!--  Row  -->
-    <div class="row">
+   <!--  Row: ro_cu  -->
+   <div class="row">
       <div class="sname">ro_cu</div>
       <div class="sconst"> <form> <input disabled="disabled" type="text" id="ro_cu"> </form> </div>
       <div class="sunit">Ohm/m</div>
       <div class="scoment">Resistivity of copper at 20ºC</div>
-    </div>
+   </div>
 
-    <!--  Row  -->
-    <div class="row">
+   <!--  Row: Cro_cu  -->
+   <div class="row">
       <div class="sname">Cro_cu</div>
       <div class="sconst"> <form> <input disabled="disabled" type="text" id="Cro_cu"> </form> </div>
       <div class="sunit">1/ºC</div>
       <div class="scoment">Coefficient of resistivity of copper with temperature</div>
-    </div>
+   </div>
 
-    <!--  Header: Inductance Factor with Air Gap -->
-    <h2 id="Inductance_Factor_with_Air_Gap">Inductance Factor with Air Gap</h2>
+   <!--  Header: Inductance Factor with Air Gap -->
+   <h2 id="Inductance_Factor_with_Air_Gap">Inductance Factor with Air Gap</h2>
 
-    <!--  Row  -->
-    <div class="row">
+   <!--  Row: g  -->
+   <div class="row">
       <div class="sname">g</div>
       <div class="sval"> <form> <input type="text" id="g"> </form> </div>
       <div class="sunit">mm</div>
       <div class="scoment">Air gap lenght</div>
-    </div>
+   </div>
 
-    <!--  Row  -->
-    <div class="row">
+   <!--  Row: g_factor  -->
+   <div class="row">
       <div class="sname">g_factor</div>
       <div class="scalc"> <form> <input disabled="disabled" type="text" id="g_factor"> </form> </div>
       <div class="sunit">%</div>
       <div class="scoment">Relative lenght of air gap (g/√Ae)</div>
-    </div>
+   </div>
 
-    <!--  Row  -->
-    <div class="row">
+   <!--  Row: Fr_factor  -->
+   <div class="row">
       <div class="sname">Fr_factor</div>
       <div class="scalc"> <form> <input disabled="disabled" type="text" id="Fr_factor"> </form> </div>
       <div class="sunit">&nbsp;</div>
       <div class="scoment">Fringing factor of air gap (+-15% error)</div>
-    </div>
+   </div>
 
-    <!--  Row  -->
-    <div class="row">
+   <!--  Row: AL_gap  -->
+   <div class="row">
       <div class="sname">AL_gap</div>
       <div class="scalc"> <form> <input disabled="disabled" type="text" id="AL_gap"> </form> </div>
       <div class="sunit">nH/turn<sup>2</sup></div>
       <div class="scoment">Inductance factor (permeability) of air gap</div>
-    </div>
+   </div>
 
-    <!--  Row  -->
-    <div class="row">
+   <!--  Row: AL_total  -->
+   <div class="row">
       <div class="sname">AL_total</div>
       <div class="scalc"> <form> <input disabled="disabled" type="text" id="AL_total"> </form> </div>
       <div class="sunit">nH/turn<sup>2</sup></div>
       <div class="scoment">Total Inductance factor with gap</div>
-    </div>
+   </div>
 
-    <!--  Header: Inductance of coil -->
-    <h2 id="Inductance_of_coil">Inductance of coil</h2>
+   <!--  Header: Inductance of coil -->
+   <h2 id="Inductance_of_coil">Inductance of coil</h2>
 
-    <!--  Row  -->
-    <div class="row">
+   <!--  Row: AL  -->
+   <div class="row">
       <div class="sname">AL</div>
       <div class="sval"> <form> <input type="text" id="AL_2"> </form> </div>
       <div class="sunit">nH/turn<sup>2</sup></div>
       <div class="scoment">Inductance factor (permeability)</div>
-    </div>
+   </div>
 
-    <!--  Row  -->
-    <div class="row">
+   <!--  Row: N  -->
+   <div class="row">
       <div class="sname">N</div>
       <div class="sval"> <form> <input type="text" id="N"> </form> </div>
       <div class="sunit">turns</div>
       <div class="scoment">Number of winding turns</div>
-    </div>
+   </div>
 
-    <!--  Row  -->
-    <div class="row">
+   <!--  Row: L  -->
+   <div class="row">
       <div class="sname">L</div>
       <div class="scalc"> <form> <input disabled="disabled" type="text" id="L"> </form> </div>
       <div class="sunit">uH</div>
       <div class="scoment">Coil Inductance</div>
-    </div>
+   </div>
 
-    <!--  Row  -->
-    <div class="row">
+   <!--  Row: I_max  -->
+   <div class="row">
       <div class="sname">I_max</div>
       <div class="scalc"> <form> <input disabled="disabled" type="text" id="I_max"> </form> </div>
       <div class="sunit">A</div>
       <div class="scoment">Maximum Inductor Current</div>
-    </div>
+   </div>
 
-    <!--  Row  -->
-    <div class="row">
+   <!--  Row: E_max  -->
+   <div class="row">
       <div class="sname">E_max</div>
       <div class="scalc"> <form> <input disabled="disabled" type="text" id="E_max"> </form> </div>
       <div class="sunit">uJ</div>
       <div class="scoment">Energy stored in Inductance</div>
-    </div>
+   </div>
 
-    <!--  Header: Maximum Voltage -->
-    <h2 id="Maximum_Voltage">Maximum Voltage</h2>
+   <!--  Header: Maximum Voltage -->
+   <h2 id="Maximum_Voltage">Maximum Voltage</h2>
 
-    <!--  Row  -->
-    <div class="row">
+   <!--  Row: f  -->
+   <div class="row">
       <div class="sname">f</div>
       <div class="sval"> <form> <input type="text" id="f"> </form> </div>
       <div class="sunit">kHz</div>
       <div class="scoment">Frequency</div>
-    </div>
+   </div>
 
-    <!--  Row  -->
-    <div class="row">
+   <!--  Row: T  -->
+   <div class="row">
       <div class="sname">T</div>
       <div class="scalc"> <form> <input disabled="disabled" type="text" id="T"> </form> </div>
       <div class="sunit">us</div>
       <div class="scoment">Period</div>
-    </div>
+   </div>
 
-    <!--  Row  -->
-    <div class="row">
+   <!--  Row: V_sin  -->
+   <div class="row">
       <div class="sname">V_sin</div>
       <div class="scalc"> <form> <input disabled="disabled" type="text" id="V_sin"> </form> </div>
       <div class="sunit">V</div>
       <div class="scoment">Maximum sine wave voltage</div>
-    </div>
+   </div>
 
-    <!--  Row  -->
-    <div class="row">
+   <!--  Row: V_sq  -->
+   <div class="row">
       <div class="sname">V_sq</div>
       <div class="scalc"> <form> <input disabled="disabled" type="text" id="V_sq"> </form> </div>
       <div class="sunit">V</div>
       <div class="scoment">Maximum square wave voltage</div>
-    </div>
+   </div>
 
-</div>  <!-- End content -->
+   </div>  <!-- End content -->
 
-  <!-- Footer -->
 
-  <div class="footer">
-    <!-- License -->
-    This work by <a href="https://github.com/picuino/picalc">Picuino</a>
-    is licensed under a
-    <a rel="GPL License" 
-       href="http://www.gnu.org/licenses/gpl-3.0.html">
-       GPL version 3 license</a>.
-  </div>
+<!-- ********** BODY FOOTER ********** -->
+
+   <div class="footer">
+      <!-- License -->
+      This work by <a href="https://github.com/picuino/picalc">Picuino</a>
+      is licensed under a
+      <a rel="GPL License"
+         href="http://www.gnu.org/licenses/gpl-3.0-standalone.html">
+         GPL version 3 license</a>.
+   </div>
 
 </body>
 

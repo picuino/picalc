@@ -1,60 +1,61 @@
 ﻿
-<div class="content">
+   <div class="content"> <!-- Start content -->
 
-  <h1>{{config.title}}</h1>
+   <h1>{{config.title}}</h1>
 
 {%- for rowdata in rows %}
 
 {%- if rowdata.type == 'header' %}
 
-    <!--  Header: {{rowdata.name}} -->
-    <h2 {%- if 'id' in rowdata %} id="{{rowdata.id}}"{% endif %}>{{rowdata.name}}</h2>
+   <!--  Header: {{rowdata.name}} -->
+   <h2 {%- if 'id' in rowdata %} id="{{rowdata.id}}"{% endif %}>{{rowdata.name}}</h2>
 
 {%- elif rowdata.type == 'html' %}
 
-    <!--  Section: {{rowdata.name}} -->
-    {{rowdata.code}}
+   <!--  Code HTML: {{rowdata.name}} -->
+   {{rowdata.code}}
 
 {%- elif rowdata.type == 'image' %}
 
-    <!--  Image: {{rowdata.name}} -->
-    <img alt="{{rowdata.comment}}" 
-         {%- if 'width' in rowdata %} width="{{rowdata.width}}"{% endif %}
-         {%- if 'height' in rowdata %} height="{{rowdata.height}}"{% endif %}
-         src="{{rowdata.code}}">
+   <!--  Image: {{rowdata.name}} -->
+   <img alt="{{rowdata.comment}}"
+      {%- if 'width' in rowdata %} width="{{rowdata.width}}"{% endif %}
+      {%- if 'height' in rowdata %} height="{{rowdata.height}}"{% endif %}
+      src="{{rowdata.code}}">
 
 {%- elif rowdata.type == 'buttons' %}
 
-    <!--  Buttons {{rowdata.name}} -->
-    <div class="row">
+   <!--  Buttons: {{rowdata.name}} -->
+   <div class="row">
       {{rowdata.name}}
       {%- for button in rowdata.buttons %}
       <input type="button" value="{{button.value}}" onclick="{{button.onclick}}">
       {%- endfor %}
-    </div>
+   </div>
 
-{%- elif rowdata.type in ['var', 'const', 'calc', 'buttons'] %}
+{%- elif rowdata.type in ['var', 'const', 'calc'] %}
 
-    <!--  Row  -->
-    <div class="row">
+   <!--  Row: {{rowdata.name}}  -->
+   <div class="row">
       <div class="sname">{{rowdata.name}}</div>
 
-    {%- if rowdata.type == 'const' %}
+      {%- if rowdata.type == 'const' %}
       <div class="sconst"> <form> <input disabled="disabled" type="text" id="{{rowdata.id}}"> </form> </div>
-    {%- endif %}
+      {%- endif %}
 
-    {%- if rowdata.type == 'var' %}
+      {%- if rowdata.type == 'var' %}
       <div class="sval"> <form> <input type="text" id="{{rowdata.id}}"> </form> </div>
-    {%- endif %}
+      {%- endif %}
 
-    {%- if rowdata.type == 'calc' %}
+      {%- if rowdata.type == 'calc' %}
       <div class="scalc"> <form> <input disabled="disabled" type="text" id="{{rowdata.id}}"> </form> </div>
-    {%- endif %}
+
+      {%- endif %}
       <div class="sunit">{% if rowdata.unit %}{{rowdata.unit}}{% else %}&nbsp;{% endif %}</div>
       <div class="scoment">{{rowdata.comment}}</div>
-    </div>
+   </div>
 
 {%- endif %}
 {%- endfor %}
 
-</div>  <!-- End content -->
+   </div>  <!-- End content -->
