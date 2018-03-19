@@ -137,8 +137,10 @@ class Picalc(object):
          # Translate units to exponential number prefix, if not exist.
          if not 'prefix' in row and row['type'] in ['var', 'const', 'calc']:
             translate = {
-               'n': 1e-9, 'u': 1e-6, 'm': 1e-3,
-               'k': 1e3,  'M': 1e6,  'G': 1e9,
+               'p': 1e-12, 'n': 1e-9,
+               'u': 1e-6, 'm': 1e-3,
+               'k': 1e3,  'M': 1e6,
+               'G': 1e9, 'T': 1e12,         
             }
             if 'unit' in row and isinstance(row['unit'], str) \
                and len(row['unit'])>1 and row['unit'][0] in translate:

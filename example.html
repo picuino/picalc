@@ -8,7 +8,7 @@
    <meta charset="UTF-8">
    <meta name="Keywords" content="Picalc, yaml, help, online calculator">
    <meta name="Description" content="Picalc example calculator with all features of picalc showed">
-   <meta name="Version" content="19/03/2018 - SHA:A04790">
+   <meta name="Version" content="19/03/2018 - SHA:0835AD">
    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
    <title>Picalc example calculator</title>
 
@@ -250,7 +250,7 @@
       value = encodeURIComponent(document.getElementById("D_wire").value)
       if (value.length) query = query + "D_wire=" + value + '&';
       if (query.length > 1) url = url + query
-      history.pushState({id: 'homepage'}, 'Picalc example calculator', url);
+      history.pushState({id: ''}, 'Picalc example calculator', url);
    }
 
    // Read query string from URL
@@ -267,6 +267,25 @@
       }
       return vars;
    }
+
+   // Copy url with query to clipboard
+   function query_copy() {
+      var textArea = document.createElement('textarea');
+      textArea.value = document.location.href;
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      try {
+         document.execCommand('copy');
+      } catch (err) {
+         console.error('Oops, unable to copy url', err);
+      }
+      document.body.removeChild(textArea);
+   }
+
+   window.onpopstate = function(event) {
+      document.location.reload();
+   };
 
    // Evalue inputs with '.' or ',' as comma
    function idtonum(id) {
@@ -490,6 +509,7 @@ AAAAACABAQAAAEACAgAAAAAkIAAAAABy6v8Dq6+5goP0/ZQAAAAASUVORK5CYII=
       Values
       <input type="button" value="Reset" onclick="var_reset()">
       <input type="button" value="Clear" onclick="var_clear()">
+      <input type="button" value="Copy URL" onclick="query_copy()">
    </div>
 
    <!--  Header: Example calculation -->

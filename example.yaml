@@ -36,7 +36,7 @@ config:
      comment: 20em
 
   # Resolution of numbers. 
-  # Resolution: 5 means 5 significative digits.  1234500 or 12.345 or 0.0012345
+  # Number of significant figures. 5 prints 1234500 or 12.345 or 0.0012345
   resolution: 5
 
   # Function executed on page load. setup() is the default one.
@@ -79,7 +79,7 @@ rows:
 
 # 3.1 IMAGES
 # ----------
-# Images are read and encoded in base64 for embbed it in html code
+# Images are read and encoded in base64 for embed it in html code
 - type: image
   width: 320px
   name: example.png
@@ -137,12 +137,14 @@ rows:
 #           Or stored in constants.
 #   unit:   3th column. units used by the variable.
 #           Could be preceded by standard prefix:
+#             p for pico  (1e-12)
 #             n for nano  (1e-9)
 #             u for micro (1e-6)
 #             m for milli (1e-3)
 #             k for kilo  (1e3)
 #             M for Mega  (1e6)
 #             G for Giga  (1e9)
+#             T for Tera  (1e12)
 #           The template understand prefix for simple units.
 #           If the prefix don't match the real unit prefix
 #           (e.g. in mm^2 the real prefix is 1e-6) field 
@@ -150,7 +152,7 @@ rows:
 #   prefix: (optional) multiplicand for the unit used.
 #           If the unit is mm, the prefix must be 1e-3
 #           The template is capable of understand simple prefix
-#           n, u, m, k, M, G. 
+#           p, n, u, m, k, M, G, T
 #   comment: 4th column. Text explaining the variable.
 - type: var
   comment: Diameter of wire 
@@ -182,14 +184,14 @@ rows:
 #   name:   1st column. text with the name of variable showed.
 #   id:     (optional) name of internal variable only in case this 
 #           must be different of name showed.
-#   calc:   2nd column. Formulae or list of formulaes to make
+#   calc:   2nd column. Formula or list of formula to make
 #           calculations.
-#           Could be complemented by standar javascript functions
-#           and external javascript include modules.
+#           Could be complemented by standard JavaScript functions
+#           and external JavaScript include modules.
 #   unit:   3th column. units used by the variable.
 #           Like in vars and constants, using prefix is allowed.
 #   prefix: the multiplicand for the unit used.
-#           All the internal calcs are made in standar units
+#           All the internal calcs are made in standard units
 #           If the unit is mm, the prefix must be 1e-3
 #           The template is capable of understand simple prefix
 #           n, u, m, k, M, G. 

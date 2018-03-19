@@ -8,7 +8,7 @@
    <meta charset="UTF-8">
    <meta name="Keywords" content="Inductance, magnetics, coil, calculator">
    <meta name="Description" content="Javascript Inductance calculator">
-   <meta name="Version" content="19/03/2018 - SHA:A0A3CA">
+   <meta name="Version" content="19/03/2018 - SHA:717166">
    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
    <title>Inductance Calculator</title>
 
@@ -127,66 +127,13 @@
    .scoment {
       display: inline-block;
       min-width: 20em;
-   } 
+   }
 </style>
 
 
 <!-- ********** SCRIPTS ********** -->
 <script>
- 
 
-
-   /*********************************************************************/
-   /* Include script: include/cookies.js                                */
-   /*                                                                   */
-
-   // Init calculations
-   function cookies_setup() {
-      if  (cookies_read("saved") == 'true')
-         cookies_var_load();
-      else
-         var_reset();
-      calc();
-   }
-
-   // Save variables to cookie
-   function cookies_var_save() {
-      var expiresdate = new Date(2068, 1, 02, 11, 20);
-      expiresdate = "expires=" + expiresdate.toUTCString();
-      var names = ["Ae", "B_max", "AL", "g", "AL_2", "N", "f",  ];
-      for(var i=0; i<names.length; i++) {
-         document.cookie = names[i] + " = " + encodeURIComponent(idtonum(names[i])) + "; " + expiresdate;
-      }
-      document.cookie = "saved = true; " + expiresdate
-   }
-
-   // Load variables from cookie
-   function cookies_var_load() {
-      document.getElementById("Ae").value = cookies_read("Ae");
-      document.getElementById("B_max").value = cookies_read("B_max");
-      document.getElementById("AL").value = cookies_read("AL");
-      document.getElementById("g").value = cookies_read("g");
-      document.getElementById("AL_2").value = cookies_read("AL_2");
-      document.getElementById("N").value = cookies_read("N");
-      document.getElementById("f").value = cookies_read("f");
-      calc();
-   }
-
-   // Read cookies
-   function cookies_read(name) {
-      var re = new RegExp(name + "=([^;&]+)");
-      var value = decodeURIComponent(re.exec(document.cookie));
-      if (isFinite(value)) {
-         return value;
-      }
-      else {
-         return '';
-      }
-   }
-
-   /*                                                                   */
-   /* End Include: include/cookies.js                                   */
-   /*********************************************************************/
 
    // Setup variables onload
    function setup() {
@@ -356,7 +303,7 @@
       value = encodeURIComponent(document.getElementById("f").value)
       if (value.length) query = query + "f=" + value + '&';
       if (query.length > 1) url = url + query
-      history.pushState({id: 'homepage'}, 'Inductance Calculator', url);
+      history.pushState({id: ''}, 'Inductance Calculator', url);
    }
 
    // Read query string from URL
@@ -373,6 +320,25 @@
       }
       return vars;
    }
+
+   // Copy url with query to clipboard
+   function query_copy() {
+      var textArea = document.createElement('textarea');
+      textArea.value = document.location.href;
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      try {
+         document.execCommand('copy');
+      } catch (err) {
+         console.error('Oops, unable to copy url', err);
+      }
+      document.body.removeChild(textArea);
+   }
+
+   window.onpopstate = function(event) {
+      document.location.reload();
+   };
 
    // Evalue inputs with '.' or ',' as comma
    function idtonum(id) {
@@ -425,7 +391,7 @@
 </head>
 
 
-<body onload="cookies_setup()">
+<body onload="setup()">
 
 <!-- ********** BODY CONTENT ********** -->
 
@@ -438,8 +404,7 @@
       Values
       <input type="button" value="Reset" onclick="var_reset()">
       <input type="button" value="Clear" onclick="var_clear()">
-      <input type="button" value="Save" onclick="cookies_var_save()">
-      <input type="button" value="Load" onclick="cookies_var_load()">
+      <input type="button" value="Copy URL" onclick="query_copy()">
    </div>
 
    <!--  Header: Core and phisical constants -->

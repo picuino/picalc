@@ -30,20 +30,25 @@
          var_backup();
       }
       else var_reset();
+      query_write();
       calc();
    }
 
-   // Compute calculations
-   function calc() {
 
+   // Recalc values after variables change
+   function recalc() {   
       // Test variable changes
       var_read_id();
       if (var_test_change() == true) {
          var_backup();
          query_write();
+         calc();
       }
-      else return;
-
+   }
+   
+   
+   // Calculate formulas and print values
+   function calc() {
       {%- for rowdata in rows -%} {%- if rowdata.type == 'calc' %}
 
       // Calculation: {{rowdata.comment}}
@@ -99,7 +104,7 @@
          {%- if rowdata.value or rowdata.value == 0 %} {{rowdata.value}}{%- else %} ''{% endif %};
       {%- endif %} {%- endfor %}
 
-      calc();
+      recalc();
    }
 
    // Clear variables
@@ -109,7 +114,7 @@
       document.getElementById("{{rowdata.id}}").value = '';
       {%- endif %} {%- endfor %}
 
-      calc();
+      recalc();
    }
 
    // Test if there are variable changes
@@ -149,7 +154,7 @@
       if (value.length) query = query + "{{rowdata.id}}=" + value + '&';
       {%- endif %} {%- endfor %}
       if (query.length > 1) url = url + query
-      history.pushState({id: 'homepage'}, '{{config.title}}', url);
+      history.pushState({id: ''}, '{{config.title}}', url);
    }
 
    // Read query string from URL
@@ -167,9 +172,25 @@
       return vars;
    }
 
+   // Copy url with query to clipboard
    function query_copy() {
-      return;
+      {#- Info: https://stackoverflow.com/questions/400212/how-do-i-copy-to-the-clipboard-in-javascript #}
+      var textArea = document.createElement('textarea');
+      textArea.value = document.location.href;
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      try {
+         document.execCommand('copy');
+      } catch (err) {
+         console.error('Oops, unable to copy url', err);
+      }
+      document.body.removeChild(textArea);
    }
+
+   window.onpopstate = function(event) {
+      document.location.reload();
+   };
 
 
 {#- ********** Manage numbers ********** #}
@@ -218,8 +239,8 @@
       var evt = (evt) ? evt : ((event) ? event : null);
       var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null);
       if (node.type=="text") {
-         if (evt.keyCode == 9) { calc(); return; }
-         if (evt.keyCode == 13) { calc(); return false; }
+         if (evt.keyCode == 9) { recalc(); return; }
+         if (evt.keyCode == 13) { recalc(); return false; }
       }
    }
    document.onkeypress = OnKeyPress;
