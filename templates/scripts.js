@@ -20,35 +20,12 @@
 {%- endif %}{%- endfor %}
 
 
-{#- ********** Calculate formulaes ********** #}
+{#- ********** Calculate formulas ********** #}
 
-   // Setup variables onload
-   function setup() {
-      var config = query_read();
-      if (config.length > 0) {
-         var_write(config);
-         var_backup();
-      }
-      else var_reset();
-      query_write();
-      calc();
-   }
-
-
-   // Recalc values after variables change
-   function recalc() {   
-      // Test variable changes
-      var_read_id();
-      if (var_test_change() == true) {
-         var_backup();
-         query_write();
-         calc();
-      }
-   }
-   
-   
    // Calculate formulas and print values
    function calc() {
+      var_backup();
+
       {%- for rowdata in rows -%} {%- if rowdata.type == 'calc' %}
 
       // Calculation: {{rowdata.comment}}
@@ -97,24 +74,20 @@
    }
 
    // Reset variables to default values
-   function var_reset() {
+   function var_reset_id() {
 
       {%- for rowdata in rows %} {%- if rowdata.type in ['var'] %}
       document.getElementById("{{rowdata.id}}").value =
          {%- if rowdata.value or rowdata.value == 0 %} {{rowdata.value}}{%- else %} ''{% endif %};
       {%- endif %} {%- endfor %}
-
-      recalc();
    }
 
    // Clear variables
-   function var_clear() {
+   function var_clear_id() {
 
       {%- for rowdata in rows %} {%- if rowdata.type in ['var'] %}
       document.getElementById("{{rowdata.id}}").value = '';
       {%- endif %} {%- endfor %}
-
-      recalc();
    }
 
    // Test if there are variable changes
@@ -135,7 +108,7 @@
    }
 
    // Write values to variables
-   function var_write(values) {
+   function var_write_id(values) {
       for(var i=0; i<values.length; i++) {
          document.getElementById(values[i][0]).value = values[i][1];
       }
@@ -145,7 +118,7 @@
 {#- ********** Manage query strings ********** #}
 
    // Write query string into url
-   function query_write () {
+   function query_write() {
       var url = document.location.href.split('?')[0];
       var query = '?';
       var value;
@@ -154,7 +127,7 @@
       if (value.length) query = query + "{{rowdata.id}}=" + value + '&';
       {%- endif %} {%- endfor %}
       if (query.length > 1) url = url + query
-      history.pushState({id: ''}, '{{config.title}}', url);
+      history.pushState({id: 'picalc'}, '{{config.title}}', url);
    }
 
    // Read query string from URL
@@ -187,10 +160,6 @@
       }
       document.body.removeChild(textArea);
    }
-
-   window.onpopstate = function(event) {
-      document.location.reload();
-   };
 
 
 {#- ********** Manage numbers ********** #}
@@ -232,10 +201,41 @@
    }
 
 
-{#- ********** Manage Keyboard events ********** #}
+{#- ********** Manage events ********** #}
+
+   // Setup variables on page load
+   function setup() {
+      var config = query_read();
+      if (config.length > 0) {
+         var_write_id(config);
+         var_read_id();
+      }
+      else {
+         var_reset_id();
+         var_read_id();
+         query_write();
+      }
+      calc();
+   }
+
+   // Manage browser history
+   window.onpopstate = function OnPopState(event) {
+      var config = query_read();
+      if (config.length == 0) {
+         var_reset_id();
+      }
+      else {
+         var_clear_id();
+         var_write_id(config);
+      }
+      var_read_id();
+      if (var_test_change() == true) {
+         calc();
+      }
+   };
 
    // Manage keys [Enter] and [tab]
-   function OnKeyPress(evt) {
+   document.onkeypress = function OnKeyPress(evt) {
       var evt = (evt) ? evt : ((event) ? event : null);
       var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null);
       if (node.type=="text") {
@@ -243,4 +243,12 @@
          if (evt.keyCode == 13) { recalc(); return false; }
       }
    }
-   document.onkeypress = OnKeyPress;
+
+   // Recalc values after form change
+   function recalc() {
+      var_read_id();
+      if (var_test_change() == true) {
+         query_write();
+         calc();
+      }
+   }

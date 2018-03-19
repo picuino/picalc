@@ -8,7 +8,7 @@
    <meta charset="UTF-8">
    <meta name="Keywords" content="RMS, average, median, value, calculator">
    <meta name="Description" content="JavaScript average and RMS value Calculator">
-   <meta name="Version" content="19/03/2018 - SHA:984EF7">
+   <meta name="Version" content="19/03/2018 - SHA:FAD00C">
    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
    <title>Average and RMS value Calculator</title>
 
@@ -135,27 +135,9 @@
 <script>
 
 
-   // Setup variables onload
-   function setup() {
-      var config = query_read();
-      if (config.length > 0) {
-         var_write(config);
-         var_backup();
-      }
-      else var_reset();
-      calc();
-   }
-
-   // Compute calculations
+   // Calculate formulas and print values
    function calc() {
-
-      // Test variable changes
-      var_read_id();
-      if (var_test_change() == true) {
-         var_backup();
-         query_write();
-      }
-      else return;
+      var_backup();
 
       // Calculation: Average value of sine wave (offset)
       V_offset1 = V_min + 0.5 * (V_max - V_min);
@@ -242,7 +224,7 @@
    }
 
    // Reset variables to default values
-   function var_reset() {
+   function var_reset_id() {
       document.getElementById("V_max").value = 5;
       document.getElementById("V_min").value = 1;
       document.getElementById("D").value = 50;
@@ -251,12 +233,10 @@
       document.getElementById("V3_rms").value = '';
       document.getElementById("V4_rms").value = '';
       document.getElementById("V5_rms").value = '';
-
-      calc();
    }
 
    // Clear variables
-   function var_clear() {
+   function var_clear_id() {
       document.getElementById("V_max").value = '';
       document.getElementById("V_min").value = '';
       document.getElementById("D").value = '';
@@ -265,8 +245,6 @@
       document.getElementById("V3_rms").value = '';
       document.getElementById("V4_rms").value = '';
       document.getElementById("V5_rms").value = '';
-
-      calc();
    }
 
    // Test if there are variable changes
@@ -297,14 +275,14 @@
    }
 
    // Write values to variables
-   function var_write(values) {
+   function var_write_id(values) {
       for(var i=0; i<values.length; i++) {
          document.getElementById(values[i][0]).value = values[i][1];
       }
    }
 
    // Write query string into url
-   function query_write () {
+   function query_write() {
       var url = document.location.href.split('?')[0];
       var query = '?';
       var value;
@@ -325,7 +303,7 @@
       value = encodeURIComponent(document.getElementById("V5_rms").value)
       if (value.length) query = query + "V5_rms=" + value + '&';
       if (query.length > 1) url = url + query
-      history.pushState({id: ''}, 'Average and RMS value Calculator', url);
+      history.pushState({id: 'picalc'}, 'Average and RMS value Calculator', url);
    }
 
    // Read query string from URL
@@ -357,10 +335,6 @@
       }
       document.body.removeChild(textArea);
    }
-
-   window.onpopstate = function(event) {
-      document.location.reload();
-   };
 
    // Evalue inputs with '.' or ',' as comma
    function idtonum(id) {
@@ -398,16 +372,55 @@
       }
    }
 
+   // Setup variables on page load
+   function setup() {
+      var config = query_read();
+      if (config.length > 0) {
+         var_write_id(config);
+         var_read_id();
+      }
+      else {
+         var_reset_id();
+         var_read_id();
+         query_write();
+      }
+      calc();
+   }
+
+   // Manage browser history
+   window.onpopstate = function OnPopState(event) {
+      var config = query_read();
+      if (config.length == 0) {
+         var_reset_id();
+      }
+      else {
+         var_clear_id();
+         var_write_id(config);
+      }
+      var_read_id();
+      if (var_test_change() == true) {
+         calc();
+      }
+   };
+
    // Manage keys [Enter] and [tab]
-   function OnKeyPress(evt) {
+   document.onkeypress = function OnKeyPress(evt) {
       var evt = (evt) ? evt : ((event) ? event : null);
       var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null);
       if (node.type=="text") {
-         if (evt.keyCode == 9) { calc(); return; }
-         if (evt.keyCode == 13) { calc(); return false; }
+         if (evt.keyCode == 9) { recalc(); return; }
+         if (evt.keyCode == 13) { recalc(); return false; }
       }
    }
-   document.onkeypress = OnKeyPress;
+
+   // Recalc values after form change
+   function recalc() {
+      var_read_id();
+      if (var_test_change() == true) {
+         query_write();
+         calc();
+      }
+   }
 </script>
 
 </head>

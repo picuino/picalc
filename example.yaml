@@ -184,8 +184,7 @@ rows:
 #   name:   1st column. text with the name of variable showed.
 #   id:     (optional) name of internal variable only in case this 
 #           must be different of name showed.
-#   calc:   2nd column. Formula or list of formula to make
-#           calculations.
+#   calc:   2nd column. Formula or list of formulas to calculate.
 #           Could be complemented by standard JavaScript functions
 #           and external JavaScript include modules.
 #   unit:   3th column. units used by the variable.
