@@ -8,7 +8,7 @@
    <meta charset="UTF-8">
    <meta name="Keywords" content="Picalc, yaml, help, online calculator">
    <meta name="Description" content="Picalc example calculator with all features of picalc showed">
-   <meta name="Version" content="22/03/2018 - SHA:5DF9A0">
+   <meta name="Version" content="22/03/2018 - SHA:3ADEBE">
    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
    <title>Picalc example calculator</title>
 
@@ -224,6 +224,7 @@
    function button_reset() {
       var_reset_id()
       var_read_id()
+      query_write();
       calc();
    }
    
@@ -231,6 +232,7 @@
    function button_clear() {
       var_clear_id();
       var_read_id();
+      query_write();
       calc();
    }
 

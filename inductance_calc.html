@@ -8,7 +8,7 @@
    <meta charset="UTF-8">
    <meta name="Keywords" content="Inductance, magnetics, coil, calculator">
    <meta name="Description" content="Javascript Inductance calculator">
-   <meta name="Version" content="22/03/2018 - SHA:3C9595">
+   <meta name="Version" content="22/03/2018 - SHA:ACEA87">
    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
    <title>Inductance Calculator</title>
 
@@ -265,6 +265,7 @@
    function button_reset() {
       var_reset_id()
       var_read_id()
+      query_write();
       calc();
    }
    
@@ -272,6 +273,7 @@
    function button_clear() {
       var_clear_id();
       var_read_id();
+      query_write();
       calc();
    }
 
