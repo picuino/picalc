@@ -8,7 +8,7 @@
    <meta charset="UTF-8">
    <meta name="Keywords" content="RMS, average, median, value, calculator">
    <meta name="Description" content="JavaScript average and RMS value Calculator">
-   <meta name="Version" content="19/03/2018 - SHA:FAD00C">
+   <meta name="Version" content="22/03/2018 - SHA:0FB31C">
    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
    <title>Average and RMS value Calculator</title>
 
@@ -87,7 +87,7 @@
       border-radius: 4px;
    }
     input[type=text]:disabled {
-       color: inherit;
+      color: inherit;
    }
 
    .sval {
@@ -223,7 +223,7 @@
       V5_rms = idtonum("V5_rms") * 1.0; // Variable: V_rms of Wave 5
    }
 
-   // Reset variables to default values
+   // Reset variables to default values in html
    function var_reset_id() {
       document.getElementById("V_max").value = 5;
       document.getElementById("V_min").value = 1;
@@ -235,7 +235,7 @@
       document.getElementById("V5_rms").value = '';
    }
 
-   // Clear variables
+   // Clear variables in html
    function var_clear_id() {
       document.getElementById("V_max").value = '';
       document.getElementById("V_min").value = '';
@@ -279,6 +279,25 @@
       for(var i=0; i<values.length; i++) {
          document.getElementById(values[i][0]).value = values[i][1];
       }
+   }
+
+   // Reset variables to default values in html and JavaScript
+   function button_reset() {
+      var_reset_id()
+      var_read_id()
+      calc();
+   }
+   
+   // Clear variables in html and JavaScript
+   function button_clear() {
+      var_clear_id();
+      var_read_id();
+      calc();
+   }
+
+   // Copy to clipboard the url + query string
+   function button_url_copy() {
+      query_copy();
    }
 
    // Write query string into url
@@ -842,9 +861,9 @@ RU5ErkJggg==
    <!--  Buttons: Values -->
    <div class="row">
       Values
-      <input type="button" value="Reset" onclick="var_reset()">
-      <input type="button" value="Clear" onclick="var_clear()">
-      <input type="button" value="Copy URL" onclick="query_copy()">
+      <input type="button" value="Reset" onclick="button_reset()">
+      <input type="button" value="Clear" onclick="button_clear()">
+      <input type="button" value="Copy URL" onclick="button_url_copy()">
    </div>
 
    <!--  Header: Maximum and Minimum values of wave (peak to peak) -->

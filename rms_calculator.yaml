@@ -32,9 +32,9 @@ rows:
 - type: buttons
   name: Values
   buttons:
-  - { value: Reset,    onclick: var_reset() }
-  - { value: Clear,    onclick: var_clear() }
-  - { value: Copy URL, onclick: query_copy() }
+  - { value: Reset,    onclick: button_reset() }
+  - { value: Clear,    onclick: button_clear() }
+  - { value: Copy URL, onclick: button_url_copy() }
 
 
 # ** INPUT PARAMETER **

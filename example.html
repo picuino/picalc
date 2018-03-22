@@ -8,7 +8,7 @@
    <meta charset="UTF-8">
    <meta name="Keywords" content="Picalc, yaml, help, online calculator">
    <meta name="Description" content="Picalc example calculator with all features of picalc showed">
-   <meta name="Version" content="19/03/2018 - SHA:9B5D70">
+   <meta name="Version" content="22/03/2018 - SHA:5DF9A0">
    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
    <title>Picalc example calculator</title>
 
@@ -87,7 +87,7 @@
       border-radius: 4px;
    }
     input[type=text]:disabled {
-       color: inherit;
+      color: inherit;
    }
 
    .sval {
@@ -190,12 +190,12 @@
       Pi = ( 3.14159 ) * 1e0; // Constant: Pi. Ratio of a circle's circumference to its diameter.
    }
 
-   // Reset variables to default values
+   // Reset variables to default values in html
    function var_reset_id() {
       document.getElementById("D_wire").value = 10;
    }
 
-   // Clear variables
+   // Clear variables in html
    function var_clear_id() {
       document.getElementById("D_wire").value = '';
    }
@@ -218,6 +218,25 @@
       for(var i=0; i<values.length; i++) {
          document.getElementById(values[i][0]).value = values[i][1];
       }
+   }
+
+   // Reset variables to default values in html and JavaScript
+   function button_reset() {
+      var_reset_id()
+      var_read_id()
+      calc();
+   }
+   
+   // Clear variables in html and JavaScript
+   function button_clear() {
+      var_clear_id();
+      var_read_id();
+      calc();
+   }
+
+   // Copy to clipboard the url + query string
+   function button_url_copy() {
+      query_copy();
    }
 
    // Write query string into url
@@ -520,9 +539,9 @@ AAAAACABAQAAAEACAgAAAAAkIAAAAABy6v8Dq6+5goP0/ZQAAAAASUVORK5CYII=
    <!--  Buttons: Values -->
    <div class="row">
       Values
-      <input type="button" value="Reset" onclick="var_reset()">
-      <input type="button" value="Clear" onclick="var_clear()">
-      <input type="button" value="Copy URL" onclick="query_copy()">
+      <input type="button" value="Reset" onclick="button_reset()">
+      <input type="button" value="Clear" onclick="button_clear()">
+      <input type="button" value="Copy URL" onclick="button_url_copy()">
    </div>
 
    <!--  Header: Example calculation -->

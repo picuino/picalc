@@ -70,7 +70,7 @@
       border-radius: 4px;
    }
     input[type=text]:disabled {
-       color: inherit;
+      color: inherit;
    }
 
    .sval {

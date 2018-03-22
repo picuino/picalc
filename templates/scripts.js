@@ -73,7 +73,7 @@
       {%- endif %} {%- endfor %}
    }
 
-   // Reset variables to default values
+   // Reset variables to default values in html
    function var_reset_id() {
 
       {%- for rowdata in rows %} {%- if rowdata.type in ['var'] %}
@@ -82,7 +82,7 @@
       {%- endif %} {%- endfor %}
    }
 
-   // Clear variables
+   // Clear variables in html
    function var_clear_id() {
 
       {%- for rowdata in rows %} {%- if rowdata.type in ['var'] %}
@@ -114,6 +114,27 @@
       }
    }
 
+
+{#- ********** Manage Buttons ********** #}
+
+   // Reset variables to default values in html and JavaScript
+   function button_reset() {
+      var_reset_id()
+      var_read_id()
+      calc();
+   }
+   
+   // Clear variables in html and JavaScript
+   function button_clear() {
+      var_clear_id();
+      var_read_id();
+      calc();
+   }
+
+   // Copy to clipboard the url + query string
+   function button_url_copy() {
+      query_copy();
+   }
 
 {#- ********** Manage query strings ********** #}
 

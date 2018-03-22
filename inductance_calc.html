@@ -8,7 +8,7 @@
    <meta charset="UTF-8">
    <meta name="Keywords" content="Inductance, magnetics, coil, calculator">
    <meta name="Description" content="Javascript Inductance calculator">
-   <meta name="Version" content="19/03/2018 - SHA:77476E">
+   <meta name="Version" content="22/03/2018 - SHA:3C9595">
    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
    <title>Inductance Calculator</title>
 
@@ -87,7 +87,7 @@
       border-radius: 4px;
    }
     input[type=text]:disabled {
-       color: inherit;
+      color: inherit;
    }
 
    .sval {
@@ -207,7 +207,7 @@
       Cro_cu = ( 0.00393 ) * 1e0; // Constant: Coefficient of resistivity of copper with temperature
    }
 
-   // Reset variables to default values
+   // Reset variables to default values in html
    function var_reset_id() {
       document.getElementById("Ae").value = 683;
       document.getElementById("B_max").value = 300;
@@ -218,7 +218,7 @@
       document.getElementById("f").value = 20;
    }
 
-   // Clear variables
+   // Clear variables in html
    function var_clear_id() {
       document.getElementById("Ae").value = '';
       document.getElementById("B_max").value = '';
@@ -259,6 +259,25 @@
       for(var i=0; i<values.length; i++) {
          document.getElementById(values[i][0]).value = values[i][1];
       }
+   }
+
+   // Reset variables to default values in html and JavaScript
+   function button_reset() {
+      var_reset_id()
+      var_read_id()
+      calc();
+   }
+   
+   // Clear variables in html and JavaScript
+   function button_clear() {
+      var_clear_id();
+      var_read_id();
+      calc();
+   }
+
+   // Copy to clipboard the url + query string
+   function button_url_copy() {
+      query_copy();
    }
 
    // Write query string into url
@@ -415,9 +434,9 @@
    <!--  Buttons: Values -->
    <div class="row">
       Values
-      <input type="button" value="Reset" onclick="var_reset()">
-      <input type="button" value="Clear" onclick="var_clear()">
-      <input type="button" value="Copy URL" onclick="query_copy()">
+      <input type="button" value="Reset" onclick="button_reset()">
+      <input type="button" value="Clear" onclick="button_clear()">
+      <input type="button" value="Copy URL" onclick="button_url_copy()">
    </div>
 
    <!--  Header: Core and phisical constants -->

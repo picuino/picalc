@@ -21,7 +21,7 @@ function zero_secant(x, fn) {
 }
 
 
-// Zero finding between two points
+// Zero finding between two points with Bisection method
 function zero_bisect(x0, x1, fn) {
    var iter, x2, y0, y1, y2;
    x0 = x0 * 1.0;

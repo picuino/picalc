@@ -106,13 +106,14 @@ rows:
   # value: text to show in button
   # onclick: function to call on click event
   # Included functions:
-  #   Reset: load default values in variables.
-  #   Clear: load empty string to all variables.
+  #   button_reset: load default values in variables.
+  #   button_clear: load empty string to all variables.
+  #   button_url_copy: copy to clipboard url + query strings
   # Other external functions must be loaded in include section 
   # before use it in this database.
-  - { value: Reset,    onclick: var_reset() }
-  - { value: Clear,    onclick: var_clear() }
-  - { value: Copy URL, onclick: query_copy() }
+  - { value: Reset,    onclick: button_reset() }
+  - { value: Clear,    onclick: button_clear() }
+  - { value: Copy URL, onclick: button_url_copy() }
 
 
 # 3.4 HEADERS
