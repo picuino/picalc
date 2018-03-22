@@ -121,6 +121,7 @@
    function button_reset() {
       var_reset_id()
       var_read_id()
+      query_write();
       calc();
    }
    
@@ -128,6 +129,7 @@
    function button_clear() {
       var_clear_id();
       var_read_id();
+      query_write();
       calc();
    }
 
