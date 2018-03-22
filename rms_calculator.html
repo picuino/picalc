@@ -8,7 +8,7 @@
    <meta charset="UTF-8">
    <meta name="Keywords" content="RMS, average, median, value, calculator">
    <meta name="Description" content="JavaScript average and RMS value Calculator">
-   <meta name="Version" content="22/03/2018 - SHA:0FB31C">
+   <meta name="Version" content="22/03/2018 - SHA:1E214C">
    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
    <title>Average and RMS value Calculator</title>
 
@@ -285,6 +285,7 @@
    function button_reset() {
       var_reset_id()
       var_read_id()
+      query_write();
       calc();
    }
    
@@ -292,6 +293,7 @@
    function button_clear() {
       var_clear_id();
       var_read_id();
+      query_write();
       calc();
    }
 
