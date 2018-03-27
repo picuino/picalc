@@ -80,14 +80,17 @@
       border: 1px solid #888;
       border-radius: 4px;
     }
+    select {
+      width: 6em; 
+    }
     .sval {
       display: inline-block;
       width: 6em;
     }
     .sval input[type=text] {
       background-color: #FFFFC0;
-    }
-
+    } 
+    
     .sconst {
       display: inline-block;
       width: 6em;
@@ -123,19 +126,19 @@
 
   <script>
 
-    function func_1() {
+   function func_1() {
       var database = {
          'E30': [130, 230],
          'E45': [145, 245],
          'E80': [180, 280],
       }         
       core = document.getElementById("core").value
-      document.getElementById("P1").value = database[core][0];
-      document.getElementById("P2").value = database[core][1];
-    }
+      var vars_id = ["P1", "P2"];
+      for(var i=0; i<vars_id.length; i++) {
+         document.getElementById(vars_id[i]).value = database[core][i];
+      }
+   }
     
-    function func_2() {
-    }
   
 
 
@@ -150,11 +153,9 @@
 
     <!-- Compute calculations -->
     function calc() {
-
       <!-- Variable: Param 1 -->
       P1 = tonum("P1");
       P2 = tonum("P2");
-
     }
 
     <!-- Reset variables to default values -->
@@ -263,7 +264,7 @@
     
 <form method="post">
    Core: 
-   <select  onchange="func_1()" id="core" name="core">    
+    <select onchange="func_1()" id="core" name="core">    
     <option value="E30" selected="selected">E30</option>
     <option value="E45">E45</option>
     <option value="E80">E80</option>

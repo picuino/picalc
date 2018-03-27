@@ -115,6 +115,33 @@
    }
 
 
+{#- ********** Manage Select forms ********** #}
+
+   {%- for rowdata in rows %} {%- if rowdata.type in ['select'] %}
+
+   // Select: {{rowdata.name}}
+   function select_{{rowdata.id}}() {
+      var database = {
+         {%- for select_data in rowdata.select %}
+         "{{select_data.name}}": {
+            {%- for name in select_data.vars %}"{{name}}": {{select_data.vars[name]}}, {% endfor -%} },
+         {%- endfor %}
+      }         
+      selected_id = document.getElementById("select_{{rowdata.id}}_id").value;
+      data_selected = database[selected_id];
+      if (!data_selected || data_selected.length == 0) 
+         return;
+      var elem;
+      for(var key in data_selected) {
+         elem = document.getElementById(key);
+         if (elem) elem.value = data_selected[key];
+      }
+      var_read_id();
+      calc();
+   }      
+   {%- endif %} {%- endfor %}
+
+
 {#- ********** Manage Buttons ********** #}
 
    // Reset variables to default values in html and JavaScript

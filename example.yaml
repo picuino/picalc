@@ -77,7 +77,15 @@ include:
 
 rows:
 
-# 3.1 IMAGES
+
+# 3.1 HEADERS
+# -----------
+# Insert a header of level 2 <h2>header</h2>
+- type: header
+  name: Example calculation
+  
+  
+# 3.2 IMAGES
 # ----------
 # Images are read and encoded in base64 for embed it in html code
 - type: image
@@ -86,7 +94,7 @@ rows:
   comment: example of embed image
 
   
-# 3.2 RAW HTML CODE
+# 3.3 RAW HTML CODE
 # -----------------
 # Allows inserting all kind of raw html code.
 - type: html
@@ -96,8 +104,29 @@ rows:
       <hr /> <br />
       {% endraw %}
 
-  
-# 3.3 BUTTONS
+
+# 3.4 SELECT
+# ----------
+# Insert a select form witch insert variable values in html page
+# Values always must be represented in standard units.
+# Variables not present in html code will be ignored.
+# Only variables in select field will be written in html code.
+#
+- type: select
+  name: Wire type
+  id: wire_diameter
+  comment: Diameter of wire selection
+  select:
+    - name: AWG24
+      vars: { d_wire: 0,5106e-3, i_max: 4.0 }
+      selected: true
+    - name: AWG26
+      vars: { d_wire: 0,4049e-3, i_max: 3.2 }
+    - name: AWG28
+      vars: { d_wire: 0,3211e-3, i_max: 2.6 }
+
+
+# 3.5 BUTTONS
 # -----------
 # Insert a file of buttons preceded of 'name'.      
 - type: buttons
@@ -116,14 +145,7 @@ rows:
   - { value: Copy URL, onclick: button_url_copy() }
 
 
-# 3.4 HEADERS
-# -----------
-# Insert a header of level 2 <h2>header</h2>
-- type: header
-  name: Example calculation
-  
-  
-# 3.5 VARIABLES AND CONSTANTS 
+# 3.6 VARIABLES AND CONSTANTS 
 # ---------------------------
 # Variables creates an html form where user can write values.
 # Constants show constant values used in calculations. 
@@ -132,8 +154,8 @@ rows:
 # Fields of both:
 #   type: var or const
 #   name:   1st column. text with the name of variable showed.
-#   id:     (optional) name of internal variable only in case this 
-#           must be different of name showed.
+#   id:     (optional) name of internal variable. Must be set if 
+#           internal name is different to showed name.
 #   value:  2nd column. default value writed by var_reset() function.
 #           Or stored in constants.
 #   unit:   3th column. units used by the variable.
@@ -158,6 +180,7 @@ rows:
 - type: var
   comment: Diameter of wire 
   name: D_wire
+  id: d_wire
   value: 10
   unit: mm
 
@@ -169,7 +192,7 @@ rows:
   unit: ''
 
   
-# 3.6 CALCULATIONS
+# 3.7 CALCULATIONS
 # ----------------
 # Calculations made with variables and constants
 #
@@ -205,7 +228,3 @@ rows:
   calc: 
     - foo = 25 * 6
     - Section_of_wire = Math.PI * 0.25 * Math.pow(D_wire, 2)
-
-  
-  
-  

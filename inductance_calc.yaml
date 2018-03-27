@@ -31,13 +31,19 @@ rows:
   name: Core and phisical constants
 
 - type: select
-  comment: Select core and parameter values  
-  name: core
-  values:
-    - E_10_5_5:  { Le: 26.3e-3, Ae: 10.9e-6, Ve:  287e-9 }
-    - E_13_7_4:  { Le: 29.6e-3, Ae: 12.4e-6, Ve:  367e-9 }
-    - E_25_13_7: { Le: 57.5e-3, Ae: 52.5e-6, Ve: 3020e-9, K1: 90, K2: -0.731 }
-    - E_30_15_7: { Le: 67.0e-3, Ae: 60.0e-6, Ve: 4000e-9 }
+  comment: Core parameters
+  name: Core
+  id: core
+  select:
+    - name: E_10_5_5
+      vars: { Le: 26.3e-3, Ae: 10.9e-6, Ve: 287e-9 }
+      selected: true
+    - name: E_13_7_4
+      vars: { Le: 29.6e-3, Ae: 12.4e-6, Ve: 367e-9 }
+    - name: E_25_13_7
+      vars: { Le: 57.5e-3, Ae: 52.5e-6, Ve: 3020e-9, K1: 90, K2: -0.731 }
+    - name: E_30_15_7
+      vars: { Le: 67.0e-3, Ae: 60.0e-6, Ve: 4000e-9 }
   
 - type: var
   comment: Effective magnetic cross section

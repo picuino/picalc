@@ -8,7 +8,7 @@
    <meta charset="UTF-8">
    <meta name="Keywords" content="Inductance, magnetics, coil, calculator">
    <meta name="Description" content="Javascript Inductance calculator">
-   <meta name="Version" content="22/03/2018 - SHA:ACEA87">
+   <meta name="Version" content="26/03/2018 - SHA:6CD27E">
    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
    <title>Inductance Calculator</title>
 
@@ -89,7 +89,12 @@
     input[type=text]:disabled {
       color: inherit;
    }
-
+   
+   .ssel {
+      display: inline-block;
+      width: 11.0em;
+   }
+   
    .sval {
       display: inline-block;
       width: 6em;
@@ -259,6 +264,27 @@
       for(var i=0; i<values.length; i++) {
          document.getElementById(values[i][0]).value = values[i][1];
       }
+   }
+
+   // Select: Core
+   function select_core() {
+      var database = {
+         "E_10_5_5": {"Le": 0.0263, "Ae": 1.09e-05, "Ve": 287e-9, },
+         "E_13_7_4": {"Le": 0.0296, "Ae": 1.24e-05, "Ve": 367e-9, },
+         "E_25_13_7": {"K2": -0.731, "K1": 90, "Le": 0.0575, "Ae": 5.25e-05, "Ve": 3020e-9, },
+         "E_30_15_7": {"Le": 0.067, "Ae": 6e-05, "Ve": 4000e-9, },
+      }         
+      selected_id = document.getElementById("select_core_id").value;
+      data_selected = database[selected_id];
+      if (!data_selected || data_selected.length == 0) 
+         return;
+      var elem;
+      for(var key in data_selected) {
+         elem = document.getElementById(key);
+         if (elem) elem.value = data_selected[key];
+      }
+      var_read_id();
+      calc();
    }
 
    // Reset variables to default values in html and JavaScript
@@ -443,6 +469,18 @@
 
    <!--  Header: Core and phisical constants -->
    <h2 id="Core_and_phisical_constants">Core and phisical constants</h2>
+
+   <!--  Row: Core  -->
+   <div class="row">
+      <div class="sname">Core</div>
+      <select class="ssel" onchange="select_core()" id="select_core_id">
+	   <option value="E_10_5_5"selected="selected">E_10_5_5</option>
+	   <option value="E_13_7_4">E_13_7_4</option>
+	   <option value="E_25_13_7">E_25_13_7</option>
+	   <option value="E_30_15_7">E_30_15_7</option>
+      </select>
+      <div class="scoment">Core parameters</div>
+   </div>
 
    <!--  Row: Ae  -->
    <div class="row">

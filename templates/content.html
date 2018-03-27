@@ -33,6 +33,20 @@
       {%- endfor %}
    </div>
 
+{%- elif rowdata.type == 'select' %}
+
+   <!--  Row: {{rowdata.name}}  -->
+   <div class="row">
+      <div class="sname">{{rowdata.name}}</div>
+      <select class="ssel" onchange="select_{{rowdata.id}}()" id="select_{{rowdata.id}}_id">
+      {%- for select in rowdata.select %}
+	   <option value="{{select.name}}"{% if select.selected %}selected="selected"{% endif %}>{{select.name}}</option>
+      {%- endfor %}
+      </select>
+      <div class="scoment">{{rowdata.comment}}</div>
+   </div>
+
+
 {%- elif rowdata.type in ['var', 'const', 'calc'] %}
 
    <!--  Row: {{rowdata.name}}  -->
