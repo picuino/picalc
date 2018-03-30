@@ -1,5 +1,25 @@
-﻿{%- macro to_numexp_1(num) -%} {{"%1.0e"|format(num|float)}} {%- endmacro %}
-{%- macro to_numexp_5(num) -%} {{"%5.4e"|format(num|float)}} {%- endmacro %}
+﻿{%- macro to_numexp_5(num) -%} {{"%5.4e"|format(num|float)}} {%- endmacro %}
+{%- macro macro_prefix(prefix) -%}{%- if prefix == 1 %} 1.0{% else %} {{"%1.0e"|format(prefix|float)}} {%- endif %} {%- endmacro %}
+
+{#- ********** Global variables ********** #}
+
+   {#- Define global variables #}
+
+   // Global variables and backup
+   {%- for rowdata in rows -%} {%- if rowdata.type in ['var', 'const', 'calc'] %}
+   var {{rowdata.id}};  // {{rowdata.comment}}
+   {%- endif %} {%- endfor %}
+   var variables_backup = {}; // Global variables values backup
+
+   {#- Global variables properties #}
+
+   // Global variables properties
+   var _prefix = {
+     {%- for rowdata in rows -%} {%- if rowdata.type in ['var', 'const', 'calc'] %}
+     "{{rowdata.id}}": {{ macro_prefix(rowdata.prefix) }},
+     {%- endif %} {%- endfor %}
+   };
+
 
 {#- ********** Include external files ********** #}
 
@@ -47,38 +67,55 @@
    // Print calcs
    function print_calc() {
 
+      {#- Write calculate values to html #}
       {%- for rowdata in rows -%} {%- if rowdata.type in ['calc'] %}
-      document.getElementById("{{rowdata.id}}").value = num_fix({{rowdata.id}}
-         {%- if rowdata.prefix == 1 %} * 1.0{% else %} * {{ to_numexp_1(1.0/(rowdata.prefix|float)) }}{% endif %}, {{config.resolution}});
+      document.getElementById("{{rowdata.id}}").value = num_fix({{rowdata.id}} *
+         {{ macro_prefix(1.0/(rowdata.prefix|float)) }}, {{config.resolution}});
       {%- endif %} {%- endfor %}
 
+      {#- Write constants to html #}
       {%- for rowdata in rows -%} {%- if rowdata.type in ['const'] %}
       document.getElementById("{{rowdata.id}}").value = "{{rowdata.value}}";
       {%- endif %} {%- endfor %}
    }
 
+
 {#- ********** Manage variables ********** #}
 
-   // Read all variables
+   // Read variables from html
    function var_read_id() {
 
       {%- for rowdata in rows %} {%- if rowdata.type in ['var'] %}
-      {{rowdata.id}} = idtonum("{{rowdata.id}}")
-         {%- if rowdata.prefix == 1 %} * 1.0{% else %} * {{ to_numexp_1(rowdata.prefix|float) }}
-         {%- endif %}; // Variable: {{rowdata.comment}}
-      {%- endif %} {%- endfor %}
-
-      {%- for rowdata in rows %} {%- if rowdata.type in ['const'] %}
-      {{rowdata.id}} = ( {{rowdata.value}} ) * 1e0; // Constant: {{rowdata.comment}}
+      {{rowdata.id}} = idtonum("{{rowdata.id}}") *
+         {{ macro_prefix(rowdata.prefix) }}; // Variable: {{rowdata.comment}}
       {%- endif %} {%- endfor %}
    }
 
-   // Reset variables to default values in html
-   function var_reset_id() {
+   // Write variables
+   function var_write(config) {
+      var name;
+      for(var i=0; i<config.length; i++) {
+         name = config[i][0];
+         if (name in _prefix) {
+            window[name] = config[i][1];
+         }
+      }
+   }
 
-      {%- for rowdata in rows %} {%- if rowdata.type in ['var'] %}
-      document.getElementById("{{rowdata.id}}").value =
-         {%- if rowdata.value or rowdata.value == 0 %} {{rowdata.value}}{%- else %} ''{% endif %};
+   // Read constants from html
+   function const_read_id() {
+
+      {%- for rowdata in rows %} {%- if rowdata.type in ['const'] %}
+      {{rowdata.id}} = ( {{rowdata.value}} )  *
+         {{ macro_prefix(rowdata.prefix) }}; // Constant: {{rowdata.comment}}
+      {%- endif %} {%- endfor %}
+   }
+
+   // Reset variables to default values
+   function var_reset() {
+
+      {%- for rowdata in rows %} {%- if rowdata.type in ['var', 'const'] %}
+      {{rowdata.id}} = {%- if rowdata.value or rowdata.value == 0 %} ( {{rowdata.value}} ) * {{ macro_prefix(rowdata.prefix) }} {%- else %} ''{% endif %};
       {%- endif %} {%- endfor %}
    }
 
@@ -90,28 +127,40 @@
       {%- endif %} {%- endfor %}
    }
 
-   // Test if there are variable changes
-   var var_values = {};
+   // Clear variables in html
+   function var_clear() {
 
+      {%- for rowdata in rows %} {%- if rowdata.type in ['var'] %}
+      {{rowdata.id}} = '';
+      {%- endif %} {%- endfor %}
+
+      {%- for rowdata in rows %} {%- if rowdata.type in ['const'] %}
+      {{rowdata.id}} = ( {{rowdata.value}} ) * 1e0; // Constant: {{rowdata.comment}}
+      {%- endif %} {%- endfor %}
+   }
+
+   // Test if there are any change in variables
    function var_test_change() {
-      {%- for rowdata in rows %}{%- if rowdata.type in ['var'] %}
-      if (var_values["{{rowdata.id}}"] != {{rowdata.id}}) return true;
-      {%- endif %}{%- endfor %}
+      {%- for rowdata in rows %} {%- if rowdata.type in ['var'] %}
+      if (variables_backup["{{rowdata.id}}"] != {{rowdata.id}}) return true;
+      {%- endif %} {%- endfor %}
       return false;
    }
 
    // Copy values of variables
    function var_backup() {
       {%- for rowdata in rows %} {%- if rowdata.type in ['var'] %}
-      var_values["{{rowdata.id}}"] = {{rowdata.id}};
+      variables_backup["{{rowdata.id}}"] = {{rowdata.id}};
       {%- endif %} {%- endfor %}
    }
 
-   // Write values to variables
-   function var_write_id(values) {
-      for(var i=0; i<values.length; i++) {
-         document.getElementById(values[i][0]).value = values[i][1];
-      }
+   // Write variables values to html forms
+   function var_write_id() {
+      var value;
+      {%- for rowdata in rows %} {%- if rowdata.type in ['var'] %}
+      if ({{rowdata.id}} == "") value = ""; else value = {{rowdata.id}} / _prefix["{{rowdata.id}}"];
+      document.getElementById("{{rowdata.id}}").value = value;
+      {%- endif %} {%- endfor %}
    }
 
 
@@ -126,19 +175,20 @@
          "{{select_data.name}}": {
             {%- for name in select_data.vars %}"{{name}}": {{select_data.vars[name]}}, {% endfor -%} },
          {%- endfor %}
-      }         
+      }
+      // Read selected values
       selected_id = document.getElementById("select_{{rowdata.id}}_id").value;
       data_selected = database[selected_id];
-      if (!data_selected || data_selected.length == 0) 
+      if (!data_selected || data_selected.length == 0)
          return;
-      var elem;
+      // Copy values to variables
       for(var key in data_selected) {
-         elem = document.getElementById(key);
-         if (elem) elem.value = data_selected[key];
+         if (key in window)
+            window[key] = data_selected[key];
       }
-      var_read_id();
+      var_write_id();
       calc();
-   }      
+   }
    {%- endif %} {%- endfor %}
 
 
@@ -146,17 +196,17 @@
 
    // Reset variables to default values in html and JavaScript
    function button_reset() {
-      var_reset_id()
-      var_read_id()
+      var_reset();
       query_write();
+      var_write_id();
       calc();
    }
-   
+
    // Clear variables in html and JavaScript
    function button_clear() {
-      var_clear_id();
-      var_read_id();
+      var_clear();
       query_write();
+      var_write_id();
       calc();
    }
 
@@ -164,6 +214,7 @@
    function button_url_copy() {
       query_copy();
    }
+
 
 {#- ********** Manage query strings ********** #}
 
@@ -173,7 +224,7 @@
       var query = '?';
       var value;
       {%- for rowdata in rows %} {%- if rowdata.type in ['var'] %}
-      value = encodeURIComponent(document.getElementById("{{rowdata.id}}").value)
+      value = encodeURIComponent({{rowdata.id}})
       if (value.length) query = query + "{{rowdata.id}}=" + value + '&';
       {%- endif %} {%- endfor %}
       if (query.length > 1) url = url + query
@@ -257,31 +308,19 @@
    function setup() {
       var config = query_read();
       if (config.length > 0) {
-         var_write_id(config);
-         var_read_id();
+         var_write(config);
       }
       else {
-         var_reset_id();
-         var_read_id();
+         var_reset();
          query_write();
       }
+      var_write_id();
       calc();
    }
 
    // Manage browser history
    window.onpopstate = function OnPopState(event) {
-      var config = query_read();
-      if (config.length == 0) {
-         var_reset_id();
-      }
-      else {
-         var_clear_id();
-         var_write_id(config);
-      }
-      var_read_id();
-      if (var_test_change() == true) {
-         calc();
-      }
+      setup();
    };
 
    // Manage keys [Enter] and [tab]
@@ -294,7 +333,7 @@
       }
    }
 
-   // Recalc values after form change
+   // Recalc values after key pressed
    function recalc() {
       var_read_id();
       if (var_test_change() == true) {

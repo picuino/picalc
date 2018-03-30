@@ -1,6 +1,7 @@
 ﻿config:
   title: Average and RMS value Calculator
-  description: JavaScript average and RMS value Calculator
+  author: Picuino
+  description: JavaScript calculator of average and RMS values
   keywords: RMS, average, median, value, calculator
 
   width:

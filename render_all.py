@@ -124,15 +124,29 @@ class Picalc(object):
       self.output = Template(self.page).render(time_sha_version=self.version)
       return self.output
 
-      
+
+   def valid_name(self, name, id_list):
+      """Return valid JavaScript identificator name not repeated in id_list"""
+      name = re.sub('[^a-zA-Z0-9]', '_', name)
+      if name in id_list:
+         i = 2
+         while ((name + '%d' % i) in id_list):
+            i = i + 1
+         name = name + '%d' % i
+      return name
+
+
    def database_complete(self):
       """Fill empty fields in database
          fill empty id with names
          fill empty prefix with number according with unit prefix"""
+      id_list = []
       for row in self.rows:
-         # Generate id string based on name
-         if not 'id' in row and not row['type'] in ['buttons']:
-            row['id'] = re.sub(' ', '_', row['name'])
+         # Generate identity string based on name with no repeat symbols
+         if not 'id' in row:
+            row['id'] = row['name']
+         row['id'] = self.valid_name(row['id'], id_list)
+         id_list.append(row['id'])
 
          # Translate units to exponential number prefix, if not exist.
          if not 'prefix' in row and row['type'] in ['var', 'const', 'calc']:
@@ -211,6 +225,7 @@ def main():
       if (filename == CONFIG_NAME):
          continue
       process(filename)
+   print('')
 
 
 if __name__ == "__main__":

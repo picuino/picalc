@@ -1,6 +1,7 @@
 ﻿config:
   title: Inductance Calculator
-  description: Javascript Inductance calculator
+  author_: Picuino
+  description: JavaScript calculator of inductances with ferrite core
   keywords: Inductance, magnetics, coil, calculator
 
   width:
@@ -89,13 +90,13 @@ rows:
   name: Inductance Factor with Air Gap
 
 - type: var
-  comment: Air gap lenght
+  comment: Air gap length
   name: g
   value: 0
   unit: mm
 
 - type: calc
-  comment: Relative lenght of air gap (g/√Ae)
+  comment: Relative length of air gap (g/√Ae)
   name: g_factor
   prefix: 1e-2
   unit: '%'

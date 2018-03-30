@@ -19,7 +19,8 @@
 #
 config:
   title: Picalc example calculator
-  description: Picalc example calculator with all features of picalc showed
+  author: Picuino
+  description: Picalc example calculator, with demonstration of all features of picalc
   keywords: Picalc, yaml, help, online calculator
 
   width:
@@ -117,6 +118,10 @@ rows:
   id: wire_diameter
   comment: Diameter of wire selection
   select:
+    # Values must be expressed in units of International System of measurement:
+    # meter, kilogram, second, kelvin, ampere, mole, etc. without prefixes.
+    # Variables not used in the current calculator will be ignored.
+    # This allows you to use the same table in several calculators.
     - name: AWG24
       vars: { d_wire: 0,5106e-3, i_max: 4.0 }
       selected: true

@@ -4,13 +4,16 @@
 <!-- ********** HEAD ********** -->
 <head>
 
-   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-   <meta charset="UTF-8">
-   <meta name="Keywords" content="{{config.keywords}}">
-   <meta name="Description" content="{{config.description}}">
-   <meta name="Version" content="{{version}}">
-   <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
    <title>{{config.title}}</title>
+
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0">
+   {% if config.keywords %}<meta name="keywords" content="{{config.keywords}}">{% endif %}
+   {% if config.author %}<meta name="author" content="{{config.author}}">{% endif %}
+   {% if config.description %}<meta name="description" content="{{config.description}}">{% endif %}
+   <meta name="generator" content="Picalc generator powered by Python and Jinja2"
+   <meta name="version" content="{{version}}">
+
 
 
 <!-- ********** STYLES ********** -->

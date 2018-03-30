@@ -4,13 +4,16 @@
 <!-- ********** HEAD ********** -->
 <head>
 
-   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-   <meta charset="UTF-8">
-   <meta name="Keywords" content="Inductance, magnetics, coil, calculator">
-   <meta name="Description" content="Javascript Inductance calculator">
-   <meta name="Version" content="26/03/2018 - SHA:6CD27E">
-   <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
    <title>Inductance Calculator</title>
+
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0">
+   <meta name="keywords" content="Inductance, magnetics, coil, calculator">
+   
+   <meta name="description" content="JavaScript calculator of inductances with ferrite core">
+   <meta name="generator" content="Picalc generator powered by Python and Jinja2"
+   <meta name="version" content="02/04/2018 - SHA:2A0CF9">
+
 
 
 <!-- ********** STYLES ********** -->
@@ -140,11 +143,58 @@
 <script>
 
 
+   // Global variables and backup
+   var Ae;  // Effective magnetic cross section
+   var B_max;  // Max value of magnetic flux density
+   var AL;  // Inductance factor (permeability)
+   var uo;  // Permeability of air
+   var ro_cu;  // Resistivity of copper at 20ºC
+   var Cro_cu;  // Coefficient of resistivity of copper with temperature
+   var g;  // Air gap length
+   var g_factor;  // Relative length of air gap (g/√Ae)
+   var Fr_factor;  // Fringing factor of air gap (+-15% error)
+   var AL_gap;  // Inductance factor (permeability) of air gap
+   var AL_total;  // Total Inductance factor with gap
+   var AL_2;  // Inductance factor (permeability)
+   var N;  // Number of winding turns
+   var L;  // Coil Inductance
+   var I_max;  // Maximum Inductor Current
+   var E_max;  // Energy stored in Inductance
+   var f;  // Frequency
+   var T;  // Period
+   var V_sin;  // Maximum sine wave voltage
+   var V_sq;  // Maximum square wave voltage
+   var variables_backup = {}; // Global variables values backup
+
+   // Global variables properties
+   var _prefix = {
+     "Ae":  1e-06,
+     "B_max":  1e-03,
+     "AL":  1e-09,
+     "uo":  1.0,
+     "ro_cu":  1.0,
+     "Cro_cu":  1.0,
+     "g":  1e-03,
+     "g_factor":  1e-02,
+     "Fr_factor":  1.0,
+     "AL_gap":  1e-09,
+     "AL_total":  1e-09,
+     "AL_2":  1e-09,
+     "N":  1.0,
+     "L":  1e-06,
+     "I_max":  1.0,
+     "E_max":  1e-06,
+     "f":  1e+03,
+     "T":  1e-06,
+     "V_sin":  1.0,
+     "V_sq":  1.0,
+   };
+
    // Calculate formulas and print values
    function calc() {
       var_backup();
 
-      // Calculation: Relative lenght of air gap (g/√Ae)
+      // Calculation: Relative length of air gap (g/√Ae)
       g_factor = g / Math.sqrt(Ae);
 
       // Calculation: Fringing factor of air gap (+-15% error)
@@ -183,44 +233,82 @@
 
    // Print calcs
    function print_calc() {
-      document.getElementById("g_factor").value = num_fix(g_factor * 1e+02, 5);
-      document.getElementById("Fr_factor").value = num_fix(Fr_factor * 1.0, 5);
-      document.getElementById("AL_gap").value = num_fix(AL_gap * 1e+09, 5);
-      document.getElementById("AL_total").value = num_fix(AL_total * 1e+09, 5);
-      document.getElementById("L").value = num_fix(L * 1e+06, 5);
-      document.getElementById("I_max").value = num_fix(I_max * 1.0, 5);
-      document.getElementById("E_max").value = num_fix(E_max * 1e+06, 5);
-      document.getElementById("T").value = num_fix(T * 1e+06, 5);
-      document.getElementById("V_sin").value = num_fix(V_sin * 1.0, 5);
-      document.getElementById("V_sq").value = num_fix(V_sq * 1.0, 5);
+      document.getElementById("g_factor").value = num_fix(g_factor *
+          1e+02, 5);
+      document.getElementById("Fr_factor").value = num_fix(Fr_factor *
+          1.0, 5);
+      document.getElementById("AL_gap").value = num_fix(AL_gap *
+          1e+09, 5);
+      document.getElementById("AL_total").value = num_fix(AL_total *
+          1e+09, 5);
+      document.getElementById("L").value = num_fix(L *
+          1e+06, 5);
+      document.getElementById("I_max").value = num_fix(I_max *
+          1.0, 5);
+      document.getElementById("E_max").value = num_fix(E_max *
+          1e+06, 5);
+      document.getElementById("T").value = num_fix(T *
+          1e+06, 5);
+      document.getElementById("V_sin").value = num_fix(V_sin *
+          1.0, 5);
+      document.getElementById("V_sq").value = num_fix(V_sq *
+          1.0, 5);
       document.getElementById("uo").value = "1.2566e-6";
       document.getElementById("ro_cu").value = "17.24e-9";
       document.getElementById("Cro_cu").value = "0.00393";
    }
 
-   // Read all variables
+   // Read variables from html
    function var_read_id() {
-      Ae = idtonum("Ae") * 1e-06; // Variable: Effective magnetic cross section
-      B_max = idtonum("B_max") * 1e-03; // Variable: Max value of magnetic flux density
-      AL = idtonum("AL") * 1e-09; // Variable: Inductance factor (permeability)
-      g = idtonum("g") * 1e-03; // Variable: Air gap lenght
-      AL_2 = idtonum("AL_2") * 1e-09; // Variable: Inductance factor (permeability)
-      N = idtonum("N") * 1.0; // Variable: Number of winding turns
-      f = idtonum("f") * 1e+03; // Variable: Frequency
-      uo = ( 1.2566e-6 ) * 1e0; // Constant: Permeability of air
-      ro_cu = ( 17.24e-9 ) * 1e0; // Constant: Resistivity of copper at 20ºC
-      Cro_cu = ( 0.00393 ) * 1e0; // Constant: Coefficient of resistivity of copper with temperature
+      Ae = idtonum("Ae") *
+          1e-06; // Variable: Effective magnetic cross section
+      B_max = idtonum("B_max") *
+          1e-03; // Variable: Max value of magnetic flux density
+      AL = idtonum("AL") *
+          1e-09; // Variable: Inductance factor (permeability)
+      g = idtonum("g") *
+          1e-03; // Variable: Air gap length
+      AL_2 = idtonum("AL_2") *
+          1e-09; // Variable: Inductance factor (permeability)
+      N = idtonum("N") *
+          1.0; // Variable: Number of winding turns
+      f = idtonum("f") *
+          1e+03; // Variable: Frequency
    }
 
-   // Reset variables to default values in html
-   function var_reset_id() {
-      document.getElementById("Ae").value = 683;
-      document.getElementById("B_max").value = 300;
-      document.getElementById("AL").value = 8100;
-      document.getElementById("g").value = 0;
-      document.getElementById("AL_2").value = idtonum("AL");
-      document.getElementById("N").value = 10;
-      document.getElementById("f").value = 20;
+   // Write variables
+   function var_write(config) {
+      var name;
+      for(var i=0; i<config.length; i++) {
+         name = config[i][0];
+         if (name in _prefix) {
+            window[name] = config[i][1];
+         }
+      }
+   }
+
+   // Read constants from html
+   function const_read_id() {
+      uo = ( 1.2566e-6 )  *
+          1.0; // Constant: Permeability of air
+      ro_cu = ( 17.24e-9 )  *
+          1.0; // Constant: Resistivity of copper at 20ºC
+      Cro_cu = ( 0.00393 )  *
+          1.0; // Constant: Coefficient of resistivity of copper with temperature
+   }
+
+   // Reset variables to default values
+   function var_reset() {
+      Ae = ( 683 ) *  1e-06;
+      B_max = ( 300 ) *  1e-03;
+      AL = ( 8100 ) *  1e-09;
+      uo = ( 1.2566e-6 ) *  1.0;
+      ro_cu = ( 17.24e-9 ) *  1.0;
+      Cro_cu = ( 0.00393 ) *  1.0;
+      g = ( 0 ) *  1e-03;
+      AL_2 = ( idtonum("AL") ) *  1e-09;
+      N = ( 10 ) *  1.0;
+      f = ( 20 ) *  1e+03;
    }
 
    // Clear variables in html
@@ -234,36 +322,60 @@
       document.getElementById("f").value = '';
    }
 
-   // Test if there are variable changes
-   var var_values = {};
+   // Clear variables in html
+   function var_clear() {
+      Ae = '';
+      B_max = '';
+      AL = '';
+      g = '';
+      AL_2 = '';
+      N = '';
+      f = '';
+      uo = ( 1.2566e-6 ) * 1e0; // Constant: Permeability of air
+      ro_cu = ( 17.24e-9 ) * 1e0; // Constant: Resistivity of copper at 20ºC
+      Cro_cu = ( 0.00393 ) * 1e0; // Constant: Coefficient of resistivity of copper with temperature
+   }
 
+   // Test if there are any change in variables
    function var_test_change() {
-      if (var_values["Ae"] != Ae) return true;
-      if (var_values["B_max"] != B_max) return true;
-      if (var_values["AL"] != AL) return true;
-      if (var_values["g"] != g) return true;
-      if (var_values["AL_2"] != AL_2) return true;
-      if (var_values["N"] != N) return true;
-      if (var_values["f"] != f) return true;
+      if (variables_backup["Ae"] != Ae) return true;
+      if (variables_backup["B_max"] != B_max) return true;
+      if (variables_backup["AL"] != AL) return true;
+      if (variables_backup["g"] != g) return true;
+      if (variables_backup["AL_2"] != AL_2) return true;
+      if (variables_backup["N"] != N) return true;
+      if (variables_backup["f"] != f) return true;
       return false;
    }
 
    // Copy values of variables
    function var_backup() {
-      var_values["Ae"] = Ae;
-      var_values["B_max"] = B_max;
-      var_values["AL"] = AL;
-      var_values["g"] = g;
-      var_values["AL_2"] = AL_2;
-      var_values["N"] = N;
-      var_values["f"] = f;
+      variables_backup["Ae"] = Ae;
+      variables_backup["B_max"] = B_max;
+      variables_backup["AL"] = AL;
+      variables_backup["g"] = g;
+      variables_backup["AL_2"] = AL_2;
+      variables_backup["N"] = N;
+      variables_backup["f"] = f;
    }
 
-   // Write values to variables
-   function var_write_id(values) {
-      for(var i=0; i<values.length; i++) {
-         document.getElementById(values[i][0]).value = values[i][1];
-      }
+   // Write variables values to html forms
+   function var_write_id() {
+      var value;
+      if (Ae == "") value = ""; else value = Ae / _prefix["Ae"];
+      document.getElementById("Ae").value = value;
+      if (B_max == "") value = ""; else value = B_max / _prefix["B_max"];
+      document.getElementById("B_max").value = value;
+      if (AL == "") value = ""; else value = AL / _prefix["AL"];
+      document.getElementById("AL").value = value;
+      if (g == "") value = ""; else value = g / _prefix["g"];
+      document.getElementById("g").value = value;
+      if (AL_2 == "") value = ""; else value = AL_2 / _prefix["AL_2"];
+      document.getElementById("AL_2").value = value;
+      if (N == "") value = ""; else value = N / _prefix["N"];
+      document.getElementById("N").value = value;
+      if (f == "") value = ""; else value = f / _prefix["f"];
+      document.getElementById("f").value = value;
    }
 
    // Select: Core
@@ -273,33 +385,34 @@
          "E_13_7_4": {"Le": 0.0296, "Ae": 1.24e-05, "Ve": 367e-9, },
          "E_25_13_7": {"K2": -0.731, "K1": 90, "Le": 0.0575, "Ae": 5.25e-05, "Ve": 3020e-9, },
          "E_30_15_7": {"Le": 0.067, "Ae": 6e-05, "Ve": 4000e-9, },
-      }         
+      }
+      // Read selected values
       selected_id = document.getElementById("select_core_id").value;
       data_selected = database[selected_id];
-      if (!data_selected || data_selected.length == 0) 
+      if (!data_selected || data_selected.length == 0)
          return;
-      var elem;
+      // Copy values to variables
       for(var key in data_selected) {
-         elem = document.getElementById(key);
-         if (elem) elem.value = data_selected[key];
+         if (key in window)
+            window[key] = data_selected[key];
       }
-      var_read_id();
+      var_write_id();
       calc();
    }
 
    // Reset variables to default values in html and JavaScript
    function button_reset() {
-      var_reset_id()
-      var_read_id()
+      var_reset();
       query_write();
+      var_write_id();
       calc();
    }
-   
+
    // Clear variables in html and JavaScript
    function button_clear() {
-      var_clear_id();
-      var_read_id();
+      var_clear();
       query_write();
+      var_write_id();
       calc();
    }
 
@@ -313,19 +426,19 @@
       var url = document.location.href.split('?')[0];
       var query = '?';
       var value;
-      value = encodeURIComponent(document.getElementById("Ae").value)
+      value = encodeURIComponent(Ae)
       if (value.length) query = query + "Ae=" + value + '&';
-      value = encodeURIComponent(document.getElementById("B_max").value)
+      value = encodeURIComponent(B_max)
       if (value.length) query = query + "B_max=" + value + '&';
-      value = encodeURIComponent(document.getElementById("AL").value)
+      value = encodeURIComponent(AL)
       if (value.length) query = query + "AL=" + value + '&';
-      value = encodeURIComponent(document.getElementById("g").value)
+      value = encodeURIComponent(g)
       if (value.length) query = query + "g=" + value + '&';
-      value = encodeURIComponent(document.getElementById("AL_2").value)
+      value = encodeURIComponent(AL_2)
       if (value.length) query = query + "AL_2=" + value + '&';
-      value = encodeURIComponent(document.getElementById("N").value)
+      value = encodeURIComponent(N)
       if (value.length) query = query + "N=" + value + '&';
-      value = encodeURIComponent(document.getElementById("f").value)
+      value = encodeURIComponent(f)
       if (value.length) query = query + "f=" + value + '&';
       if (query.length > 1) url = url + query
       history.pushState({id: 'picalc'}, 'Inductance Calculator', url);
@@ -401,31 +514,19 @@
    function setup() {
       var config = query_read();
       if (config.length > 0) {
-         var_write_id(config);
-         var_read_id();
+         var_write(config);
       }
       else {
-         var_reset_id();
-         var_read_id();
+         var_reset();
          query_write();
       }
+      var_write_id();
       calc();
    }
 
    // Manage browser history
    window.onpopstate = function OnPopState(event) {
-      var config = query_read();
-      if (config.length == 0) {
-         var_reset_id();
-      }
-      else {
-         var_clear_id();
-         var_write_id(config);
-      }
-      var_read_id();
-      if (var_test_change() == true) {
-         calc();
-      }
+      setup();
    };
 
    // Manage keys [Enter] and [tab]
@@ -438,7 +539,7 @@
       }
    }
 
-   // Recalc values after form change
+   // Recalc values after key pressed
    function recalc() {
       var_read_id();
       if (var_test_change() == true) {
@@ -538,7 +639,7 @@
       <div class="sname">g</div>
       <div class="sval"> <form> <input type="text" id="g"> </form> </div>
       <div class="sunit">mm</div>
-      <div class="scoment">Air gap lenght</div>
+      <div class="scoment">Air gap length</div>
    </div>
 
    <!--  Row: g_factor  -->
@@ -546,7 +647,7 @@
       <div class="sname">g_factor</div>
       <div class="scalc"> <form> <input disabled="disabled" type="text" id="g_factor"> </form> </div>
       <div class="sunit">%</div>
-      <div class="scoment">Relative lenght of air gap (g/√Ae)</div>
+      <div class="scoment">Relative length of air gap (g/√Ae)</div>
    </div>
 
    <!--  Row: Fr_factor  -->
