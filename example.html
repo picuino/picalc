@@ -12,7 +12,7 @@
    <meta name="author" content="Picuino">
    <meta name="description" content="Picalc example calculator, with demonstration of all features of picalc">
    <meta name="generator" content="Picalc generator powered by Python and Jinja2"
-   <meta name="version" content="02/04/2018 - SHA:EF1E19">
+   <meta name="version" content="03/04/2018 - SHA:F659BC">
 
 
 
@@ -190,6 +190,10 @@
    // Calculate formulas and print values
    function calc() {
       var_backup();
+      query_write();
+
+      // Constant: Pi. Ratio of a circle's circumference to its diameter.
+      Pi = ( 3.14159 ) *  1.0;
 
       // Calculation: Section area of wire
       foo = 25 * 6;
@@ -201,15 +205,13 @@
 
    // Print calcs
    function print_calc() {
-      document.getElementById("Section_of_wire").value = num_fix(Section_of_wire *
-          1e+06, 5);
+      document.getElementById("Section_of_wire").value = num_float(Section_of_wire *  1e+06, 5);
       document.getElementById("Pi").value = "3.14159";
    }
 
    // Read variables from html
    function var_read_id() {
-      d_wire = idtonum("d_wire") *
-          1e-03; // Variable: Diameter of wire
+      d_wire = idtonum("d_wire") *  1e-03; // Variable: Diameter of wire
    }
 
    // Write variables
@@ -221,29 +223,19 @@
             window[name] = config[i][1];
          }
       }
-   }
-
-   // Read constants from html
-   function const_read_id() {
-      Pi = ( 3.14159 )  *
-          1.0; // Constant: Pi. Ratio of a circle's circumference to its diameter.
+      var_write_id();
    }
 
    // Reset variables to default values
    function var_reset() {
       d_wire = ( 10 ) *  1e-03;
-      Pi = ( 3.14159 ) *  1.0;
-   }
-
-   // Clear variables in html
-   function var_clear_id() {
-      document.getElementById("d_wire").value = '';
+      var_write_id();
    }
 
    // Clear variables in html
    function var_clear() {
       d_wire = '';
-      Pi = ( 3.14159 ) * 1e0; // Constant: Pi. Ratio of a circle's circumference to its diameter.
+      var_write_id();
    }
 
    // Test if there are any change in variables
@@ -260,7 +252,7 @@
    // Write variables values to html forms
    function var_write_id() {
       var value;
-      if (d_wire == "") value = ""; else value = d_wire / _prefix["d_wire"];
+      if (d_wire == "") value = ""; else value = num_float(d_wire / _prefix["d_wire"], 5);
       document.getElementById("d_wire").value = value;
    }
 
@@ -288,7 +280,6 @@
    // Reset variables to default values in html and JavaScript
    function button_reset() {
       var_reset();
-      query_write();
       var_write_id();
       calc();
    }
@@ -296,7 +287,6 @@
    // Clear variables in html and JavaScript
    function button_clear() {
       var_clear();
-      query_write();
       var_write_id();
       calc();
    }
@@ -311,7 +301,7 @@
       var url = document.location.href.split('?')[0];
       var query = '?';
       var value;
-      value = encodeURIComponent(d_wire)
+      value = encodeURIComponent(num_float(d_wire, 5))
       if (value.length) query = query + "d_wire=" + value + '&';
       if (query.length > 1) url = url + query
       history.pushState({id: 'picalc'}, 'Picalc example calculator', url);
@@ -353,6 +343,13 @@
       if (isNaN(val)) return '';
       return val * 1e0; // return number
    }
+   
+   // Format number in floating point with certain 'digits' of precision
+   function num_float(number, digits) {
+      if (!isFinite(number)) return '';
+      if (number == 0) return '0';
+      return Number.parseFloat(number).toPrecision(digits);
+   }
 
    // Format number with fix digits
    function num_fix(number, digits) {
@@ -391,9 +388,7 @@
       }
       else {
          var_reset();
-         query_write();
       }
-      var_write_id();
       calc();
    }
 
@@ -416,7 +411,6 @@
    function recalc() {
       var_read_id();
       if (var_test_change() == true) {
-         query_write();
          calc();
       }
    }

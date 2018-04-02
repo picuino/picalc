@@ -72,12 +72,12 @@
     input[type=text]:disabled {
       color: inherit;
    }
-   
+
    .ssel {
       display: inline-block;
       width: {{config.width.value[:-2]|float + config.width.units[:-2]|float}}{{config.width.units[-2:]}};
    }
-   
+
    .sval {
       display: inline-block;
       width: {{config.width.value}};
@@ -126,7 +126,7 @@
    /* Include styles: {{inc.name}}{{' '*(49 - inc.name|length)}} */
    /*                                                                   */
    {%- macro include_style(name) %}{% include name %}{% endmacro %}
-   
+
    {{ include_style(inc.name)|indent(3) }}
 
    /*                                                                   */

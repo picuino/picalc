@@ -13,7 +13,7 @@
     comment: 20em
 
   resolution: 5
-  
+
 # *******************************************************************
 
 rows:
@@ -25,7 +25,7 @@ rows:
   - { value: Clear,    onclick: button_clear() }
   - { value: Copy URL, onclick: button_url_copy() }
 
-  
+
   # ** INPUT PARAMETER **
 
 - type: header
@@ -45,7 +45,7 @@ rows:
       vars: { Le: 57.5e-3, Ae: 52.5e-6, Ve: 3020e-9, K1: 90, K2: -0.731 }
     - name: E_30_15_7
       vars: { Le: 67.0e-3, Ae: 60.0e-6, Ve: 4000e-9 }
-  
+
 - type: var
   comment: Effective magnetic cross section
   name: Ae
@@ -149,7 +149,7 @@ rows:
   comment: Inductance factor (permeability)
   name: AL
   id: AL_2
-  value: 'idtonum("AL")'
+  value: AL * 1e9
   unit: nH/turn<sup>2</sup>
 
 - type: var

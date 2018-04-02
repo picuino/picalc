@@ -12,7 +12,7 @@
    <meta name="author" content="Picuino">
    <meta name="description" content="JavaScript calculator of average and RMS values">
    <meta name="generator" content="Picalc generator powered by Python and Jinja2"
-   <meta name="version" content="02/04/2018 - SHA:09281C">
+   <meta name="version" content="03/04/2018 - SHA:E86D4C">
 
 
 
@@ -201,6 +201,7 @@
    // Calculate formulas and print values
    function calc() {
       var_backup();
+      query_write();
 
       // Calculation: Average value of sine wave (offset)
       V_offset1 = V_min + 0.5 * (V_max - V_min);
@@ -256,58 +257,34 @@
 
    // Print calcs
    function print_calc() {
-      document.getElementById("V_offset1").value = num_fix(V_offset1 *
-          1.0, 5);
-      document.getElementById("V_sin_ac_rms").value = num_fix(V_sin_ac_rms *
-          1.0, 5);
-      document.getElementById("V_sin_rms").value = num_fix(V_sin_rms *
-          1.0, 5);
-      document.getElementById("V_offset2").value = num_fix(V_offset2 *
-          1.0, 5);
-      document.getElementById("V_tri_ac_rms").value = num_fix(V_tri_ac_rms *
-          1.0, 5);
-      document.getElementById("V_tri_rms").value = num_fix(V_tri_rms *
-          1.0, 5);
-      document.getElementById("V_offset3").value = num_fix(V_offset3 *
-          1.0, 5);
-      document.getElementById("V_rsin_ac_rms").value = num_fix(V_rsin_ac_rms *
-          1.0, 5);
-      document.getElementById("V_rsin_rms").value = num_fix(V_rsin_rms *
-          1.0, 5);
-      document.getElementById("V_offset4").value = num_fix(V_offset4 *
-          1.0, 5);
-      document.getElementById("V_saw_ac_rms").value = num_fix(V_saw_ac_rms *
-          1.0, 5);
-      document.getElementById("V_saw_rms").value = num_fix(V_saw_rms *
-          1.0, 5);
-      document.getElementById("V_offset5").value = num_fix(V_offset5 *
-          1.0, 5);
-      document.getElementById("V_sq_ac_rms").value = num_fix(V_sq_ac_rms *
-          1.0, 5);
-      document.getElementById("V_sq_rms").value = num_fix(V_sq_rms *
-          1.0, 5);
-      document.getElementById("V_add_rms").value = num_fix(V_add_rms *
-          1.0, 5);
+      document.getElementById("V_offset1").value = num_float(V_offset1 *  1.0, 5);
+      document.getElementById("V_sin_ac_rms").value = num_float(V_sin_ac_rms *  1.0, 5);
+      document.getElementById("V_sin_rms").value = num_float(V_sin_rms *  1.0, 5);
+      document.getElementById("V_offset2").value = num_float(V_offset2 *  1.0, 5);
+      document.getElementById("V_tri_ac_rms").value = num_float(V_tri_ac_rms *  1.0, 5);
+      document.getElementById("V_tri_rms").value = num_float(V_tri_rms *  1.0, 5);
+      document.getElementById("V_offset3").value = num_float(V_offset3 *  1.0, 5);
+      document.getElementById("V_rsin_ac_rms").value = num_float(V_rsin_ac_rms *  1.0, 5);
+      document.getElementById("V_rsin_rms").value = num_float(V_rsin_rms *  1.0, 5);
+      document.getElementById("V_offset4").value = num_float(V_offset4 *  1.0, 5);
+      document.getElementById("V_saw_ac_rms").value = num_float(V_saw_ac_rms *  1.0, 5);
+      document.getElementById("V_saw_rms").value = num_float(V_saw_rms *  1.0, 5);
+      document.getElementById("V_offset5").value = num_float(V_offset5 *  1.0, 5);
+      document.getElementById("V_sq_ac_rms").value = num_float(V_sq_ac_rms *  1.0, 5);
+      document.getElementById("V_sq_rms").value = num_float(V_sq_rms *  1.0, 5);
+      document.getElementById("V_add_rms").value = num_float(V_add_rms *  1.0, 5);
    }
 
    // Read variables from html
    function var_read_id() {
-      V_max = idtonum("V_max") *
-          1.0; // Variable: Maximum value of signal
-      V_min = idtonum("V_min") *
-          1.0; // Variable: Minimum value of signal
-      D = idtonum("D") *
-          1e-02; // Variable: Duty cycle
-      V1_rms = idtonum("V1_rms") *
-          1.0; // Variable: V_rms of Wave 1
-      V2_rms = idtonum("V2_rms") *
-          1.0; // Variable: V_rms of Wave 2
-      V3_rms = idtonum("V3_rms") *
-          1.0; // Variable: V_rms of Wave 3
-      V4_rms = idtonum("V4_rms") *
-          1.0; // Variable: V_rms of Wave 4
-      V5_rms = idtonum("V5_rms") *
-          1.0; // Variable: V_rms of Wave 5
+      V_max = idtonum("V_max") *  1.0; // Variable: Maximum value of signal
+      V_min = idtonum("V_min") *  1.0; // Variable: Minimum value of signal
+      D = idtonum("D") *  1e-02; // Variable: Duty cycle
+      V1_rms = idtonum("V1_rms") *  1.0; // Variable: V_rms of Wave 1
+      V2_rms = idtonum("V2_rms") *  1.0; // Variable: V_rms of Wave 2
+      V3_rms = idtonum("V3_rms") *  1.0; // Variable: V_rms of Wave 3
+      V4_rms = idtonum("V4_rms") *  1.0; // Variable: V_rms of Wave 4
+      V5_rms = idtonum("V5_rms") *  1.0; // Variable: V_rms of Wave 5
    }
 
    // Write variables
@@ -319,10 +296,7 @@
             window[name] = config[i][1];
          }
       }
-   }
-
-   // Read constants from html
-   function const_read_id() {
+      var_write_id();
    }
 
    // Reset variables to default values
@@ -335,18 +309,7 @@
       V3_rms = '';
       V4_rms = '';
       V5_rms = '';
-   }
-
-   // Clear variables in html
-   function var_clear_id() {
-      document.getElementById("V_max").value = '';
-      document.getElementById("V_min").value = '';
-      document.getElementById("D").value = '';
-      document.getElementById("V1_rms").value = '';
-      document.getElementById("V2_rms").value = '';
-      document.getElementById("V3_rms").value = '';
-      document.getElementById("V4_rms").value = '';
-      document.getElementById("V5_rms").value = '';
+      var_write_id();
    }
 
    // Clear variables in html
@@ -359,6 +322,7 @@
       V3_rms = '';
       V4_rms = '';
       V5_rms = '';
+      var_write_id();
    }
 
    // Test if there are any change in variables
@@ -389,28 +353,27 @@
    // Write variables values to html forms
    function var_write_id() {
       var value;
-      if (V_max == "") value = ""; else value = V_max / _prefix["V_max"];
+      if (V_max == "") value = ""; else value = num_float(V_max / _prefix["V_max"], 5);
       document.getElementById("V_max").value = value;
-      if (V_min == "") value = ""; else value = V_min / _prefix["V_min"];
+      if (V_min == "") value = ""; else value = num_float(V_min / _prefix["V_min"], 5);
       document.getElementById("V_min").value = value;
-      if (D == "") value = ""; else value = D / _prefix["D"];
+      if (D == "") value = ""; else value = num_float(D / _prefix["D"], 5);
       document.getElementById("D").value = value;
-      if (V1_rms == "") value = ""; else value = V1_rms / _prefix["V1_rms"];
+      if (V1_rms == "") value = ""; else value = num_float(V1_rms / _prefix["V1_rms"], 5);
       document.getElementById("V1_rms").value = value;
-      if (V2_rms == "") value = ""; else value = V2_rms / _prefix["V2_rms"];
+      if (V2_rms == "") value = ""; else value = num_float(V2_rms / _prefix["V2_rms"], 5);
       document.getElementById("V2_rms").value = value;
-      if (V3_rms == "") value = ""; else value = V3_rms / _prefix["V3_rms"];
+      if (V3_rms == "") value = ""; else value = num_float(V3_rms / _prefix["V3_rms"], 5);
       document.getElementById("V3_rms").value = value;
-      if (V4_rms == "") value = ""; else value = V4_rms / _prefix["V4_rms"];
+      if (V4_rms == "") value = ""; else value = num_float(V4_rms / _prefix["V4_rms"], 5);
       document.getElementById("V4_rms").value = value;
-      if (V5_rms == "") value = ""; else value = V5_rms / _prefix["V5_rms"];
+      if (V5_rms == "") value = ""; else value = num_float(V5_rms / _prefix["V5_rms"], 5);
       document.getElementById("V5_rms").value = value;
    }
 
    // Reset variables to default values in html and JavaScript
    function button_reset() {
       var_reset();
-      query_write();
       var_write_id();
       calc();
    }
@@ -418,7 +381,6 @@
    // Clear variables in html and JavaScript
    function button_clear() {
       var_clear();
-      query_write();
       var_write_id();
       calc();
    }
@@ -433,21 +395,21 @@
       var url = document.location.href.split('?')[0];
       var query = '?';
       var value;
-      value = encodeURIComponent(V_max)
+      value = encodeURIComponent(num_float(V_max, 5))
       if (value.length) query = query + "V_max=" + value + '&';
-      value = encodeURIComponent(V_min)
+      value = encodeURIComponent(num_float(V_min, 5))
       if (value.length) query = query + "V_min=" + value + '&';
-      value = encodeURIComponent(D)
+      value = encodeURIComponent(num_float(D, 5))
       if (value.length) query = query + "D=" + value + '&';
-      value = encodeURIComponent(V1_rms)
+      value = encodeURIComponent(num_float(V1_rms, 5))
       if (value.length) query = query + "V1_rms=" + value + '&';
-      value = encodeURIComponent(V2_rms)
+      value = encodeURIComponent(num_float(V2_rms, 5))
       if (value.length) query = query + "V2_rms=" + value + '&';
-      value = encodeURIComponent(V3_rms)
+      value = encodeURIComponent(num_float(V3_rms, 5))
       if (value.length) query = query + "V3_rms=" + value + '&';
-      value = encodeURIComponent(V4_rms)
+      value = encodeURIComponent(num_float(V4_rms, 5))
       if (value.length) query = query + "V4_rms=" + value + '&';
-      value = encodeURIComponent(V5_rms)
+      value = encodeURIComponent(num_float(V5_rms, 5))
       if (value.length) query = query + "V5_rms=" + value + '&';
       if (query.length > 1) url = url + query
       history.pushState({id: 'picalc'}, 'Average and RMS value Calculator', url);
@@ -489,6 +451,13 @@
       if (isNaN(val)) return '';
       return val * 1e0; // return number
    }
+   
+   // Format number in floating point with certain 'digits' of precision
+   function num_float(number, digits) {
+      if (!isFinite(number)) return '';
+      if (number == 0) return '0';
+      return Number.parseFloat(number).toPrecision(digits);
+   }
 
    // Format number with fix digits
    function num_fix(number, digits) {
@@ -527,9 +496,7 @@
       }
       else {
          var_reset();
-         query_write();
       }
-      var_write_id();
       calc();
    }
 
@@ -552,7 +519,6 @@
    function recalc() {
       var_read_id();
       if (var_test_change() == true) {
-         query_write();
          calc();
       }
    }

@@ -38,16 +38,16 @@ class Container(dict):
    """Object for contain dicts"""
    def __init__(self, data):
       self.update(data)
-      
+
    def update(self, data):
       self.__dict__.update(data)
 
    def __str__(self):
       return str(self.__dict__)
 
-   
+
 class Picalc(object):
-   
+
    def __init__(self, database_name):
       self.database_name = database_name
       self.config_name = CONFIG_NAME
@@ -80,7 +80,7 @@ class Picalc(object):
       self.include = database['include']
       self.rows = database['rows']
 
-      # Format database    
+      # Format database
       self.load_images()
       self.database_complete()
 
@@ -92,7 +92,7 @@ class Picalc(object):
             self.config.template_path, encoding='utf-8-sig'),
          autoescape=False)
       self.template = self.env.get_template(self.config.template_name)
-      
+
 
    def load_images(self):
       """Read all include files present in database"""
@@ -154,7 +154,7 @@ class Picalc(object):
                'p': 1e-12, 'n': 1e-9,
                'u': 1e-6, 'm': 1e-3,
                'k': 1e3,  'M': 1e6,
-               'G': 1e9, 'T': 1e12,         
+               'G': 1e9, 'T': 1e12,
             }
             if 'unit' in row and isinstance(row['unit'], str) \
                and len(row['unit'])>1 and row['unit'][0] in translate:
@@ -162,7 +162,7 @@ class Picalc(object):
             else:
                row['prefix'] = 1
 
- 
+
    def write(self, filename, data):
       """Write data to disk with utf-8 encoding"""
       fo = codecs.open(filename, 'w', encoding='utf-8-sig')

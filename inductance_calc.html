@@ -9,10 +9,10 @@
    <meta charset="utf-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0">
    <meta name="keywords" content="Inductance, magnetics, coil, calculator">
-   
+
    <meta name="description" content="JavaScript calculator of inductances with ferrite core">
    <meta name="generator" content="Picalc generator powered by Python and Jinja2"
-   <meta name="version" content="02/04/2018 - SHA:2A0CF9">
+   <meta name="version" content="03/04/2018 - SHA:0CF844">
 
 
 
@@ -92,12 +92,12 @@
     input[type=text]:disabled {
       color: inherit;
    }
-   
+
    .ssel {
       display: inline-block;
       width: 11.0em;
    }
-   
+
    .sval {
       display: inline-block;
       width: 6em;
@@ -193,6 +193,16 @@
    // Calculate formulas and print values
    function calc() {
       var_backup();
+      query_write();
+
+      // Constant: Permeability of air
+      uo = ( 1.2566e-6 ) *  1.0;
+
+      // Constant: Resistivity of copper at 20ºC
+      ro_cu = ( 17.24e-9 ) *  1.0;
+
+      // Constant: Coefficient of resistivity of copper with temperature
+      Cro_cu = ( 0.00393 ) *  1.0;
 
       // Calculation: Relative length of air gap (g/√Ae)
       g_factor = g / Math.sqrt(Ae);
@@ -233,26 +243,16 @@
 
    // Print calcs
    function print_calc() {
-      document.getElementById("g_factor").value = num_fix(g_factor *
-          1e+02, 5);
-      document.getElementById("Fr_factor").value = num_fix(Fr_factor *
-          1.0, 5);
-      document.getElementById("AL_gap").value = num_fix(AL_gap *
-          1e+09, 5);
-      document.getElementById("AL_total").value = num_fix(AL_total *
-          1e+09, 5);
-      document.getElementById("L").value = num_fix(L *
-          1e+06, 5);
-      document.getElementById("I_max").value = num_fix(I_max *
-          1.0, 5);
-      document.getElementById("E_max").value = num_fix(E_max *
-          1e+06, 5);
-      document.getElementById("T").value = num_fix(T *
-          1e+06, 5);
-      document.getElementById("V_sin").value = num_fix(V_sin *
-          1.0, 5);
-      document.getElementById("V_sq").value = num_fix(V_sq *
-          1.0, 5);
+      document.getElementById("g_factor").value = num_float(g_factor *  1e+02, 5);
+      document.getElementById("Fr_factor").value = num_float(Fr_factor *  1.0, 5);
+      document.getElementById("AL_gap").value = num_float(AL_gap *  1e+09, 5);
+      document.getElementById("AL_total").value = num_float(AL_total *  1e+09, 5);
+      document.getElementById("L").value = num_float(L *  1e+06, 5);
+      document.getElementById("I_max").value = num_float(I_max *  1.0, 5);
+      document.getElementById("E_max").value = num_float(E_max *  1e+06, 5);
+      document.getElementById("T").value = num_float(T *  1e+06, 5);
+      document.getElementById("V_sin").value = num_float(V_sin *  1.0, 5);
+      document.getElementById("V_sq").value = num_float(V_sq *  1.0, 5);
       document.getElementById("uo").value = "1.2566e-6";
       document.getElementById("ro_cu").value = "17.24e-9";
       document.getElementById("Cro_cu").value = "0.00393";
@@ -260,20 +260,13 @@
 
    // Read variables from html
    function var_read_id() {
-      Ae = idtonum("Ae") *
-          1e-06; // Variable: Effective magnetic cross section
-      B_max = idtonum("B_max") *
-          1e-03; // Variable: Max value of magnetic flux density
-      AL = idtonum("AL") *
-          1e-09; // Variable: Inductance factor (permeability)
-      g = idtonum("g") *
-          1e-03; // Variable: Air gap length
-      AL_2 = idtonum("AL_2") *
-          1e-09; // Variable: Inductance factor (permeability)
-      N = idtonum("N") *
-          1.0; // Variable: Number of winding turns
-      f = idtonum("f") *
-          1e+03; // Variable: Frequency
+      Ae = idtonum("Ae") *  1e-06; // Variable: Effective magnetic cross section
+      B_max = idtonum("B_max") *  1e-03; // Variable: Max value of magnetic flux density
+      AL = idtonum("AL") *  1e-09; // Variable: Inductance factor (permeability)
+      g = idtonum("g") *  1e-03; // Variable: Air gap length
+      AL_2 = idtonum("AL_2") *  1e-09; // Variable: Inductance factor (permeability)
+      N = idtonum("N") *  1.0; // Variable: Number of winding turns
+      f = idtonum("f") *  1e+03; // Variable: Frequency
    }
 
    // Write variables
@@ -285,16 +278,7 @@
             window[name] = config[i][1];
          }
       }
-   }
-
-   // Read constants from html
-   function const_read_id() {
-      uo = ( 1.2566e-6 )  *
-          1.0; // Constant: Permeability of air
-      ro_cu = ( 17.24e-9 )  *
-          1.0; // Constant: Resistivity of copper at 20ºC
-      Cro_cu = ( 0.00393 )  *
-          1.0; // Constant: Coefficient of resistivity of copper with temperature
+      var_write_id();
    }
 
    // Reset variables to default values
@@ -302,24 +286,11 @@
       Ae = ( 683 ) *  1e-06;
       B_max = ( 300 ) *  1e-03;
       AL = ( 8100 ) *  1e-09;
-      uo = ( 1.2566e-6 ) *  1.0;
-      ro_cu = ( 17.24e-9 ) *  1.0;
-      Cro_cu = ( 0.00393 ) *  1.0;
       g = ( 0 ) *  1e-03;
-      AL_2 = ( idtonum("AL") ) *  1e-09;
+      AL_2 = ( AL * 1e9 ) *  1e-09;
       N = ( 10 ) *  1.0;
       f = ( 20 ) *  1e+03;
-   }
-
-   // Clear variables in html
-   function var_clear_id() {
-      document.getElementById("Ae").value = '';
-      document.getElementById("B_max").value = '';
-      document.getElementById("AL").value = '';
-      document.getElementById("g").value = '';
-      document.getElementById("AL_2").value = '';
-      document.getElementById("N").value = '';
-      document.getElementById("f").value = '';
+      var_write_id();
    }
 
    // Clear variables in html
@@ -331,9 +302,7 @@
       AL_2 = '';
       N = '';
       f = '';
-      uo = ( 1.2566e-6 ) * 1e0; // Constant: Permeability of air
-      ro_cu = ( 17.24e-9 ) * 1e0; // Constant: Resistivity of copper at 20ºC
-      Cro_cu = ( 0.00393 ) * 1e0; // Constant: Coefficient of resistivity of copper with temperature
+      var_write_id();
    }
 
    // Test if there are any change in variables
@@ -362,19 +331,19 @@
    // Write variables values to html forms
    function var_write_id() {
       var value;
-      if (Ae == "") value = ""; else value = Ae / _prefix["Ae"];
+      if (Ae == "") value = ""; else value = num_float(Ae / _prefix["Ae"], 5);
       document.getElementById("Ae").value = value;
-      if (B_max == "") value = ""; else value = B_max / _prefix["B_max"];
+      if (B_max == "") value = ""; else value = num_float(B_max / _prefix["B_max"], 5);
       document.getElementById("B_max").value = value;
-      if (AL == "") value = ""; else value = AL / _prefix["AL"];
+      if (AL == "") value = ""; else value = num_float(AL / _prefix["AL"], 5);
       document.getElementById("AL").value = value;
-      if (g == "") value = ""; else value = g / _prefix["g"];
+      if (g == "") value = ""; else value = num_float(g / _prefix["g"], 5);
       document.getElementById("g").value = value;
-      if (AL_2 == "") value = ""; else value = AL_2 / _prefix["AL_2"];
+      if (AL_2 == "") value = ""; else value = num_float(AL_2 / _prefix["AL_2"], 5);
       document.getElementById("AL_2").value = value;
-      if (N == "") value = ""; else value = N / _prefix["N"];
+      if (N == "") value = ""; else value = num_float(N / _prefix["N"], 5);
       document.getElementById("N").value = value;
-      if (f == "") value = ""; else value = f / _prefix["f"];
+      if (f == "") value = ""; else value = num_float(f / _prefix["f"], 5);
       document.getElementById("f").value = value;
    }
 
@@ -403,7 +372,6 @@
    // Reset variables to default values in html and JavaScript
    function button_reset() {
       var_reset();
-      query_write();
       var_write_id();
       calc();
    }
@@ -411,7 +379,6 @@
    // Clear variables in html and JavaScript
    function button_clear() {
       var_clear();
-      query_write();
       var_write_id();
       calc();
    }
@@ -426,19 +393,19 @@
       var url = document.location.href.split('?')[0];
       var query = '?';
       var value;
-      value = encodeURIComponent(Ae)
+      value = encodeURIComponent(num_float(Ae, 5))
       if (value.length) query = query + "Ae=" + value + '&';
-      value = encodeURIComponent(B_max)
+      value = encodeURIComponent(num_float(B_max, 5))
       if (value.length) query = query + "B_max=" + value + '&';
-      value = encodeURIComponent(AL)
+      value = encodeURIComponent(num_float(AL, 5))
       if (value.length) query = query + "AL=" + value + '&';
-      value = encodeURIComponent(g)
+      value = encodeURIComponent(num_float(g, 5))
       if (value.length) query = query + "g=" + value + '&';
-      value = encodeURIComponent(AL_2)
+      value = encodeURIComponent(num_float(AL_2, 5))
       if (value.length) query = query + "AL_2=" + value + '&';
-      value = encodeURIComponent(N)
+      value = encodeURIComponent(num_float(N, 5))
       if (value.length) query = query + "N=" + value + '&';
-      value = encodeURIComponent(f)
+      value = encodeURIComponent(num_float(f, 5))
       if (value.length) query = query + "f=" + value + '&';
       if (query.length > 1) url = url + query
       history.pushState({id: 'picalc'}, 'Inductance Calculator', url);
@@ -481,6 +448,13 @@
       return val * 1e0; // return number
    }
 
+   // Format number in floating point with certain 'digits' of precision
+   function num_float(number, digits) {
+      if (!isFinite(number)) return '';
+      if (number == 0) return '0';
+      return Number.parseFloat(number).toPrecision(digits);
+   }
+
    // Format number with fix digits
    function num_fix(number, digits) {
       if (!isFinite(number)) return '';
@@ -518,9 +492,7 @@
       }
       else {
          var_reset();
-         query_write();
       }
-      var_write_id();
       calc();
    }
 
@@ -543,7 +515,6 @@
    function recalc() {
       var_read_id();
       if (var_test_change() == true) {
-         query_write();
          calc();
       }
    }
@@ -575,10 +546,10 @@
    <div class="row">
       <div class="sname">Core</div>
       <select class="ssel" onchange="select_core()" id="select_core_id">
-	   <option value="E_10_5_5"selected="selected">E_10_5_5</option>
-	   <option value="E_13_7_4">E_13_7_4</option>
-	   <option value="E_25_13_7">E_25_13_7</option>
-	   <option value="E_30_15_7">E_30_15_7</option>
+      <option value="E_10_5_5"selected="selected">E_10_5_5</option>
+      <option value="E_13_7_4">E_13_7_4</option>
+      <option value="E_25_13_7">E_25_13_7</option>
+      <option value="E_30_15_7">E_30_15_7</option>
       </select>
       <div class="scoment">Core parameters</div>
    </div>
