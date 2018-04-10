@@ -261,15 +261,8 @@
       return val * 1e0; // return number
    }
 
-   // Format number in floating point with certain 'digits' of precision
+   // Format number with fixed digits
    function num_float(number, digits) {
-      if (!isFinite(number)) return '';
-      if (number == 0) return '0';
-      return Number.parseFloat(number).toPrecision(digits);
-   }
-
-   // Format number with fix digits
-   function num_fix(number, digits) {
       if (!isFinite(number)) return '';
       if (number == 0) return '0';
       if (Math.sign(number) < 0)
@@ -277,23 +270,19 @@
       else
          var sign = '';
       number = Math.abs(number)
-      exp = Math.ceil(Math.log10(number) + 0.000001);
-      number = Math.round(number * Math.pow(10, digits - exp)) + '';
-      // Number have fractional part
-      if (digits > exp) {
-         // number have only fractional part
-         if (exp <= 0) {
-            return sign + '0.0000000'.substr(0, 2 - exp) + number;
-         }
-         // Number have integer and fractional part
-         else {
-            return sign + number.substr(0, exp) + '.' + number.substr(exp, digits - exp);
-         }
+      // Fixed point number
+      if (number >= 1e-3 && number < 1e6) {
+         number = Number(number.toPrecision(digits));
+         number = sign + number.toString();
+         return number;
       }
-      // Number with only integer part
+      // Float number
       else {
-         number = number  + '0000000000'
-         return sign + number.substr(0, exp);
+         exp = Math.floor(Math.log10(number) / 3) * 3;
+         number = number * Math.pow(10, -exp);
+         number = Number(number.toPrecision(digits));
+         number = number.toString() + 'e' + exp.toString();
+         return number;
       }
    }
 
