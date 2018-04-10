@@ -12,7 +12,7 @@
    
    <meta name="description" content="JavaScript calculator of inductances with ferrite core">
    <meta name="generator" content="Picalc generator powered by Python and Jinja2">
-   <meta name="version" content="10/04/2018 - SHA:2AD99E">
+   <meta name="version" content="10/04/2018 - SHA:6398E9">
 
 
 
@@ -95,7 +95,9 @@
 
    .ssel {
       display: inline-block;
-      width: 11.0em;
+      padding-top: 0;
+      width: 11.4em;
+      
    }
 
    .sval {
@@ -159,7 +161,7 @@
    var N;  // Number of winding turns
    var L;  // Coil Inductance
    var I_max;  // Maximum Inductor Current
-   var E_max;  // Energy stored in Inductance
+   var E_max;  // Maximum Energy stored in Inductance
    var f;  // Frequency
    var T;  // Period
    var V_sin;  // Maximum sine wave voltage
@@ -224,7 +226,7 @@
       // Calculation: Maximum Inductor Current
       I_max = (Ae * B_max) / (AL * N);
 
-      // Calculation: Energy stored in Inductance
+      // Calculation: Maximum Energy stored in Inductance
       E_max = 0.5 * Math.pow(I_max, 2) * L;
 
       // Calculation: Period
@@ -283,9 +285,9 @@
 
    // Reset variables to default values
    function var_reset() {
-      Ae = ( 683 ) *  1e-06;
-      B_max = ( 300 ) *  1e-03;
-      AL = ( 8100 ) *  1e-09;
+      Ae = ( 60 ) *  1e-06;
+      B_max = ( 320 ) *  1e-03;
+      AL = ( 1700 ) *  1e-09;
       g = ( 0 ) *  1e-03;
       AL_2 = ( AL * 1e9 ) *  1e-09;
       N = ( 10 ) *  1.0;
@@ -350,10 +352,32 @@
    // Select: Core
    function select_core() {
       var database = {
-         "E_10_5_5": {"Le": 0.0263, "Ae": 1.09e-05, "Ve": 287e-9, },
-         "E_13_7_4": {"Le": 0.0296, "Ae": 1.24e-05, "Ve": 367e-9, },
-         "E_25_13_7": {"K2": -0.731, "K1": 90, "Le": 0.0575, "Ae": 5.25e-05, "Ve": 3020e-9, },
-         "E_30_15_7": {"Le": 0.067, "Ae": 6e-05, "Ve": 4000e-9, },
+         "E_10_5_5": {"Le": 0.0263, "Ae": 1.09e-05, "Ve": 287e-9, "AL": 750e-9, },
+         "E_13_7_4": {"K2": -0.676, "K1": 28.4, "Le": 0.0296, "Ae": 1.24e-05, "Ve": 367e-9, "AL": 800e-9, },
+         "E_14_8_4": {"K2": -0.712, "K1": 36.8, "Le": 0.0339, "Ae": 1.55e-05, "Ve": 525e-9, "AL": 860e-9, },
+         "E_16_6_5": {"K2": -0.764, "K1": 42.0, "Le": 0.0286, "Ae": 1.92e-05, "Ve": 549e-9, "AL": 1100e-9, },
+         "E_16_8_5": {"K2": -0.701, "K1": 42.2, "Le": 0.0376, "Ae": 2.01e-05, "Ve": 756e-9, "AL": 950e-9, },
+         "E_16_8_8": {"Le": 0.0376, "Ae": 3.63e-05, "Ve": 1370e-9, "AL": 1800e-9, },
+         "E_19_8_5": {"K2": -0.697, "K1": 46.4, "Le": 0.0396, "Ae": 2.25e-05, "Ve": 891e-9, "AL": 1050e-9, },
+         "E_20_10_6": {"K2": -0.737, "K1": 61.6, "Le": 0.0463, "Ae": 3.21e-05, "Ve": 1490e-9, "AL": 1300e-9, },
+         "E_20_10_11": {"Le": 0.0463, "Ae": 61e-6, "Ve": 2830e-9, "AL": 2300e-9, },
+         "E_21_9_5": {"K2": -0.682, "K1": 47.4, "Le": 0.0434, "Ae": 2.16e-05, "Ve": 937e-9, "AL": 900e-9, },
+         "E_25_13_7": {"K2": -0.731, "K1": 90, "Le": 0.0575, "Ae": 5.25e-05, "Ve": 3020e-9, "AL": 1750, },
+         "E_28_10_11": {"Le": 0.0516, "Ae": 8.17e-05, "Ve": 4220e-9, "AL": 3000e-9, },
+         "E_30_15_7": {"Le": 0.067, "Ae": 6e-05, "Ve": 4000e-9, "AL": 1700e-9, },
+         "E_32_16_9": {"K2": -0.748, "K1": 145, "Le": 74e-3, "Ae": 83e-6, "Ve": 6140e-9, "AL": 2100e-9, },
+         "E_34_14_9": {"K2": -0.719, "K1": 146, "Le": 0.0696, "Ae": 8.48e-05, "Ve": 5900e-9, "AL": 2300e-9, },
+         "E_36_18_11": {"K2": -0.749, "K1": 182, "Le": 81e-3, "Ae": 120e-6, "Ve": 9720e-9, "AL": 2900e-9, },
+         "E_40_16_12": {"K2": -0.782, "K1": 239, "Le": 77e-3, "Ae": 149e-6, "Ve": 11500e-9, "AL": 3800e-9, },
+         "E_42_21_15": {"K2": -0.741, "K1": 272, "Le": 97e-3, "Ae": 178e-6, "Ve": 17300e-9, "AL": 3500e-9, },
+         "E_42_21_20": {"K2": -0.77, "K1": 354, "Le": 97e-3, "Ae": 234e-6, "Ve": 22700e-9, "AL": 4750e-9, },
+         "E_47_20_16": {"K2": -0.773, "K1": 364, "Le": 89e-3, "Ae": 233e-6, "Ve": 20700e-9, "AL": 5100e-9, },
+         "E_55_28_21": {"K2": -0.764, "K1": 496, "Le": 124e-3, "Ae": 354e-6, "Ve": 43900e-9, "AL": 7200e-9, },
+         "E_56_24_19": {"K2": -0.784, "K1": 500, "Le": 107e-3, "Ae": 340e-6, "Ve": 36400e-9, "AL": 6300e-9, },
+         "E_65_32_27": {"K2": -0.762, "K1": 716, "Le": 147e-3, "Ae": 535e-6, "Ve": 78650e-9, "AL": 7200e-9, },
+         "E_70_33_32": {"K2": -0.789, "K1": 903, "Le": 149e-3, "Ae": 683e-6, "Ve": 102000e-9, "AL": 8850e-9, },
+         "E_80_38_20": {"K2": -0.71, "K1": 539, "Le": 184e-3, "Ae": 390e-6, "Ve": 71800e-9, "AL": 4150e-9, },
+         "E_100_60_28": {"Le": 274e-3, "Ae": 735e-6, "Ve": 201390e-9, "AL": 6200e-9, },
       }
       // Read selected values
       selected_id = document.getElementById("select_core_id").value;
@@ -458,7 +482,7 @@
          var sign = '';
       number = Math.abs(number)
       // Fixed point number
-      if (number >= 1e-3 && number < 1e6) {
+      if (number >= 1e-3 && number < 1e5) {
          number = Number(number.toPrecision(digits));
          number = sign + number.toString();
          return number;
@@ -535,10 +559,32 @@
    <div class="row">
       <div class="sname">Core</div>
       <select class="ssel" onchange="select_core()" id="select_core_id">
-      <option value="E_10_5_5"selected="selected">E_10_5_5</option>
+      <option value="E_10_5_5">E_10_5_5</option>
       <option value="E_13_7_4">E_13_7_4</option>
+      <option value="E_14_8_4">E_14_8_4</option>
+      <option value="E_16_6_5">E_16_6_5</option>
+      <option value="E_16_8_5">E_16_8_5</option>
+      <option value="E_16_8_8">E_16_8_8</option>
+      <option value="E_19_8_5">E_19_8_5</option>
+      <option value="E_20_10_6">E_20_10_6</option>
+      <option value="E_20_10_11">E_20_10_11</option>
+      <option value="E_21_9_5">E_21_9_5</option>
       <option value="E_25_13_7">E_25_13_7</option>
-      <option value="E_30_15_7">E_30_15_7</option>
+      <option value="E_28_10_11">E_28_10_11</option>
+      <option value="E_30_15_7"selected="selected">E_30_15_7</option>
+      <option value="E_32_16_9">E_32_16_9</option>
+      <option value="E_34_14_9">E_34_14_9</option>
+      <option value="E_36_18_11">E_36_18_11</option>
+      <option value="E_40_16_12">E_40_16_12</option>
+      <option value="E_42_21_15">E_42_21_15</option>
+      <option value="E_42_21_20">E_42_21_20</option>
+      <option value="E_47_20_16">E_47_20_16</option>
+      <option value="E_55_28_21">E_55_28_21</option>
+      <option value="E_56_24_19">E_56_24_19</option>
+      <option value="E_65_32_27">E_65_32_27</option>
+      <option value="E_70_33_32">E_70_33_32</option>
+      <option value="E_80_38_20">E_80_38_20</option>
+      <option value="E_100_60_28">E_100_60_28</option>
       </select>
       <div class="scoment">Core parameters</div>
    </div>
@@ -674,7 +720,7 @@
       <div class="sname">E_max</div>
       <div class="scalc"> <form> <input disabled="disabled" type="text" id="E_max"> </form> </div>
       <div class="sunit">uJ</div>
-      <div class="scoment">Energy stored in Inductance</div>
+      <div class="scoment">Maximum Energy stored in Inductance</div>
    </div>
 
    <!--  Header: Maximum Voltage -->

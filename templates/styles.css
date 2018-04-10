@@ -75,7 +75,12 @@
 
    .ssel {
       display: inline-block;
+      padding-top: 0;
+      {% if 'select' in config.width -%}
+      width: {{config.width.select}};
+      {% else -%}
       width: {{config.width.value[:-2]|float + config.width.units[:-2]|float}}{{config.width.units[-2:]}};
+      {%- endif %}
    }
 
    .sval {

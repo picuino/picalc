@@ -12,7 +12,7 @@
    <meta name="author" content="Picuino">
    <meta name="description" content="Picalc example calculator, with demonstration of all features of picalc">
    <meta name="generator" content="Picalc generator powered by Python and Jinja2">
-   <meta name="version" content="10/04/2018 - SHA:EE5281">
+   <meta name="version" content="10/04/2018 - SHA:C969C9">
 
 
 
@@ -95,6 +95,7 @@
 
    .ssel {
       display: inline-block;
+      padding-top: 0;
       width: 9.0em;
    }
 
@@ -354,7 +355,7 @@
          var sign = '';
       number = Math.abs(number)
       // Fixed point number
-      if (number >= 1e-3 && number < 1e6) {
+      if (number >= 1e-3 && number < 1e5) {
          number = Number(number.toPrecision(digits));
          number = sign + number.toString();
          return number;

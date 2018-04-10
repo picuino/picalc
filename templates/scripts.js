@@ -271,7 +271,7 @@
          var sign = '';
       number = Math.abs(number)
       // Fixed point number
-      if (number >= 1e-3 && number < 1e6) {
+      if (number >= 1e-3 && number < 1e5) {
          number = Number(number.toPrecision(digits));
          number = sign + number.toString();
          return number;
