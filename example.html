@@ -12,7 +12,7 @@
    <meta name="author" content="Picuino">
    <meta name="description" content="Picalc example calculator, with demonstration of all features of picalc">
    <meta name="generator" content="Picalc generator powered by Python and Jinja2">
-   <meta name="version" content="10/04/2018 - SHA:C969C9">
+   <meta name="version" content="15/04/2018 - SHA:65916E">
 
 
 
@@ -96,7 +96,8 @@
    .ssel {
       display: inline-block;
       padding-top: 0;
-      width: 9.0em;
+      width: 9.4em;
+      
    }
 
    .sval {
@@ -198,7 +199,7 @@
 
       // Calculation: Section area of wire
       foo = 25 * 6;
-      Section_of_wire = Math.PI * 0.25 * Math.pow(D_wire, 2);
+      Section_of_wire = Math.PI * 0.25 * Math.pow(d_wire, 2);
 
       // Print variables and calcs
       print_calc();
@@ -229,7 +230,7 @@
 
    // Reset variables to default values
    function var_reset() {
-      d_wire = ( 10 ) *  1e-03;
+      d_wire = ( 0.5106 ) *  1e-03;
       var_write_id();
    }
 
@@ -260,9 +261,46 @@
    // Select: Wire type
    function select_wire_diameter() {
       var database = {
-         "AWG24": {"d_wire": 0, "i_max": 4.0, "5106e-3": None, },
-         "AWG26": {"4049e-3": None, "d_wire": 0, "i_max": 3.2, },
-         "AWG28": {"3211e-3": None, "d_wire": 0, "i_max": 2.6, },
+         "AWG1": {"d_wire": 0.007348, },
+         "AWG2": {"d_wire": 0.006544, },
+         "AWG3": {"d_wire": 0.005827, },
+         "AWG4": {"d_wire": 0.005189, },
+         "AWG5": {"d_wire": 0.004621, },
+         "AWG6": {"d_wire": 0.004115, },
+         "AWG7": {"d_wire": 0.003665, },
+         "AWG8": {"d_wire": 0.003264, },
+         "AWG9": {"d_wire": 0.002906, },
+         "AWG10": {"d_wire": 0.002588, },
+         "AWG11": {"d_wire": 0.002305, },
+         "AWG12": {"d_wire": 0.002053, },
+         "AWG13": {"d_wire": 0.001828, },
+         "AWG14": {"d_wire": 0.001628, },
+         "AWG15": {"d_wire": 0.00145, },
+         "AWG16": {"d_wire": 0.001291, },
+         "AWG17": {"d_wire": 0.00115, },
+         "AWG18": {"d_wire": 0.00102362, },
+         "AWG19": {"d_wire": 0.0009116, },
+         "AWG20": {"d_wire": 0.0008128, },
+         "AWG21": {"d_wire": 0.0007229, },
+         "AWG22": {"d_wire": 0.0006438, },
+         "AWG23": {"d_wire": 0.0005733, },
+         "AWG24": {"d_wire": 0.0005106, },
+         "AWG25": {"d_wire": 0.0004547, },
+         "AWG26": {"d_wire": 0.0004049, },
+         "AWG27": {"d_wire": 0.0003606, },
+         "AWG28": {"d_wire": 0.0003211, },
+         "AWG29": {"d_wire": 0.0002859, },
+         "AWG30": {"d_wire": 0.0002546, },
+         "AWG31": {"d_wire": 0.0002268, },
+         "AWG32": {"d_wire": 0.0002019, },
+         "AWG33": {"d_wire": 0.0001798, },
+         "AWG34": {"d_wire": 0.0001601, },
+         "AWG35": {"d_wire": 0.0001426, },
+         "AWG36": {"d_wire": 0.000127, },
+         "AWG37": {"d_wire": 0.0001131, },
+         "AWG38": {"d_wire": 0.0001007, },
+         "AWG39": {"d_wire": 8.969e-05, },
+         "AWG40": {"d_wire": 7.987e-05, },
       }
       // Read selected values
       selected_id = document.getElementById("select_wire_diameter_id").value;
@@ -416,9 +454,6 @@
    <div class="content"> <!-- Start content -->
 
    <h1>Picalc example calculator</h1>
-
-   <!--  Header: Example calculation -->
-   <h2 id="Example_calculation">Example calculation</h2>
 
    <!--  Image: example.png -->
    <img alt="example of embed image" width="320px"
@@ -574,20 +609,9 @@ AAAAACABAQAAAEACAgAAAAAkIAAAAABy6v8Dq6+5goP0/ZQAAAAASUVORK5CYII=
 
    <!--  Code HTML: Horizontal line -->
    
-<hr /> <br />
+<hr /><br />
 
 
-
-   <!--  Row: Wire type  -->
-   <div class="row">
-      <div class="sname">Wire type</div>
-      <select class="ssel" onchange="select_wire_diameter()" id="select_wire_diameter_id">
-      <option value="AWG24"selected="selected">AWG24</option>
-      <option value="AWG26">AWG26</option>
-      <option value="AWG28">AWG28</option>
-      </select>
-      <div class="scoment">Diameter of wire selection</div>
-   </div>
 
    <!--  Buttons: Values -->
    <div class="row">
@@ -595,6 +619,57 @@ AAAAACABAQAAAEACAgAAAAAkIAAAAABy6v8Dq6+5goP0/ZQAAAAASUVORK5CYII=
       <input type="button" value="Reset" onclick="button_reset()">
       <input type="button" value="Clear" onclick="button_clear()">
       <input type="button" value="Copy URL" onclick="button_url_copy()">
+   </div>
+
+   <!--  Header: Example calculation -->
+   <h2 id="Example_calculation">Example calculation</h2>
+
+   <!--  Row: Wire type  -->
+   <div class="row">
+      <div class="sname">Wire type</div>
+      <select class="ssel" onchange="select_wire_diameter()" id="select_wire_diameter_id">
+      <option value="AWG1">AWG1</option>
+      <option value="AWG2">AWG2</option>
+      <option value="AWG3">AWG3</option>
+      <option value="AWG4">AWG4</option>
+      <option value="AWG5">AWG5</option>
+      <option value="AWG6">AWG6</option>
+      <option value="AWG7">AWG7</option>
+      <option value="AWG8">AWG8</option>
+      <option value="AWG9">AWG9</option>
+      <option value="AWG10">AWG10</option>
+      <option value="AWG11">AWG11</option>
+      <option value="AWG12">AWG12</option>
+      <option value="AWG13">AWG13</option>
+      <option value="AWG14">AWG14</option>
+      <option value="AWG15">AWG15</option>
+      <option value="AWG16">AWG16</option>
+      <option value="AWG17">AWG17</option>
+      <option value="AWG18">AWG18</option>
+      <option value="AWG19">AWG19</option>
+      <option value="AWG20">AWG20</option>
+      <option value="AWG21">AWG21</option>
+      <option value="AWG22">AWG22</option>
+      <option value="AWG23">AWG23</option>
+      <option value="AWG24"selected="selected">AWG24</option>
+      <option value="AWG25">AWG25</option>
+      <option value="AWG26">AWG26</option>
+      <option value="AWG27">AWG27</option>
+      <option value="AWG28">AWG28</option>
+      <option value="AWG29">AWG29</option>
+      <option value="AWG30">AWG30</option>
+      <option value="AWG31">AWG31</option>
+      <option value="AWG32">AWG32</option>
+      <option value="AWG33">AWG33</option>
+      <option value="AWG34">AWG34</option>
+      <option value="AWG35">AWG35</option>
+      <option value="AWG36">AWG36</option>
+      <option value="AWG37">AWG37</option>
+      <option value="AWG38">AWG38</option>
+      <option value="AWG39">AWG39</option>
+      <option value="AWG40">AWG40</option>
+      </select>
+      <div class="scoment">Diameter of wire selection</div>
    </div>
 
    <!--  Row: D_wire  -->

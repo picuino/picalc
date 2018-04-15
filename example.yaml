@@ -1,5 +1,5 @@
 #****************************************************************
-# Example database with all features of picalc 
+# Example database with all features of picalc
 #
 # Picalc is a Python and Jinja2 program for make online and
 # offline calculators based on standalone html and javascript.
@@ -9,11 +9,11 @@
 #  This example yaml database have 3 sections:
 #    1. Configuration
 #    2. Import modules
-#    3. Content of calculator in a list of rows 
-#  
+#    3. Content of calculator in a list of rows
+#
 #****************************************************************
 
-# 
+#
 # 1. CONFIGURATION
 # ================
 #
@@ -25,7 +25,7 @@ config:
 
   width:
      # Max and min width of html page
-     max: 640px    
+     max: 640px
      min: 320px
 
      # Minimun widths of calculator columns:
@@ -34,16 +34,17 @@ config:
      name: 5em
      value: 5em
      units: 4em
+     select: 9.4em
      comment: 20em
 
-  # Resolution of numbers. 
+  # Resolution of numbers.
   # Number of significant figures. 5 prints 1234500 or 12.345 or 0.0012345
   resolution: 5
 
   # Function executed on page load. setup() is the default one.
   onload: setup()
 
-# 
+#
 # 1.1 Default configuration
 # -------------------------
 # Configuration included in default config.yaml
@@ -57,8 +58,8 @@ config:
   font:
     normal_size: 16
     license_size: 12
-  
-  
+
+
 #
 # 2. INCLUDE FILES
 # ================
@@ -70,7 +71,7 @@ include:
     name: include/example.js
   - type: style
     name: include/example.css
-    
+
 #
 # 3. CONTENT ROWS
 # ===============
@@ -79,14 +80,7 @@ include:
 rows:
 
 
-# 3.1 HEADERS
-# -----------
-# Insert a header of level 2 <h2>header</h2>
-- type: header
-  name: Example calculation
-  
-  
-# 3.2 IMAGES
+# 3.1 IMAGES
 # ----------
 # Images are read and encoded in base64 for embed it in html code
 - type: image
@@ -94,7 +88,7 @@ rows:
   name: example.png
   comment: example of embed image
 
-  
+
 # 3.3 RAW HTML CODE
 # -----------------
 # Allows inserting all kind of raw html code.
@@ -102,11 +96,37 @@ rows:
   name: Horizontal line
   code: |
       {% raw %}
-      <hr /> <br />
+      <hr /><br />
       {% endraw %}
 
 
-# 3.4 SELECT
+# 3.2 BUTTONS
+# -----------
+# Insert a file of buttons preceded of 'name'.
+- type: buttons
+  name: Values
+  buttons:
+  # value: text to show in button
+  # onclick: function to call on click event
+  # Included functions:
+  #   button_reset: load default values in variables.
+  #   button_clear: load empty string to all variables.
+  #   button_url_copy: copy to clipboard url + query strings
+  # Other external functions must be loaded in include section
+  # before use it in this database.
+  - { value: Reset,    onclick: button_reset() }
+  - { value: Clear,    onclick: button_clear() }
+  - { value: Copy URL, onclick: button_url_copy() }
+
+
+# 3.3 HEADERS
+# -----------
+# Insert a header of level 2 <h2>header</h2>
+- type: header
+  name: Example calculation
+
+
+# 3.5 SELECT
 # ----------
 # Insert a select form witch insert variable values in html page
 # Values always must be represented in standard units.
@@ -122,44 +142,100 @@ rows:
     # meter, kilogram, second, kelvin, ampere, mole, etc. without prefixes.
     # Variables not used in the current calculator will be ignored.
     # This allows you to use the same table in several calculators.
+    # https://es.wikipedia.org/wiki/Calibre_de_alambre_estadounidense
+    - name: AWG1
+      vars: { d_wire: 7.348e-3 }
+    - name: AWG2
+      vars: { d_wire: 6.544e-3 }
+    - name: AWG3
+      vars: { d_wire: 5.827e-3 }
+    - name: AWG4
+      vars: { d_wire: 5.189e-3 }
+    - name: AWG5
+      vars: { d_wire: 4.621e-3 }
+    - name: AWG6
+      vars: { d_wire: 4.115e-3 }
+    - name: AWG7
+      vars: { d_wire: 3.665e-3 }
+    - name: AWG8
+      vars: { d_wire: 3.264e-3 }
+    - name: AWG9
+      vars: { d_wire: 2.906e-3 }
+    - name: AWG10
+      vars: { d_wire: 2.588e-3 }
+    - name: AWG11
+      vars: { d_wire: 2.305e-3 }
+    - name: AWG12
+      vars: { d_wire: 2.053e-3 }
+    - name: AWG13
+      vars: { d_wire: 1.828e-3 }
+    - name: AWG14
+      vars: { d_wire: 1.628e-3 }
+    - name: AWG15
+      vars: { d_wire: 1.450e-3 }
+    - name: AWG16
+      vars: { d_wire: 1.291e-3 }
+    - name: AWG17
+      vars: { d_wire: 1.150e-3 }
+    - name: AWG18
+      vars: { d_wire: 1.02362e-3 }
+    - name: AWG19
+      vars: { d_wire: 0.9116e-3 }
+    - name: AWG20
+      vars: { d_wire: 0.8128e-3 }
+    - name: AWG21
+      vars: { d_wire: 0.7229e-3 }
+    - name: AWG22
+      vars: { d_wire: 0.6438e-3 }
+    - name: AWG23
+      vars: { d_wire: 0.5733e-3 }
     - name: AWG24
-      vars: { d_wire: 0,5106e-3, i_max: 4.0 }
+      vars: { d_wire: 0.5106e-3 }
       selected: true
+    - name: AWG25
+      vars: { d_wire: 0.4547e-3 }
     - name: AWG26
-      vars: { d_wire: 0,4049e-3, i_max: 3.2 }
+      vars: { d_wire: 0.4049e-3 }
+    - name: AWG27
+      vars: { d_wire: 0.3606e-3 }
     - name: AWG28
-      vars: { d_wire: 0,3211e-3, i_max: 2.6 }
+      vars: { d_wire: 0.3211e-3 }
+    - name: AWG29
+      vars: { d_wire: 0.2859e-3 }
+    - name: AWG30
+      vars: { d_wire: 0.2546e-3 }
+    - name: AWG31
+      vars: { d_wire: 0.2268e-3 }
+    - name: AWG32
+      vars: { d_wire: 0.2019e-3 }
+    - name: AWG33
+      vars: { d_wire: 0.1798e-3 }
+    - name: AWG34
+      vars: { d_wire: 0.1601e-3 }
+    - name: AWG35
+      vars: { d_wire: 0.1426e-3 }
+    - name: AWG36
+      vars: { d_wire: 0.1270e-3 }
+    - name: AWG37
+      vars: { d_wire: 0.1131e-3 }
+    - name: AWG38
+      vars: { d_wire: 0.1007e-3 }
+    - name: AWG39
+      vars: { d_wire: 0.08969e-3 }
+    - name: AWG40
+      vars: { d_wire: 0.07987e-3 }
 
 
-# 3.5 BUTTONS
-# -----------
-# Insert a file of buttons preceded of 'name'.      
-- type: buttons
-  name: Values
-  buttons:
-  # value: text to show in button
-  # onclick: function to call on click event
-  # Included functions:
-  #   button_reset: load default values in variables.
-  #   button_clear: load empty string to all variables.
-  #   button_url_copy: copy to clipboard url + query strings
-  # Other external functions must be loaded in include section 
-  # before use it in this database.
-  - { value: Reset,    onclick: button_reset() }
-  - { value: Clear,    onclick: button_clear() }
-  - { value: Copy URL, onclick: button_url_copy() }
-
-
-# 3.6 VARIABLES AND CONSTANTS 
+# 3.6 VARIABLES AND CONSTANTS
 # ---------------------------
 # Variables creates an html form where user can write values.
-# Constants show constant values used in calculations. 
+# Constants show constant values used in calculations.
 #   Constants are no editable forms.
 #
 # Fields of both:
 #   type: var or const
 #   name:   1st column. text with the name of variable showed.
-#   id:     (optional) name of internal variable. Must be set if 
+#   id:     (optional) name of internal variable. Must be set if
 #           internal name is different to showed name.
 #   value:  2nd column. default value writed by var_reset() function.
 #           Or stored in constants.
@@ -175,7 +251,7 @@ rows:
 #             T for Tera  (1e12)
 #           The template understand prefix for simple units.
 #           If the prefix don't match the real unit prefix
-#           (e.g. in mm^2 the real prefix is 1e-6) field 
+#           (e.g. in mm^2 the real prefix is 1e-6) field
 #           prefix must be used.
 #   prefix: (optional) multiplicand for the unit used.
 #           If the unit is mm, the prefix must be 1e-3
@@ -183,10 +259,10 @@ rows:
 #           p, n, u, m, k, M, G, T
 #   comment: 4th column. Text explaining the variable.
 - type: var
-  comment: Diameter of wire 
+  comment: Diameter of wire
   name: D_wire
   id: d_wire
-  value: 10
+  value: 0.5106
   unit: mm
 
 # In const type, value is represented as text without converting to number
@@ -196,13 +272,13 @@ rows:
   value: 3.14159
   unit: ''
 
-  
+
 # 3.7 CALCULATIONS
 # ----------------
 # Calculations made with variables and constants
 #
 # Units used:
-#   First, the html page read variables and constants and multiply 
+#   First, the html page read variables and constants and multiply
 #   them by corresponding prefix to obtain standard units.
 #   All calculations are made always in standard units.
 #   After calculations, the results are divided by corresponding
@@ -211,7 +287,7 @@ rows:
 # Fields:
 #   type: calc
 #   name:   1st column. text with the name of variable showed.
-#   id:     (optional) name of internal variable only in case this 
+#   id:     (optional) name of internal variable only in case this
 #           must be different of name showed.
 #   calc:   2nd column. Formula or list of formulas to calculate.
 #           Could be complemented by standard JavaScript functions
@@ -222,7 +298,7 @@ rows:
 #           All the internal calcs are made in standard units
 #           If the unit is mm, the prefix must be 1e-3
 #           The template is capable of understand simple prefix
-#           n, u, m, k, M, G. 
+#           n, u, m, k, M, G.
 #   comment: 4th column. Text explaining the variable.
 - type: calc
   comment: Section area of wire
@@ -230,6 +306,6 @@ rows:
   unit: mm<sup>2</sup>
   prefix: 1e-6
   id: Section_of_wire
-  calc: 
+  calc:
     - foo = 25 * 6
-    - Section_of_wire = Math.PI * 0.25 * Math.pow(D_wire, 2)
+    - Section_of_wire = Math.PI * 0.25 * Math.pow(d_wire, 2)
