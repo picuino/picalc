@@ -2,8 +2,8 @@
 
 Picalc is a Python and Jinja2 program for make online and
 offline calculators based on standalone html and javascript.
-A yaml database stores all information about the content
-and style options of the calculator.
+A yaml database stores all information about the calculator 
+content and style options.
 
 For more extensive information see [example.yaml](example.yaml)
 
