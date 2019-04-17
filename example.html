@@ -12,7 +12,7 @@
    <meta name="author" content="Picuino">
    <meta name="description" content="Picalc example calculator, with demonstration of all features of picalc">
    <meta name="generator" content="Picalc generator powered by Python and Jinja2">
-   <meta name="version" content="15/04/2018 - SHA:65916E">
+   <meta name="version" content="17/04/2019 - SHA:B76775">
 
 
 
@@ -96,13 +96,13 @@
    .ssel {
       display: inline-block;
       padding-top: 0;
-      width: 9.4em;
+      width: 10.4em;
       
    }
 
    .sval {
       display: inline-block;
-      width: 5em;
+      width: 6em;
    }
    .sval input[type=text] {
       background-color: #FFFFC0;
@@ -110,7 +110,7 @@
 
    .sconst {
       display: inline-block;
-      width: 5em;
+      width: 6em;
    }
    .sconst input[type=text] {
       background-color: #FFFFFF;
@@ -118,7 +118,7 @@
 
    .scalc  {
       display: inline-block;
-      width: 5em;
+      width: 6em;
    }
    .scalc input[type=text] {
       background-color: #C0FFFF;
@@ -189,6 +189,19 @@
    /* End Include: include/example.js                                   */
    /*********************************************************************/ 
 
+   /*********************************************************************/
+   /* Function definitions                                              */
+   /*                                                                   */
+
+   /* Function: wire section */
+   function wire_section(diameter) {
+      return( Math.PI * 0.25 * Math.pow(diameter, 2));
+   }
+   
+   /*                                                                   */
+   /* End function definitions                                          */
+   /*********************************************************************/
+
    // Calculate formulas and print values
    function calc() {
       var_backup();
@@ -199,7 +212,7 @@
 
       // Calculation: Section area of wire
       foo = 25 * 6;
-      Section_of_wire = Math.PI * 0.25 * Math.pow(d_wire, 2);
+      Section_of_wire = wire_section(d_wire);
 
       // Print variables and calcs
       print_calc();

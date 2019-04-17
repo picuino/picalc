@@ -32,9 +32,9 @@ config:
      # name        |   value | units | comment           |
      # Car_speed   |    25.8 |  m/s  | Speed of car      |
      name: 5em
-     value: 5em
+     value: 6em
      units: 4em
-     select: 9.4em
+     select: 10.4em
      comment: 20em
 
   # Resolution of numbers.
@@ -273,6 +273,17 @@ rows:
   unit: ''
 
 
+# 3.8 FUNCTION DEFINITION
+# -----------------------
+# Define functions in JavaScript raw code
+- type: function
+  name: wire section
+  code: |
+    function wire_section(diameter) {
+       return( Math.PI * 0.25 * Math.pow(diameter, 2));
+    }
+
+
 # 3.7 CALCULATIONS
 # ----------------
 # Calculations made with variables and constants
@@ -308,4 +319,4 @@ rows:
   id: Section_of_wire
   calc:
     - foo = 25 * 6
-    - Section_of_wire = Math.PI * 0.25 * Math.pow(d_wire, 2)
+    - Section_of_wire = wire_section(d_wire)

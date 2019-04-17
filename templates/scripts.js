@@ -44,6 +44,22 @@
 {%- endif %}{%- endfor %}
 
 
+{#- ********** Include function definitions ********** #}
+
+   /*********************************************************************/
+   /* Function definitions                                              */
+   /*                                                                   */
+
+   {%- for rowdata in rows %}{%- if rowdata.type == 'function' %}
+
+   /* Function: {{rowdata.name}} */
+   {{rowdata.code|indent(3)}}
+
+   {%- endif %}{% endfor %}   
+   /*                                                                   */
+   /* End function definitions                                          */
+   /*********************************************************************/
+
 {#- ********** Calculate formulas ********** #}
 
    // Calculate formulas and print values

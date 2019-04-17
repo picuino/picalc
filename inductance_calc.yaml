@@ -193,13 +193,6 @@ rows:
   name: Inductance of coil
 
 - type: var
-  comment: Inductance factor (permeability)
-  name: AL
-  id: AL_2
-  value: AL * 1e9
-  unit: nH/turn<sup>2</sup>
-
-- type: var
   comment: Number of winding turns
   name: N
   value: 10
@@ -209,13 +202,13 @@ rows:
   comment: Coil Inductance
   name: L
   unit: uH
-  calc: L = AL_2 * Math.pow(N, 2)
+  calc: L = AL_total * Math.pow(N, 2)
 
 - type: calc
   comment: Maximum Inductor Current
   name: I_max
   unit: A
-  calc: I_max = (Ae * B_max) / (AL * N)
+  calc: I_max = (Ae * B_max) / (AL_total * N)
 
 - type: calc
   comment: Maximum Energy stored in Inductance
@@ -242,19 +235,15 @@ rows:
   calc: T = 1.0 / f
 
 - type: calc
-  comment: Maximum sine wave voltage
+  comment: Maximum sine wave voltage (V_eff)
   name: V_sin
   unit: V
-  calc: V_sin = I_max * (2 * Math.PI * f) * L / Math.sqrt(2)
-  #  Ip = Vp / (2*pi*f*L)
-  #  V = Vp / sqrt(2)
+  calc: V_sin = (I_max / Math.sqrt(2)) * (2 * Math.PI * f) * L
 
 - type: calc
-  comment: Maximum square wave voltage
+  comment: Maximum square wave voltage (V_peak)
   name: V_sq
   unit: V
   calc:
-  #  I * L = V * T
-  - T = 1.0 / f
-  - V_sq = L * I_max * 2 / ( T / 2.0 )
+  - V_sq = (I_max * 2) * ( 2.0 * f * L )
 

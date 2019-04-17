@@ -15,6 +15,7 @@
     name: 6em
     value: 6em
     units: 6em
+    select: 12.4em
     comment: 20em
   
   onload: setup()

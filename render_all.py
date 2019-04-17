@@ -15,7 +15,6 @@ is licensed under a GPL version 3 license
 
 """
 
-import base64
 import os
 import re
 import codecs
@@ -23,6 +22,7 @@ from jinja2 import Environment, FileSystemLoader, Template #, select_autoescape
 import yaml
 import time
 import hashlib
+import base64
 
 
 __license__ = """
@@ -110,7 +110,7 @@ class Picalc(object):
       fi = open(filename, 'rb')
       data = fi.read()
       fi.close()
-      return data.encode('base64')
+      return base64.encodebytes(data).decode("ascii")
 
 
    def render(self):
