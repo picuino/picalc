@@ -11,7 +11,7 @@
    <meta name="keywords" content="Inductance, magnetics, coil, calculator">
    <meta name="description" content="JavaScript calculator of inductances with ferrite core">
    <meta name="generator" content="Picalc generator powered by Python and Jinja2">
-   <meta name="version" content="17/04/2019 - SHA:DBAC8D">
+   <meta name="version" content="19/04/2019 - SHA:CBC9C9">
 
 
 
@@ -145,14 +145,14 @@
 
 
    // Global variables and backup
-   var Ae;  // Effective magnetic cross section
+   var A_min;  // Minimun magnetic cross section
    var B_max;  // Max value of magnetic flux density
    var AL;  // Inductance factor (permeability)
    var uo;  // Permeability of air
    var ro_cu;  // Resistivity of copper at 20ºC
    var Cro_cu;  // Coefficient of resistivity of copper with temperature
-   var g;  // Air gap length
-   var g_factor;  // Relative length of air gap (g/√Ae)
+   var g;  // Air gap length of central arm
+   var g_factor;  // Relative length of air gap (g/√A_min)
    var Fr_factor;  // Fringing factor of air gap (+-15% error)
    var AL_gap;  // Inductance factor (permeability) of air gap
    var AL_total;  // Total Inductance factor with gap
@@ -168,7 +168,7 @@
 
    // Global variables properties
    var _prefix = {
-     "Ae":  1e-06,
+     "A_min":  1e-06,
      "B_max":  1e-03,
      "AL":  1e-09,
      "uo":  1.0,
@@ -210,8 +210,8 @@
       // Constant: Coefficient of resistivity of copper with temperature
       Cro_cu = ( 0.00393 ) *  1.0;
 
-      // Calculation: Relative length of air gap (g/√Ae)
-      g_factor = g / Math.sqrt(Ae);
+      // Calculation: Relative length of air gap (g/√A_min)
+      g_factor = g / Math.sqrt(A_min);
 
       // Calculation: Fringing factor of air gap (+-15% error)
       Fr_K1 = 2.15;
@@ -219,7 +219,7 @@
       Fr_factor = 1 + Fr_K1 * Math.pow(g_factor, Fr_K2);
 
       // Calculation: Inductance factor (permeability) of air gap
-      AL_gap = uo * Ae * Fr_factor / g;
+      AL_gap = uo * A_min * Fr_factor / g;
 
       // Calculation: Total Inductance factor with gap
       AL_total = 1.0 / ( (1.0 / AL_gap) + (1.0 / AL) );
@@ -228,7 +228,7 @@
       L = AL_total * Math.pow(N, 2);
 
       // Calculation: Maximum Inductor Current
-      I_max = (Ae * B_max) / (AL_total * N);
+      I_max = (A_min * B_max) / (AL_total * N);
 
       // Calculation: Maximum Energy stored in Inductance
       E_max = 0.5 * Math.pow(I_max, 2) * L;
@@ -265,10 +265,10 @@
 
    // Read variables from html
    function var_read_id() {
-      Ae = idtonum("Ae") *  1e-06; // Variable: Effective magnetic cross section
+      A_min = idtonum("A_min") *  1e-06; // Variable: Minimun magnetic cross section
       B_max = idtonum("B_max") *  1e-03; // Variable: Max value of magnetic flux density
       AL = idtonum("AL") *  1e-09; // Variable: Inductance factor (permeability)
-      g = idtonum("g") *  1e-03; // Variable: Air gap length
+      g = idtonum("g") *  1e-03; // Variable: Air gap length of central arm
       N = idtonum("N") *  1.0; // Variable: Number of winding turns
       f = idtonum("f") *  1e+03; // Variable: Frequency
    }
@@ -287,7 +287,7 @@
 
    // Reset variables to default values
    function var_reset() {
-      Ae = ( 60 ) *  1e-06;
+      A_min = ( 49 ) *  1e-06;
       B_max = ( 320 ) *  1e-03;
       AL = ( 1700 ) *  1e-09;
       g = ( 0 ) *  1e-03;
@@ -298,7 +298,7 @@
 
    // Clear variables in html
    function var_clear() {
-      Ae = '';
+      A_min = '';
       B_max = '';
       AL = '';
       g = '';
@@ -309,7 +309,7 @@
 
    // Test if there are any change in variables
    function var_test_change() {
-      if (variables_backup["Ae"] != Ae) return true;
+      if (variables_backup["A_min"] != A_min) return true;
       if (variables_backup["B_max"] != B_max) return true;
       if (variables_backup["AL"] != AL) return true;
       if (variables_backup["g"] != g) return true;
@@ -320,7 +320,7 @@
 
    // Copy values of variables
    function var_backup() {
-      variables_backup["Ae"] = Ae;
+      variables_backup["A_min"] = A_min;
       variables_backup["B_max"] = B_max;
       variables_backup["AL"] = AL;
       variables_backup["g"] = g;
@@ -331,8 +331,8 @@
    // Write variables values to html forms
    function var_write_id() {
       var value;
-      if (Ae == "") value = ""; else value = num_float(Ae / _prefix["Ae"], 5);
-      document.getElementById("Ae").value = value;
+      if (A_min == "") value = ""; else value = num_float(A_min / _prefix["A_min"], 5);
+      document.getElementById("A_min").value = value;
       if (B_max == "") value = ""; else value = num_float(B_max / _prefix["B_max"], 5);
       document.getElementById("B_max").value = value;
       if (AL == "") value = ""; else value = num_float(AL / _prefix["AL"], 5);
@@ -348,32 +348,32 @@
    // Select: Core
    function select_core() {
       var database = {
-         "E_10_5_5": {"Le": 0.0263, "Ae": 1.09e-05, "Ve": 287e-9, "AL": 750e-9, },
-         "E_13_7_4": {"Le": 0.0296, "Ae": 1.24e-05, "Ve": 367e-9, "AL": 800e-9, "K1": 28.4, "K2": -0.676, },
-         "E_14_8_4": {"Le": 0.0339, "Ae": 1.55e-05, "Ve": 525e-9, "AL": 860e-9, "K1": 36.8, "K2": -0.712, },
-         "E_16_6_5": {"Le": 0.0286, "Ae": 1.92e-05, "Ve": 549e-9, "AL": 1100e-9, "K1": 42.0, "K2": -0.764, },
-         "E_16_8_5": {"Le": 0.0376, "Ae": 2.01e-05, "Ve": 756e-9, "AL": 950e-9, "K1": 42.2, "K2": -0.701, },
-         "E_16_8_8": {"Le": 0.0376, "Ae": 3.63e-05, "Ve": 1370e-9, "AL": 1800e-9, },
-         "E_19_8_5": {"Le": 0.0396, "Ae": 2.25e-05, "Ve": 891e-9, "AL": 1050e-9, "K1": 46.4, "K2": -0.697, },
-         "E_20_10_6": {"Le": 0.0463, "Ae": 3.21e-05, "Ve": 1490e-9, "AL": 1300e-9, "K1": 61.6, "K2": -0.737, },
-         "E_20_10_11": {"Le": 0.0463, "Ae": 61e-6, "Ve": 2830e-9, "AL": 2300e-9, },
-         "E_21_9_5": {"Le": 0.0434, "Ae": 2.16e-05, "Ve": 937e-9, "AL": 900e-9, "K1": 47.4, "K2": -0.682, },
-         "E_25_13_7": {"Le": 0.0575, "Ae": 5.25e-05, "Ve": 3020e-9, "AL": 1750, "K1": 90, "K2": -0.731, },
-         "E_28_10_11": {"Le": 0.0516, "Ae": 8.17e-05, "Ve": 4220e-9, "AL": 3000e-9, },
-         "E_30_15_7": {"Le": 0.067, "Ae": 6e-05, "Ve": 4000e-9, "AL": 1700e-9, },
-         "E_32_16_9": {"Le": 74e-3, "Ae": 83e-6, "Ve": 6140e-9, "AL": 2100e-9, "K1": 145, "K2": -0.748, },
-         "E_34_14_9": {"Le": 0.0696, "Ae": 8.48e-05, "Ve": 5900e-9, "AL": 2300e-9, "K1": 146, "K2": -0.719, },
-         "E_36_18_11": {"Le": 81e-3, "Ae": 120e-6, "Ve": 9720e-9, "AL": 2900e-9, "K1": 182, "K2": -0.749, },
-         "E_40_16_12": {"Le": 77e-3, "Ae": 149e-6, "Ve": 11500e-9, "AL": 3800e-9, "K1": 239, "K2": -0.782, },
-         "E_42_21_15": {"Le": 97e-3, "Ae": 178e-6, "Ve": 17300e-9, "AL": 3500e-9, "K1": 272, "K2": -0.741, },
-         "E_42_21_20": {"Le": 97e-3, "Ae": 234e-6, "Ve": 22700e-9, "AL": 4750e-9, "K1": 354, "K2": -0.77, },
-         "E_47_20_16": {"Le": 89e-3, "Ae": 233e-6, "Ve": 20700e-9, "AL": 5100e-9, "K1": 364, "K2": -0.773, },
-         "E_55_28_21": {"Le": 124e-3, "Ae": 354e-6, "Ve": 43900e-9, "AL": 7200e-9, "K1": 496, "K2": -0.764, },
-         "E_56_24_19": {"Le": 107e-3, "Ae": 340e-6, "Ve": 36400e-9, "AL": 6300e-9, "K1": 500, "K2": -0.784, },
-         "E_65_32_27": {"Le": 147e-3, "Ae": 535e-6, "Ve": 78650e-9, "AL": 7200e-9, "K1": 716, "K2": -0.762, },
-         "E_70_33_32": {"Le": 149e-3, "Ae": 683e-6, "Ve": 102000e-9, "AL": 8850e-9, "K1": 903, "K2": -0.789, },
-         "E_80_38_20": {"Le": 184e-3, "Ae": 390e-6, "Ve": 71800e-9, "AL": 4150e-9, "K1": 539, "K2": -0.71, },
-         "E_100_60_28": {"Le": 274e-3, "Ae": 735e-6, "Ve": 201390e-9, "AL": 6200e-9, },
+         "E_10_5_5": {"Le": 0.0263, "Ae": 1.09e-05, "A_min": 1.04e-05, "Ve": 287e-9, "AL": 750e-9, },
+         "E_13_7_4": {"Le": 0.0296, "Ae": 1.24e-05, "A_min": 1.22e-05, "Ve": 367e-9, "AL": 800e-9, "K1": 28.4, "K2": -0.676, },
+         "E_14_8_4": {"Le": 0.0339, "Ae": 1.55e-05, "A_min": 1.31e-05, "Ve": 525e-9, "AL": 860e-9, "K1": 36.8, "K2": -0.712, },
+         "E_16_6_5": {"Le": 0.0286, "Ae": 1.92e-05, "A_min": 1.76e-05, "Ve": 549e-9, "AL": 1100e-9, "K1": 42.0, "K2": -0.764, },
+         "E_16_8_5": {"Le": 0.0376, "Ae": 2.01e-05, "A_min": 1.94e-05, "Ve": 756e-9, "AL": 950e-9, "K1": 42.2, "K2": -0.701, },
+         "E_16_8_8": {"Le": 0.0376, "Ae": 3.63e-05, "A_min": 3.5e-05, "Ve": 1370e-9, "AL": 1800e-9, },
+         "E_19_8_5": {"Le": 0.0396, "Ae": 2.25e-05, "A_min": 2.21e-05, "Ve": 891e-9, "AL": 1050e-9, "K1": 46.4, "K2": -0.697, },
+         "E_21_9_5": {"Le": 0.0434, "Ae": 2.16e-05, "A_min": 2.02e-05, "Ve": 937e-9, "AL": 900e-9, "K1": 47.4, "K2": -0.682, },
+         "E_20_10_6": {"Le": 0.0463, "Ae": 3.21e-05, "A_min": 3.19e-05, "Ve": 1490e-9, "AL": 1300e-9, "K1": 61.6, "K2": -0.737, },
+         "E_20_10_11": {"Le": 0.0463, "Ae": 6.1e-05, "A_min": 6.05e-05, "Ve": 2830e-9, "AL": 2300e-9, },
+         "E_25_13_7": {"Le": 0.0575, "Ae": 5.25e-05, "A_min": 5.15e-05, "Ve": 3020e-9, "AL": 1750, "K1": 90, "K2": -0.731, },
+         "E_28_10_11": {"Le": 0.0516, "Ae": 8.17e-05, "A_min": 7.7e-05, "Ve": 4220e-9, "AL": 3000e-9, },
+         "E_30_15_7": {"Le": 0.067, "Ae": 6e-05, "A_min": 4.9e-05, "Ve": 4000e-9, "AL": 1700e-9, },
+         "E_32_16_9": {"Le": 74e-3, "Ae": 8.3e-05, "A_min": 8.14e-05, "Ve": 6140e-9, "AL": 2100e-9, "K1": 145, "K2": -0.748, },
+         "E_34_14_9": {"Le": 0.0696, "Ae": 8.48e-05, "A_min": 8.32e-05, "Ve": 5900e-9, "AL": 2300e-9, "K1": 146, "K2": -0.719, },
+         "E_36_18_11": {"Le": 81e-3, "Ae": 120e-6, "A_min": 112e-6, "Ve": 9720e-9, "AL": 2900e-9, "K1": 182, "K2": -0.749, },
+         "E_40_16_12": {"Le": 77e-3, "Ae": 149e-6, "A_min": 143e-6, "Ve": 11500e-9, "AL": 3800e-9, "K1": 239, "K2": -0.782, },
+         "E_42_21_15": {"Le": 97e-3, "Ae": 178e-6, "A_min": 175e-6, "Ve": 17300e-9, "AL": 3500e-9, "K1": 272, "K2": -0.741, },
+         "E_42_21_20": {"Le": 97e-3, "Ae": 234e-6, "A_min": 229e-6, "Ve": 22700e-9, "AL": 4750e-9, "K1": 354, "K2": -0.77, },
+         "E_47_20_16": {"Le": 89e-3, "Ae": 233e-6, "A_min": 226e-6, "Ve": 20700e-9, "AL": 5100e-9, "K1": 364, "K2": -0.773, },
+         "E_55_28_21": {"Le": 124e-3, "Ae": 354e-6, "A_min": 351e-6, "Ve": 43900e-9, "AL": 7200e-9, "K1": 496, "K2": -0.764, },
+         "E_56_24_19": {"Le": 107e-3, "Ae": 340e-6, "A_min": 327e-6, "Ve": 36400e-9, "AL": 6300e-9, "K1": 500, "K2": -0.784, },
+         "E_65_32_27": {"Le": 147e-3, "Ae": 535e-6, "A_min": 529e-6, "Ve": 78650e-9, "AL": 7200e-9, "K1": 716, "K2": -0.762, },
+         "E_70_33_32": {"Le": 149e-3, "Ae": 683e-6, "A_min": 676e-6, "Ve": 102000e-9, "AL": 8850e-9, "K1": 903, "K2": -0.789, },
+         "E_80_38_20": {"Le": 184e-3, "Ae": 390e-6, "A_min": 388e-6, "Ve": 71800e-9, "AL": 4150e-9, "K1": 539, "K2": -0.71, },
+         "E_100_60_28": {"Le": 274e-3, "Ae": 735e-6, "A_min": 690e-6, "Ve": 201390e-9, "AL": 6200e-9, },
       }
       // Read selected values
       selected_id = document.getElementById("select_core_id").value;
@@ -413,8 +413,8 @@
       var url = document.location.href.split('?')[0];
       var query = '?';
       var value;
-      value = encodeURIComponent(num_float(Ae, 5))
-      if (value.length) query = query + "Ae=" + value + '&';
+      value = encodeURIComponent(num_float(A_min, 5))
+      if (value.length) query = query + "A_min=" + value + '&';
       value = encodeURIComponent(num_float(B_max, 5))
       if (value.length) query = query + "B_max=" + value + '&';
       value = encodeURIComponent(num_float(AL, 5))
@@ -560,9 +560,9 @@
       <option value="E_16_8_5">E_16_8_5</option>
       <option value="E_16_8_8">E_16_8_8</option>
       <option value="E_19_8_5">E_19_8_5</option>
+      <option value="E_21_9_5">E_21_9_5</option>
       <option value="E_20_10_6">E_20_10_6</option>
       <option value="E_20_10_11">E_20_10_11</option>
-      <option value="E_21_9_5">E_21_9_5</option>
       <option value="E_25_13_7">E_25_13_7</option>
       <option value="E_28_10_11">E_28_10_11</option>
       <option value="E_30_15_7"selected="selected">E_30_15_7</option>
@@ -583,12 +583,12 @@
       <div class="scoment">Core parameters</div>
    </div>
 
-   <!--  Row: Ae  -->
+   <!--  Row: A_min  -->
    <div class="row">
-      <div class="sname">Ae</div>
-      <div class="sval"> <form> <input type="text" id="Ae"> </form> </div>
+      <div class="sname">A_min</div>
+      <div class="sval"> <form> <input type="text" id="A_min"> </form> </div>
       <div class="sunit">mm<sup>2</sup></div>
-      <div class="scoment">Effective magnetic cross section</div>
+      <div class="scoment">Minimun magnetic cross section</div>
    </div>
 
    <!--  Row: B_max  -->
@@ -639,7 +639,7 @@
       <div class="sname">g</div>
       <div class="sval"> <form> <input type="text" id="g"> </form> </div>
       <div class="sunit">mm</div>
-      <div class="scoment">Air gap length</div>
+      <div class="scoment">Air gap length of central arm</div>
    </div>
 
    <!--  Row: g_factor  -->
@@ -647,7 +647,7 @@
       <div class="sname">g_factor</div>
       <div class="scalc"> <form> <input disabled="disabled" type="text" id="g_factor"> </form> </div>
       <div class="sunit">%</div>
-      <div class="scoment">Relative length of air gap (g/√Ae)</div>
+      <div class="scoment">Relative length of air gap (g/√A_min)</div>
    </div>
 
    <!--  Row: Fr_factor  -->

@@ -39,64 +39,38 @@ rows:
   select:
     # https://en.tdk.eu/tdk-en/529420/products/product-catalog/ferrites-and-accessories/epcos-ferrites-and-accessories/e-elp-cores-and-accessories
     # AL @ N27 matherial
-    - name: E_10_5_5
-      vars: { Le: 26.3e-3, Ae: 10.9e-6, Ve: 287e-9, AL: 750e-9 }
-    - name: E_13_7_4
-      vars: { Le: 29.6e-3, Ae: 12.4e-6, Ve: 367e-9, AL: 800e-9, K1: 28.4, K2: -0.676 }
-    - name: E_14_8_4
-      vars: { Le: 33.9e-3, Ae: 15.5e-6, Ve: 525e-9, AL: 860e-9, K1: 36.8, K2: -0.712 }
-    - name: E_16_6_5
-      vars: { Le: 28.6e-3, Ae: 19.2e-6, Ve: 549e-9, AL: 1100e-9, K1: 42.0, K2: -0.764 }
-    - name: E_16_8_5
-      vars: { Le: 37.6e-3, Ae: 20.1e-6, Ve: 756e-9, AL: 950e-9, K1: 42.2, K2: -0.701 }
-    - name: E_16_8_8
-      vars: { Le: 37.6e-3, Ae: 36.3e-6, Ve: 1370e-9, AL: 1800e-9 }
-    - name: E_19_8_5
-      vars: { Le: 39.6e-3, Ae: 22.5e-6, Ve: 891e-9, AL: 1050e-9, K1: 46.4, K2: -0.697 }
-    - name: E_20_10_6
-      vars: { Le: 46.3e-3, Ae: 32.1e-6, Ve: 1490e-9, AL: 1300e-9, K1: 61.6, K2: -0.737 }
-    - name: E_20_10_11
-      vars: { Le: 46.3e-3, Ae: 61e-6, Ve: 2830e-9, AL: 2300e-9 }
-    - name: E_21_9_5
-      vars: { Le: 43.4e-3, Ae: 21.6e-6, Ve: 937e-9, AL: 900e-9, K1: 47.4, K2: -0.682 }
-    - name: E_25_13_7
-      vars: { Le: 57.5e-3, Ae: 52.5e-6, Ve: 3020e-9, AL: 1750, K1: 90, K2: -0.731 }
-    - name: E_28_10_11
-      vars: { Le: 51.6e-3, Ae: 81.7e-6, Ve: 4220e-9, AL: 3000e-9 }
-    - name: E_30_15_7
-      vars: { Le: 67.0e-3, Ae: 60.0e-6, Ve: 4000e-9, AL: 1700e-9 }
-      selected: true
-    - name: E_32_16_9
-      vars: { Le: 74e-3, Ae: 83e-6, Ve: 6140e-9, AL: 2100e-9, K1: 145, K2: -0.748 }
-    - name: E_34_14_9
-      vars: { Le: 69.6e-3, Ae: 84.8e-6, Ve: 5900e-9, AL: 2300e-9, K1: 146, K2: -0.719 }
-    - name: E_36_18_11
-      vars: { Le: 81e-3, Ae: 120e-6, Ve: 9720e-9, AL: 2900e-9, K1: 182, K2: -0.749 }
-    - name: E_40_16_12
-      vars: { Le: 77e-3, Ae: 149e-6, Ve: 11500e-9, AL: 3800e-9, K1: 239, K2: -0.782 }
-    - name: E_42_21_15
-      vars: { Le: 97e-3, Ae: 178e-6, Ve: 17300e-9, AL: 3500e-9, K1: 272, K2: -0.741 }
-    - name: E_42_21_20
-      vars: { Le: 97e-3, Ae: 234e-6, Ve: 22700e-9, AL: 4750e-9, K1: 354, K2: -0.770 }
-    - name: E_47_20_16
-      vars: { Le: 89e-3, Ae: 233e-6, Ve: 20700e-9, AL: 5100e-9, K1: 364, K2: -0.773 }
-    - name: E_55_28_21
-      vars: { Le: 124e-3, Ae: 354e-6, Ve: 43900e-9, AL: 7200e-9, K1: 496, K2: -0.764 }
-    - name: E_56_24_19
-      vars: { Le: 107e-3, Ae: 340e-6, Ve: 36400e-9, AL: 6300e-9, K1: 500, K2: -0.784 }
-    - name: E_65_32_27
-      vars: { Le: 147e-3, Ae: 535e-6, Ve: 78650e-9, AL: 7200e-9, K1: 716, K2: -0.762 }
-    - name: E_70_33_32
-      vars: { Le: 149e-3, Ae: 683e-6, Ve: 102000e-9, AL: 8850e-9, K1: 903, K2: -0.789 }
-    - name: E_80_38_20
-      vars: { Le: 184e-3, Ae: 390e-6, Ve: 71800e-9, AL: 4150e-9, K1: 539, K2: -0.710 }
-    - name: E_100_60_28
-      vars: { Le: 274e-3, Ae: 735e-6, Ve: 201390e-9, AL: 6200e-9 }
+    # Ag = Gap section of central arm in [mm2] (width * height)
+    - { name: E_10_5_5,    vars: { Le: 26.3e-3, Ae: 10.9e-6, A_min: 10.4e-6, Ve: 287e-9,    AL: 750e-9 } }
+    - { name: E_13_7_4,    vars: { Le: 29.6e-3, Ae: 12.4e-6, A_min: 12.2e-6, Ve: 367e-9,    AL: 800e-9,  K1: 28.4, K2: -0.676 } }
+    - { name: E_14_8_4,    vars: { Le: 33.9e-3, Ae: 15.5e-6, A_min: 13.1e-6, Ve: 525e-9,    AL: 860e-9,  K1: 36.8, K2: -0.712 } }
+    - { name: E_16_6_5,    vars: { Le: 28.6e-3, Ae: 19.2e-6, A_min: 17.6e-6, Ve: 549e-9,    AL: 1100e-9, K1: 42.0, K2: -0.764 } }
+    - { name: E_16_8_5,    vars: { Le: 37.6e-3, Ae: 20.1e-6, A_min: 19.4e-6, Ve: 756e-9,    AL: 950e-9,  K1: 42.2, K2: -0.701 } }
+    - { name: E_16_8_8,    vars: { Le: 37.6e-3, Ae: 36.3e-6, A_min: 35.0e-6, Ve: 1370e-9,   AL: 1800e-9 } }
+    - { name: E_19_8_5,    vars: { Le: 39.6e-3, Ae: 22.5e-6, A_min: 22.1e-6, Ve: 891e-9,    AL: 1050e-9, K1: 46.4, K2: -0.697 } }
+    - { name: E_21_9_5,    vars: { Le: 43.4e-3, Ae: 21.6e-6, A_min: 20.2e-6, Ve: 937e-9,    AL: 900e-9,  K1: 47.4, K2: -0.682 } }
+    - { name: E_20_10_6,   vars: { Le: 46.3e-3, Ae: 32.1e-6, A_min: 31.9e-6, Ve: 1490e-9,   AL: 1300e-9, K1: 61.6, K2: -0.737 } }
+    - { name: E_20_10_11,  vars: { Le: 46.3e-3, Ae: 61.0e-6, A_min: 60.5e-6, Ve: 2830e-9,   AL: 2300e-9 } }
+    - { name: E_25_13_7,   vars: { Le: 57.5e-3, Ae: 52.5e-6, A_min: 51.5e-6, Ve: 3020e-9,   AL: 1750,    K1: 90,   K2: -0.731 } }
+    - { name: E_28_10_11,  vars: { Le: 51.6e-3, Ae: 81.7e-6, A_min: 77.0e-6, Ve: 4220e-9,   AL: 3000e-9 } }
+    - { name: E_30_15_7,   vars: { Le: 67.0e-3, Ae: 60.0e-6, A_min: 49.0e-6, Ve: 4000e-9,   AL: 1700e-9 }, selected: true }
+    - { name: E_32_16_9,   vars: { Le: 74e-3,   Ae: 83.0e-6, A_min: 81.4e-6, Ve: 6140e-9,   AL: 2100e-9, K1: 145,  K2: -0.748 } }
+    - { name: E_34_14_9,   vars: { Le: 69.6e-3, Ae: 84.8e-6, A_min: 83.2e-6, Ve: 5900e-9,   AL: 2300e-9, K1: 146,  K2: -0.719 } }
+    - { name: E_36_18_11,  vars: { Le: 81e-3,   Ae: 120e-6,  A_min: 112e-6,  Ve: 9720e-9,   AL: 2900e-9, K1: 182,  K2: -0.749 } }
+    - { name: E_40_16_12,  vars: { Le: 77e-3,   Ae: 149e-6,  A_min: 143e-6,  Ve: 11500e-9,  AL: 3800e-9, K1: 239,  K2: -0.782 } }
+    - { name: E_42_21_15,  vars: { Le: 97e-3,   Ae: 178e-6,  A_min: 175e-6,  Ve: 17300e-9,  AL: 3500e-9, K1: 272,  K2: -0.741 } }
+    - { name: E_42_21_20,  vars: { Le: 97e-3,   Ae: 234e-6,  A_min: 229e-6,  Ve: 22700e-9,  AL: 4750e-9, K1: 354,  K2: -0.770 } }
+    - { name: E_47_20_16,  vars: { Le: 89e-3,   Ae: 233e-6,  A_min: 226e-6,  Ve: 20700e-9,  AL: 5100e-9, K1: 364,  K2: -0.773 } }
+    - { name: E_55_28_21,  vars: { Le: 124e-3,  Ae: 354e-6,  A_min: 351e-6,  Ve: 43900e-9,  AL: 7200e-9, K1: 496,  K2: -0.764 } }
+    - { name: E_56_24_19,  vars: { Le: 107e-3,  Ae: 340e-6,  A_min: 327e-6,  Ve: 36400e-9,  AL: 6300e-9, K1: 500,  K2: -0.784 } }
+    - { name: E_65_32_27,  vars: { Le: 147e-3,  Ae: 535e-6,  A_min: 529e-6,  Ve: 78650e-9,  AL: 7200e-9, K1: 716,  K2: -0.762 } }
+    - { name: E_70_33_32,  vars: { Le: 149e-3,  Ae: 683e-6,  A_min: 676e-6,  Ve: 102000e-9, AL: 8850e-9, K1: 903,  K2: -0.789 } }
+    - { name: E_80_38_20,  vars: { Le: 184e-3,  Ae: 390e-6,  A_min: 388e-6,  Ve: 71800e-9,  AL: 4150e-9, K1: 539,  K2: -0.710 } }
+    - { name: E_100_60_28, vars: { Le: 274e-3,  Ae: 735e-6,  A_min: 690e-6,  Ve: 201390e-9, AL: 6200e-9 } }
 
 - type: var
-  comment: Effective magnetic cross section
-  name: Ae
-  value: 60
+  comment: Minimun magnetic cross section
+  name: A_min
+  value: 49
   prefix: 1.0e-06
   unit: mm<sup>2</sup>
 
@@ -137,17 +111,17 @@ rows:
   name: Inductance Factor with Air Gap
 
 - type: var
-  comment: Air gap length
+  comment: Air gap length of central arm
   name: g
   value: 0
   unit: mm
 
 - type: calc
-  comment: Relative length of air gap (g/√Ae)
+  comment: Relative length of air gap (g/√A_min)
   name: g_factor
   prefix: 1e-2
   unit: '%'
-  calc: g_factor = g / Math.sqrt(Ae)
+  calc: g_factor = g / Math.sqrt(A_min)
 
 - type: calc
   name: Fr_factor
@@ -158,8 +132,8 @@ rows:
 #
 #  comment: Fringing factor of air gap (Carter Factor)
 #  calc:
-#  - Lambda = 1.5 * Math.sqrt(Ae)
-#  - Beta = Math.sqrt(Ae) / (4.0 * g)
+#  - Lambda = 1.5 * Math.sqrt(A_min)
+#  - Beta = Math.sqrt(A_min) / (4.0 * g)
 #  - Alpha = (Beta * Math.atan(Beta) - 0.5 * Math.log(1 + Math.pow(Beta, 2))) * 4.0 / Math.PI
 #  - Fr_factor = Lambda / (Lambda - Alpha * g)
 #
@@ -178,7 +152,7 @@ rows:
   comment: Inductance factor (permeability) of air gap
   name: AL_gap
   unit: nH/turn<sup>2</sup>
-  calc: AL_gap = uo * Ae * Fr_factor / g
+  calc: AL_gap = uo * A_min * Fr_factor / g
 
 - type: calc
   comment: Total Inductance factor with gap
@@ -208,7 +182,7 @@ rows:
   comment: Maximum Inductor Current
   name: I_max
   unit: A
-  calc: I_max = (Ae * B_max) / (AL_total * N)
+  calc: I_max = (A_min * B_max) / (AL_total * N)
 
 - type: calc
   comment: Maximum Energy stored in Inductance
